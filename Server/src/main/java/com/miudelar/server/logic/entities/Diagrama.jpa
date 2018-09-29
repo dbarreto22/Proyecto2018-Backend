@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<jpa:entity-mappings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:java="http://jcp.org/en/jsr/detail?id=270" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:jpa="http://java.sun.com/xml/ns/persistence/orm" pkg="Entidades" v="2.6" persistenceUnitName="MiUdelaR_PU" sm="false" xs="true" id="_15376712966253" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm orm_2_1.xsd">
+    <jpa:entity lbl-ref="_15376713416256" xre="false" compositePrimaryKeyClass="CarreraPK" abs="false" class="Carrera" visibile="true" minimized="false" rootElement="_15376712966253" id="_1537671341625">
+        <jpa:ts e="true"/>
+        <jpa:hc e="true"/>
+        <jpa:eq e="true"/>
+        <jpa:con am="PUBLIC" e="true">
+            <jpa:a>_15376713416256</jpa:a>
+            <jpa:a>_15376713741568</jpa:a>
+        </jpa:con>
+        <jpa:con am="PUBLIC" e="true"/>
+        <jpa:attributes>
+            <jpa:basic attribute-type="String" visibile="true" name="nombre" id="_15376713741568">
+                <jpa:bv/>
+            </jpa:basic>
+            <jpa:one-to-many orp="false" collection-type="java.util.List" connected-entity-id="_1537671547406" connected-attribute-id="_1537730557156171" visibile="true" name="asignatura_Carreras" id="_1537730557156172"/>
+            <jpa:many-to-many collection-type="java.util.List" connected-entity-id="_1537718508046" connected-attribute-id="_153772048604654" visibile="true" name="usuarios" id="_153772048604655"/>
+            <jpa:many-to-many own="true" collection-type="java.util.List" connected-entity-id="_1537671413890" visibile="true" name="periodos_Examenes" id="_153772055131256"/>
+            <jpa:many-to-many own="true" collection-type="java.util.List" connected-entity-id="_1537671485093" connected-attribute-id="_1537730517671170" visibile="true" name="asignaturas" id="_1537730517656169"/>
+            <jpa:id attribute-type="Long" visibile="true" name="codigo" id="_15376713416256">
+                <jpa:bv/>
+                <jpa:generated-value strategy="AUTO"/>
+            </jpa:id>
+        </jpa:attributes>
+        <jpa:nq e="true" name="Carrera.findAll">
+            <jpa:query>Select e from Carrera e</jpa:query>
+        </jpa:nq>
+        <jpa:nq e="true" name="Carrera.findByNombre">
+            <jpa:query>Select c from Carrera c where c.nombre=:nombre</jpa:query>
+        </jpa:nq>
+    </jpa:entity>
+    <jpa:entity lbl-ref="_153767141389011" xre="false" compositePrimaryKeyClass="Periodo_ExamenPK" abs="false" class="Periodo_Examen" visibile="true" minimized="false" rootElement="_15376712966253" id="_1537671413890">
+        <jpa:ts e="true"/>
+        <jpa:hc e="true"/>
+        <jpa:eq e="true"/>
+        <jpa:con am="PUBLIC" e="true">
+            <jpa:a>_153767141389011</jpa:a>
+            <jpa:a>_153767143989013</jpa:a>
+            <jpa:a>_153767144242114</jpa:a>
+            <jpa:a>_153767144851515</jpa:a>
+        </jpa:con>
+        <jpa:con am="PUBLIC" e="true"/>
+        <jpa:attributes>
+            <jpa:basic attribute-type="String" visibile="true" name="tipo" id="_153767143989013">
+                <jpa:bv/>
+            </jpa:basic>
+            <jpa:basic attribute-type="String" visibile="true" name="fechaInicio" id="_153767144242114">
+                <jpa:bv/>
+            </jpa:basic>
+            <jpa:basic attribute-type="String" visibile="true" name="fechaFin" id="_153767144851515">
+                <jpa:bv/>
+            </jpa:basic>
+            <jpa:id attribute-type="Long" visibile="true" name="id" id="_153767141389011">
+                <jpa:bv/>
+                <jpa:generated-value strategy="AUTO"/>
+            </jpa:id>
+        </jpa:attributes>
+        <jpa:nq e="true" name="Periodo_Examen.findAll">
+            <jpa:query>Select e from Periodo_Examen e</jpa:query>
+        </jpa:nq>
+        <jpa:nq e="true" name="Periodo_Examen.findByTipo">
+            <jpa:query>Select p from Periodo_Examen p where p.tipo=:tipo</jpa:query>
+        </jpa:nq>
+        <jpa:nq e="true" name="Periodo_Examen.findByFechaInicio">
+            <jpa:query>Select p from Periodo_Examen p where p.fechaInicio=:fechaInicio</jpa:query>
+        </jpa:nq>
+        <jpa:nq e="true" name="Periodo_Examen.findByFechaFin">
+            <jpa:query>Select p from Periodo_Examen p where p.fechaFin=:fechaFin</jpa:query>
+        </jpa:nq>
+    </jpa:entity>
+    <jpa:entity lbl-ref="_153767148509316" xre="false" compositePrimaryKeyClass="AsignaturaPK" abs="false" class="Asignatura" visibile="true" minimized="false" rootElement="_15376712966253" id="_1537671485093">
+        <jpa:ts e="true"/>
+        <jpa:hc e="true"/>
+        <jpa:eq e="true"/>
+        <jpa:con am="PUBLIC" e="true">
+            <jpa:a>_153767148509316</jpa:a>
+            <jpa:a>_153767149859318</jpa:a>
+        </jpa:con>
+        <jpa:con am="PUBLIC" e="true"/>
+        <jpa:attributes>
+            <jpa:basic attribute-type="String" visibile="true" name="nombre" id="_153767149859318">
+                <jpa:bv/>
+            </jpa:basic>
+            <jpa:one-to-many orp="false" collection-type="java.util.List" connected-entity-id="_1537671547406" connected-attribute-id="_1537730567468173" visibile="true" name="asignatura_Carreras" id="_1537730567468174"/>
+            <jpa:many-to-many collection-type="java.util.List" connected-entity-id="_1537671341625" connected-attribute-id="_1537730517656169" visibile="true" name="carreras" id="_1537730517671170"/>
+            <jpa:id attribute-type="Long" visibile="true" name="codigo" id="_153767148509316">
+                <jpa:bv/>
+                <jpa:generated-value strategy="AUTO"/>
+            </jpa:id>
+        </jpa:attributes>
+        <jpa:nq e="true" name="Asignatura.findAll">
+            <jpa:query>Select e from Asignatura e</jpa:query>
+        </jpa:nq>
+        <jpa:nq e="true" name="Asignatura.findByNombre">
+            <jpa:query>Select a from Asignatura a where a.nombre=:nombre</jpa:query>
+        </jpa:nq>
+    </jpa:entity>
+    <jpa:entity lbl-ref="_153767154740621" xre="false" compositePrimaryKeyClass="Asignatura_CarreraPK" abs="false" class="Asignatura_Carrera" visibile="true" minimized="false" rootElement="_15376712966253" id="_1537671547406">
+        <jpa:ts e="true"/>
+        <jpa:hc e="true"/>
+        <jpa:eq e="true"/>
+        <jpa:con am="PUBLIC" e="true">
+            <jpa:a>_153767154740621</jpa:a>
+        </jpa:con>
+        <jpa:con am="PUBLIC" e="true"/>
+        <jpa:attributes>
+            <jpa:many-to-one optional="true" primaryKey="false" connected-entity-id="_1537671341625" connected-attribute-id="_1537730557156172" visibile="true" name="carrera" id="_1537730557156171"/>
+            <jpa:many-to-one optional="true" primaryKey="false" connected-entity-id="_1537671485093" connected-attribute-id="_1537730567468174" visibile="true" name="asignatura" id="_1537730567468173"/>
+            <jpa:one-to-one own="true" orp="false" optional="true" primaryKey="false" connected-entity-id="_1537671581046" connected-attribute-id="_1537728507281103" visibile="true" name="examen" id="_1537728507281102"/>
+            <jpa:one-to-one own="true" orp="false" optional="true" primaryKey="false" connected-entity-id="_1537671589625" connected-attribute-id="_1537730493046168" visibile="true" name="curso" id="_1537730493046167"/>
+            <jpa:many-to-many own="true" collection-type="java.util.List" connected-entity-id="_1537671547406" connected-attribute-id="_153772116831262" visibile="true" name="previas" id="_153772116831261"/>
+            <jpa:many-to-many collection-type="java.util.List" connected-entity-id="_1537671547406" connected-attribute-id="_153772116831261" visibile="true" name="esPreviaDe" id="_153772116831262"/>
+            <jpa:id attribute-type="Long" visibile="true" name="id" id="_153767154740621">
+                <jpa:bv/>
+                <jpa:generated-value strategy="AUTO"/>
+            </jpa:id>
+        </jpa:attributes>
+        <jpa:nq e="true" name="Asignatura_Carrera.findAll">
+            <jpa:query>Select e from Asignatura_Carrera e</jpa:query>
+        </jpa:nq>
+    </jpa:entity>
+    <jpa:entity lbl-ref="_153767158104623" xre="false" compositePrimaryKeyClass="ExamenPK" abs="false" class="Examen" visibile="true" minimized="false" rootElement="_15376712966253" id="_1537671581046">
+        <jpa:ts e="true"/>
+        <jpa:hc e="true"/>
+        <jpa:eq e="true"/>
+        <jpa:con am="PUBLIC" e="true">
+            <jpa:a>_153767158104623</jpa:a>
+            <jpa:a>_153771849495329</jpa:a>
+        </jpa:con>
+        <jpa:con am="PUBLIC" e="true"/>
+        <jpa:attributes>
+            <jpa:basic attribute-type="java.sql.Date" visibile="true" name="fecha" id="_153771849495329">
+                <jpa:bv/>
+            </jpa:basic>
+            <jpa:one-to-many orp="false" collection-type="java.util.List" connected-entity-id="_1537718898359" connected-attribute-id="_153772231070365" visibile="true" name="calificacionesExamenes" id="_153772231070366"/>
+            <jpa:one-to-one orp="false" optional="true" primaryKey="false" connected-entity-id="_1537671547406" connected-attribute-id="_1537728507281102" visibile="true" name="asignatura_Carrera" id="_1537728507281103"/>
+            <jpa:many-to-many collection-type="java.util.List" connected-entity-id="_1537718508046" connected-attribute-id="_153772803525091" visibile="true" name="inscriptos" id="_153772803525092"/>
+            <jpa:id attribute-type="Long" visibile="true" name="id" id="_153767158104623">
+                <jpa:bv/>
+                <jpa:generated-value strategy="AUTO"/>
+            </jpa:id>
+        </jpa:attributes>
+        <jpa:nq e="true" name="Examen.findAll">
+            <jpa:query>Select e from Examen e</jpa:query>
+        </jpa:nq>
+        <jpa:nq e="true" name="Examen.findByFecha">
+            <jpa:query>Select e from Examen e where e.fecha=:fecha</jpa:query>
+        </jpa:nq>
+    </jpa:entity>
+    <jpa:entity lbl-ref="_153767158962525" xre="false" compositePrimaryKeyClass="CursoPK" abs="false" class="Curso" visibile="true" minimized="false" rootElement="_15376712966253" id="_1537671589625">
+        <jpa:ts e="true"/>
+        <jpa:hc e="true"/>
+        <jpa:eq e="true"/>
+        <jpa:con am="PUBLIC" e="true">
+            <jpa:a>_153767158962525</jpa:a>
+        </jpa:con>
+        <jpa:con am="PUBLIC" e="true"/>
+        <jpa:attributes>
+            <jpa:one-to-many orp="false" own="true" collection-type="java.util.List" connected-entity-id="_1537719004218" visibile="true" name="horarios" id="_1537728690062106"/>
+            <jpa:one-to-many orp="false" collection-type="java.util.List" connected-entity-id="_1537718906593" connected-attribute-id="_1537730411640165" visibile="true" name="calificacionesCursos" id="_1537730411640166"/>
+            <jpa:one-to-one orp="false" optional="true" primaryKey="false" connected-entity-id="_1537671547406" connected-attribute-id="_1537730493046167" visibile="true" name="asignatura_Carrera" id="_1537730493046168"/>
+            <jpa:many-to-many collection-type="java.util.List" connected-entity-id="_1537718508046" connected-attribute-id="_1537728402906100" visibile="true" name="inscriptos" id="_1537728402921101"/>
+            <jpa:id attribute-type="Long" visibile="true" name="id" id="_153767158962525">
+                <jpa:bv/>
+                <jpa:generated-value strategy="AUTO"/>
+            </jpa:id>
+        </jpa:attributes>
+        <jpa:nq e="true" name="Curso.findAll">
+            <jpa:query>Select e from Curso e</jpa:query>
+        </jpa:nq>
+    </jpa:entity>
+    <jpa:entity lbl-ref="_153771850804630" xre="false" compositePrimaryKeyClass="UsuarioPK" abs="false" class="Usuario" visibile="true" minimized="false" rootElement="_15376712966253" id="_1537718508046">
+        <jpa:ts e="true"/>
+        <jpa:hc e="true"/>
+        <jpa:eq e="true"/>
+        <jpa:con am="PUBLIC" e="true">
+            <jpa:a>_153771850804630</jpa:a>
+            <jpa:a>_153771867190634</jpa:a>
+            <jpa:a>_153771868062535</jpa:a>
+            <jpa:a>_153771868973436</jpa:a>
+            <jpa:a>_153771869590637</jpa:a>
+        </jpa:con>
+        <jpa:con am="PUBLIC" e="true"/>
+        <jpa:attributes>
+            <jpa:basic attribute-type="String" visibile="true" name="nombre" id="_153771867190634">
+                <jpa:bv/>
+            </jpa:basic>
+            <jpa:basic attribute-type="String" visibile="true" name="apellido" id="_153771868062535">
+                <jpa:bv/>
+            </jpa:basic>
+            <jpa:basic attribute-type="String" visibile="true" name="email" id="_153771868973436">
+                <jpa:bv/>
+            </jpa:basic>
+            <jpa:basic attribute-type="String" visibile="true" name="password" id="_153771869590637">
+                <jpa:bv/>
+            </jpa:basic>
+            <jpa:one-to-many orp="false" collection-type="java.util.List" connected-entity-id="_1537718898359" connected-attribute-id="_153772809671893" visibile="true" name="calificacionesExamenes" id="_153772809671894"/>
+            <jpa:one-to-many orp="false" collection-type="java.util.List" connected-entity-id="_1537718906593" connected-attribute-id="_153772818779695" visibile="true" name="calificacionesCursos" id="_153772818779696"/>
+            <jpa:many-to-many own="true" collection-type="java.util.List" connected-entity-id="_1537718514843" visibile="true" name="roles" id="_153772004803151"/>
+            <jpa:many-to-many own="true" collection-type="java.util.List" connected-entity-id="_1537671341625" connected-attribute-id="_153772048604655" visibile="true" name="carreras" id="_153772048604654"/>
+            <jpa:many-to-many own="true" collection-type="java.util.List" connected-entity-id="_1537671581046" connected-attribute-id="_153772803525092" visibile="true" name="inscripcionesExamenes" id="_153772803525091"/>
+            <jpa:many-to-many own="true" collection-type="java.util.List" connected-entity-id="_1537671589625" connected-attribute-id="_1537728402921101" visibile="true" name="cursoes" id="_1537728402906100"/>
+            <jpa:id attribute-type="String" visibile="true" name="cedula" id="_153771850804630">
+                <jpa:bv/>
+                <jpa:column unique="true" nullable="true" insertable="true" updatable="true" length="255" precision="0" scale="0"/>
+                <jpa:generated-value/>
+            </jpa:id>
+        </jpa:attributes>
+        <jpa:nq e="true" name="Usuario.findAll">
+            <jpa:query>Select e from Usuario e</jpa:query>
+        </jpa:nq>
+        <jpa:nq e="true" name="Usuario.findByNombre">
+            <jpa:query>Select u from Usuario u where u.nombre=:nombre</jpa:query>
+        </jpa:nq>
+        <jpa:nq e="true" name="Usuario.findByApellido">
+            <jpa:query>Select u from Usuario u where u.apellido=:apellido</jpa:query>
+        </jpa:nq>
+        <jpa:nq e="true" name="Usuario.findByEmail">
+            <jpa:query>Select u from Usuario u where u.email=:email</jpa:query>
+        </jpa:nq>
+        <jpa:nq e="true" name="Usuario.findByPassword">
+            <jpa:query>Select u from Usuario u where u.password=:password</jpa:query>
+        </jpa:nq>
+    </jpa:entity>
+    <jpa:entity lbl-ref="_153771851484332" xre="false" compositePrimaryKeyClass="RolPK" abs="false" class="Rol" visibile="true" minimized="false" rootElement="_15376712966253" id="_1537718514843">
+        <jpa:ts e="true"/>
+        <jpa:hc e="true"/>
+        <jpa:eq e="true"/>
+        <jpa:con am="PUBLIC" e="true">
+            <jpa:a>_153771851484332</jpa:a>
+            <jpa:a>_153771883034338</jpa:a>
+        </jpa:con>
+        <jpa:con am="PUBLIC" e="true"/>
+        <jpa:con am="PUBLIC" e="true">
+            <jpa:a>_153771883034338</jpa:a>
+        </jpa:con>
+        <jpa:attributes>
+            <jpa:basic attribute-type="String" visibile="true" name="tipo" id="_153771883034338">
+                <jpa:bv/>
+            </jpa:basic>
+            <jpa:id attribute-type="Long" visibile="true" name="id" id="_153771851484332">
+                <jpa:bv/>
+                <jpa:generated-value strategy="AUTO"/>
+            </jpa:id>
+        </jpa:attributes>
+        <jpa:nq e="true" name="Rol.findAll">
+            <jpa:query>Select e from Rol e</jpa:query>
+        </jpa:nq>
+        <jpa:nq e="true" name="Rol.findByTipo">
+            <jpa:query>Select r from Rol r where r.tipo=:tipo</jpa:query>
+        </jpa:nq>
+    </jpa:entity>
+    <jpa:entity lbl-ref="_153771889835939" xre="false" compositePrimaryKeyClass="Estudiante_ExamenPK" abs="false" class="Estudiante_Examen" visibile="true" minimized="false" rootElement="_15376712966253" id="_1537718898359">
+        <jpa:ts e="true"/>
+        <jpa:hc e="true"/>
+        <jpa:eq e="true"/>
+        <jpa:con am="PUBLIC" e="true">
+            <jpa:a>_153771889835939</jpa:a>
+            <jpa:a>_153771923450050</jpa:a>
+        </jpa:con>
+        <jpa:con am="PUBLIC" e="true"/>
+        <jpa:attributes>
+            <jpa:basic attribute-type="Long" visibile="true" name="calificacion" id="_153771923450050">
+                <jpa:bv/>
+            </jpa:basic>
+            <jpa:many-to-one optional="true" primaryKey="false" connected-entity-id="_1537671581046" connected-attribute-id="_153772231070366" visibile="true" name="examen" id="_153772231070365"/>
+            <jpa:many-to-one optional="true" primaryKey="false" connected-entity-id="_1537718508046" connected-attribute-id="_153772809671894" visibile="true" name="usuario" id="_153772809671893"/>
+            <jpa:id attribute-type="Long" visibile="true" name="id" id="_153771889835939">
+                <jpa:bv/>
+                <jpa:generated-value strategy="AUTO"/>
+            </jpa:id>
+        </jpa:attributes>
+        <jpa:nq e="true" name="Estudiante_Examen.findAll">
+            <jpa:query>Select e from Estudiante_Examen e</jpa:query>
+        </jpa:nq>
+        <jpa:nq e="true" name="Estudiante_Examen.findByCalificacion">
+            <jpa:query>Select e from Estudiante_Examen e where e.calificacion=:calificacion</jpa:query>
+        </jpa:nq>
+    </jpa:entity>
+    <jpa:entity lbl-ref="_153771890659341" xre="false" compositePrimaryKeyClass="Estudiante_CursoPK" abs="false" class="Estudiante_Curso" visibile="true" minimized="false" rootElement="_15376712966253" id="_1537718906593">
+        <jpa:ts e="true"/>
+        <jpa:hc e="true"/>
+        <jpa:eq e="true"/>
+        <jpa:con am="PUBLIC" e="true">
+            <jpa:a>_153771890659341</jpa:a>
+            <jpa:a>_153771922578149</jpa:a>
+        </jpa:con>
+        <jpa:con am="PUBLIC" e="true"/>
+        <jpa:attributes>
+            <jpa:basic attribute-type="Long" visibile="true" name="calificacion" id="_153771922578149">
+                <jpa:bv/>
+            </jpa:basic>
+            <jpa:many-to-one optional="true" primaryKey="false" connected-entity-id="_1537718508046" connected-attribute-id="_153772818779696" visibile="true" name="usuario" id="_153772818779695"/>
+            <jpa:many-to-one optional="true" primaryKey="false" connected-entity-id="_1537671589625" connected-attribute-id="_1537730411640166" visibile="true" name="curso" id="_1537730411640165"/>
+            <jpa:id attribute-type="Long" visibile="true" name="id" id="_153771890659341">
+                <jpa:bv/>
+                <jpa:generated-value strategy="AUTO"/>
+            </jpa:id>
+        </jpa:attributes>
+        <jpa:nq e="true" name="Estudiante_Curso.findAll">
+            <jpa:query>Select e from Estudiante_Curso e</jpa:query>
+        </jpa:nq>
+        <jpa:nq e="true" name="Estudiante_Curso.findByCalificacion">
+            <jpa:query>Select e from Estudiante_Curso e where e.calificacion=:calificacion</jpa:query>
+        </jpa:nq>
+    </jpa:entity>
+    <jpa:entity lbl-ref="_153771900421845" xre="false" compositePrimaryKeyClass="HorarioPK" abs="false" class="Horario" visibile="true" minimized="false" rootElement="_15376712966253" id="_1537719004218">
+        <jpa:ts e="true"/>
+        <jpa:hc e="true"/>
+        <jpa:eq e="true"/>
+        <jpa:con am="PUBLIC" e="true">
+            <jpa:a>_153771900421845</jpa:a>
+            <jpa:a>_153771905906247</jpa:a>
+            <jpa:a>_153771906215648</jpa:a>
+        </jpa:con>
+        <jpa:con am="PUBLIC" e="true"/>
+        <jpa:attributes>
+            <jpa:basic attribute-type="int" visibile="true" name="horaInicio" id="_153771905906247">
+                <jpa:bv/>
+            </jpa:basic>
+            <jpa:basic attribute-type="int" visibile="true" name="horaFin" id="_153771906215648">
+                <jpa:bv/>
+            </jpa:basic>
+            <jpa:id attribute-type="Long" visibile="true" name="id" id="_153771900421845">
+                <jpa:bv/>
+                <jpa:generated-value strategy="AUTO"/>
+            </jpa:id>
+        </jpa:attributes>
+        <jpa:nq e="true" name="Horario.findAll">
+            <jpa:query>Select e from Horario e</jpa:query>
+        </jpa:nq>
+        <jpa:nq e="true" name="Horario.findByHoraInicio">
+            <jpa:query>Select h from Horario h where h.horaInicio=:horaInicio</jpa:query>
+        </jpa:nq>
+        <jpa:nq e="true" name="Horario.findByHoraFin">
+            <jpa:query>Select h from Horario h where h.horaFin=:horaFin</jpa:query>
+        </jpa:nq>
+    </jpa:entity>
+    <jpa:snp e="true" loc="BEFORE_PACKAGE">/**
+ * This file was generated by the JPA Modeler
+ */</jpa:snp>
+    <jpa:c>
+        <ct>java.util.List</ct>
+        <ct>java.util.Set</ct>
+        <ct>java.util.Map</ct>
+        <ct>java.util.Collection</ct>
+    </jpa:c>
+    <jpa:diagram>
+        <plane elementRef="_15376712966253">
+            <shape elementRef="_1537671341625">
+                <Bounds x="469.0" y="179.0" width="172.0" height="189.0"/>
+            </shape>
+            <shape elementRef="_1537671413890">
+                <Bounds x="448.0" y="-1.0" width="193.0" height="134.0"/>
+            </shape>
+            <shape elementRef="_1537671485093">
+                <Bounds x="1079.0" y="53.0" width="172.0" height="147.0"/>
+            </shape>
+            <shape elementRef="_1537671547406">
+                <Bounds x="805.0" y="179.0" width="209.0" height="197.0"/>
+            </shape>
+            <shape elementRef="_1537671581046">
+                <Bounds x="655.0" y="435.0" width="191.0" height="168.0"/>
+            </shape>
+            <shape elementRef="_1537671589625">
+                <Bounds x="655.0" y="656.0" width="173.0" height="155.0"/>
+            </shape>
+            <shape elementRef="_1537718508046">
+                <Bounds x="99.0" y="197.0" width="191.0" height="294.0"/>
+            </shape>
+            <shape elementRef="_1537718514843">
+                <Bounds x="6.0" y="20.0" width="128.0" height="92.0"/>
+            </shape>
+            <shape elementRef="_1537718898359">
+                <Bounds x="375.0" y="391.0" width="209.0" height="147.0"/>
+            </shape>
+            <shape elementRef="_1537718906593">
+                <Bounds x="93.0" y="566.0" width="197.0" height="147.0"/>
+            </shape>
+            <shape elementRef="_1537719004218">
+                <Bounds x="1113.0" y="322.0" width="138.0" height="113.0"/>
+            </shape>
+        </plane>
+    </jpa:diagram>
+</jpa:entity-mappings>
