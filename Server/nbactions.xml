@@ -14,4 +14,31 @@
                 <exec.executable>java</exec.executable>
             </properties>
         </action>
+        <action>
+            <actionName>CUSTOM-clean deploy</actionName>
+            <displayName>clean deploy</displayName>
+            <goals>
+                <goal>clean</goal>
+                <goal>install</goal>
+                <goal>wildfly:undeploy</goal>
+                <goal>wildfly:deploy</goal>
+                
+            </goals>
+        </action>
+        <action>
+            <actionName>CUSTOM-deploy</actionName>
+            <displayName>deploy</displayName>
+            <goals>
+                <goal>install</goal>
+                <goal>wildfly:undeploy</goal>
+                <goal>wildfly:deploy</goal>
+            </goals>
+        </action>
+        <action>
+            <actionName>CUSTOM-undeploy</actionName>
+            <displayName>undeploy</displayName>
+            <goals>
+                <goal>wildfly:undeploy</goal>
+            </goals>
+        </action>
     </actions>

@@ -2,8 +2,8 @@
     <!-- Propiedades del proyecto -->
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.miudelar</groupId>
-    <artifactId>MiUdelaR-Server</artifactId>
-    <packaging>jar</packaging>
+    <artifactId>miudelar-server</artifactId>
+    <packaging>war</packaging>
     <version>1.0</version>    
     <name>MiUdelaR Server</name>
     <url>http://maven.apache.org</url>
@@ -17,16 +17,32 @@
             <version>7.0</version>
             <type>jar</type>
         </dependency>
-        <dependency>
+        <!-- https://mvnrepository.com/artifact/org.jboss.resteasy/resteasy-jaxrs -->
+ <dependency>
+        <groupId>org.jboss.resteasy</groupId>
+        <artifactId>resteasy-servlet-initializer</artifactId>
+        <version>3.0.19.Final</version>
+        <scope>provided</scope>
+        <exclusions>
+            <exclusion>
+                <artifactId>resteasy-jaxrs</artifactId>
+                <groupId>org.jboss.resteasy</groupId>
+            </exclusion>
+        </exclusions>
+    </dependency>
+
+<!--        <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
             <version>5.2.10.Final</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
             <version>5.2.10.Final</version>
-        </dependency>
+            <scope>provided</scope>
+        </dependency>-->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
@@ -81,8 +97,12 @@
                     <source>1.8</source>
                     <target>1.8</target>
                 </configuration>
-                
-            </plugin>           
+            </plugin>     
+            <plugin>
+                <groupId>org.wildfly.plugins</groupId>
+                <artifactId>wildfly-maven-plugin</artifactId>
+                <version>1.2.2.Final</version>
+            </plugin>      
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -106,6 +126,11 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+  <groupId>org.apache.maven.plugins</groupId>
+  <artifactId>maven-war-plugin</artifactId>
+  <version>3.2.2</version>
+</plugin>
                 
         </plugins>
     </build>     

@@ -3,9 +3,7 @@ package com.miudelar.server.logic.managers;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import com.miudelar.server.logic.interfaces.SecurityMgt;
-import javax.jws.WebService;
 
-@WebService(endpointInterface = "com.miudelar.server.logic.interfaces.SecurityMgt")
 public class SecurityMgr implements SecurityMgt {
 
     String SALT = "InYourFace";
@@ -23,7 +21,10 @@ public class SecurityMgr implements SecurityMgt {
 
     @Override
     public String generatePassword(String inputPass) throws NoSuchAlgorithmException {
-        return generateHash(inputPass + SALT);
+        System.out.println("input: " + inputPass);
+        String hash = generateHash(inputPass + SALT);
+        System.out.println("hash: " + hash);
+        return hash;
     }
 
     private static String generateHash(String input) throws NoSuchAlgorithmException {
