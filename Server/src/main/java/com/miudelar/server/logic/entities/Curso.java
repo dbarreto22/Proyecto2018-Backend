@@ -4,12 +4,15 @@
 package com.miudelar.server.logic.entities;
 
 import java.io.Serializable;
+import java.sql.Date;
 import java.util.List;
+import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -25,9 +28,12 @@ public class Curso implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    
+    @Basic
+    private Date fecha;
 
     @XmlTransient
-    @OneToOne(targetEntity = Asignatura_Carrera.class, mappedBy = "curso")
+    @ManyToOne(targetEntity = Asignatura_Carrera.class)
     private Asignatura_Carrera asignatura_Carrera;
 
     @OneToMany(targetEntity = Horario.class)
@@ -56,13 +62,13 @@ public class Curso implements Serializable {
         this.id = id;
     }
 
-    public Asignatura_Carrera getAsignatura_Carrera() {
-        return this.asignatura_Carrera;
-    }
-
-    public void setAsignatura_Carrera(Asignatura_Carrera asignatura_Carrera) {
-        this.asignatura_Carrera = asignatura_Carrera;
-    }
+//    public Asignatura_Carrera getAsignatura_Carrera() {
+//        return this.asignatura_Carrera;
+//    }
+//
+//    public void setAsignatura_Carrera(Asignatura_Carrera asignatura_Carrera) {
+//        this.asignatura_Carrera = asignatura_Carrera;
+//    }
 
     public List<Horario> getHorarios() {
         return this.horarios;

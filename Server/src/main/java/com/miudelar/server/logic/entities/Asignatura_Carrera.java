@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.xml.bind.annotation.*;
 
@@ -26,12 +27,14 @@ public class Asignatura_Carrera implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
-    @OneToOne(targetEntity = Examen.class)
-    private Examen examen;
-
-    @OneToOne(targetEntity = Curso.class)
-    private Curso curso;
+    
+    @XmlTransient
+    @OneToMany(targetEntity = Examen.class)
+    private List<Examen> examenes;
+    
+    @XmlTransient
+    @OneToMany(targetEntity = Curso.class)
+    private List<Curso> cursos;
 
     @ManyToOne(targetEntity = Carrera.class)
     private Carrera carrera;
@@ -61,20 +64,20 @@ public class Asignatura_Carrera implements Serializable {
         this.id = id;
     }
 
-    public Examen getExamen() {
-        return this.examen;
+    public List<Examen> getExamenes() {
+        return examenes;
     }
 
-    public void setExamen(Examen examen) {
-        this.examen = examen;
+    public void setExamenes(List<Examen> examenes) {
+        this.examenes = examenes;
     }
 
-    public Curso getCurso() {
-        return this.curso;
+    public List<Curso> getCursos() {
+        return cursos;
     }
 
-    public void setCurso(Curso curso) {
-        this.curso = curso;
+    public void setCursos(List<Curso> cursos) {
+        this.cursos = cursos;
     }
 
     public Carrera getCarrera() {

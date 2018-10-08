@@ -3,16 +3,14 @@
         <action>
             <actionName>run</actionName>
             <packagings>
-                <packaging>jar</packaging>
+                <packaging>war</packaging>
+                <packaging>ear</packaging>
+                <packaging>ejb</packaging>
             </packagings>
             <goals>
-                <goal>process-classes</goal>
-                <goal>org.codehaus.mojo:exec-maven-plugin:1.2.1:exec</goal>
+                <goal>package</goal>
+                
             </goals>
-            <properties>
-                <exec.args>-classpath %classpath com.miudelar.server.main</exec.args>
-                <exec.executable>java</exec.executable>
-            </properties>
         </action>
         <action>
             <actionName>CUSTOM-clean deploy</actionName>
