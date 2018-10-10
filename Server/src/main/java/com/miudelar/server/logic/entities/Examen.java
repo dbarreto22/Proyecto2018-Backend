@@ -6,8 +6,10 @@ package com.miudelar.server.logic.entities;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -41,11 +43,11 @@ public class Examen implements Serializable {
     private Asignatura_Carrera asignatura_Carrera;
 
     @XmlTransient
-    @OneToMany(targetEntity = Estudiante_Examen.class, mappedBy = "examen")
+    @OneToMany(targetEntity = Estudiante_Examen.class, fetch = FetchType.EAGER)
     private List<Estudiante_Examen> calificacionesExamenes;
 
     @XmlTransient
-    @ManyToMany(targetEntity = Usuario.class, mappedBy = "inscripcionesExamenes")
+    @ManyToMany(targetEntity = Usuario.class, mappedBy = "inscripcionesExamenes", fetch = FetchType.EAGER)
     private List<Usuario> inscriptos;
 
     public Examen(Long id, Date fecha) {
@@ -95,5 +97,32 @@ public class Examen implements Serializable {
     public void setInscriptos(List<Usuario> inscriptos) {
         this.inscriptos = inscriptos;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 59 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Examen other = (Examen) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
 
 }

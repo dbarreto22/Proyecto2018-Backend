@@ -6,8 +6,10 @@ package com.miudelar.server.logic.entities;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -40,11 +42,11 @@ public class Curso implements Serializable {
     private List<Horario> horarios;
 
     @XmlTransient
-    @OneToMany(targetEntity = Estudiante_Curso.class, mappedBy = "curso")
+    @OneToMany(targetEntity = Estudiante_Curso.class, fetch = FetchType.EAGER)
     private List<Estudiante_Curso> calificacionesCursos;
 
     @XmlTransient
-    @ManyToMany(targetEntity = Usuario.class, mappedBy = "cursoes")
+    @ManyToMany(targetEntity = Usuario.class, mappedBy = "cursos", fetch = FetchType.EAGER)
     private List<Usuario> inscriptos;
 
     public Curso(Long id) {
@@ -93,5 +95,32 @@ public class Curso implements Serializable {
     public void setInscriptos(List<Usuario> inscriptos) {
         this.inscriptos = inscriptos;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 71 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Curso other = (Curso) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
 
 }

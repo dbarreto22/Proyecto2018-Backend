@@ -5,7 +5,9 @@ package com.miudelar.server.logic.entities;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -29,11 +31,11 @@ public class Asignatura_Carrera implements Serializable {
     private Long id;
     
     @XmlTransient
-    @OneToMany(targetEntity = Examen.class)
+    @OneToMany(targetEntity = Examen.class, fetch = FetchType.EAGER)
     private List<Examen> examenes;
     
     @XmlTransient
-    @OneToMany(targetEntity = Curso.class)
+    @OneToMany(targetEntity = Curso.class, fetch = FetchType.EAGER)
     private List<Curso> cursos;
 
     @ManyToOne(targetEntity = Carrera.class)
@@ -42,11 +44,11 @@ public class Asignatura_Carrera implements Serializable {
     @ManyToOne(targetEntity = Asignatura.class)
     private Asignatura asignatura;
 
-    @ManyToMany(targetEntity = Asignatura_Carrera.class)
+    @ManyToMany(targetEntity = Asignatura_Carrera.class, fetch = FetchType.EAGER)
     private List<Asignatura_Carrera> previas;
 
     @XmlTransient
-    @ManyToMany(targetEntity = Asignatura_Carrera.class, mappedBy = "previas")
+    @ManyToMany(targetEntity = Asignatura_Carrera.class, mappedBy = "previas", fetch = FetchType.EAGER)
     private List<Asignatura_Carrera> esPreviaDe;
 
     public Asignatura_Carrera(Long id) {
@@ -111,5 +113,32 @@ public class Asignatura_Carrera implements Serializable {
     public void setEsPreviaDe(List<Asignatura_Carrera> esPreviaDe) {
         this.esPreviaDe = esPreviaDe;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 97 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Asignatura_Carrera other = (Asignatura_Carrera) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
 
 }

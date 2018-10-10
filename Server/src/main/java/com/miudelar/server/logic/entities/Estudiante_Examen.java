@@ -4,6 +4,7 @@
 package com.miudelar.server.logic.entities;
 
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -24,33 +25,22 @@ import javax.xml.bind.annotation.*;
 //    @NamedQuery(name = "Estudiante_Examen.findByCalificacion", query = "Select e from Estudiante_Examen e where e.calificacion=:calificacion")})
 public class Estudiante_Examen implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
     @Basic
     private Long calificacion;
 
+    @Id
     @ManyToOne(targetEntity = Examen.class)
     private Examen examen;
 
+    @Id
     @ManyToOne(targetEntity = Usuario.class)
     private Usuario usuario;
 
     public Estudiante_Examen(Long id, Long calificacion) {
-        this.id = id;
         this.calificacion = calificacion;
     }
 
     public Estudiante_Examen() {
-    }
-
-    public Long getId() {
-        return this.id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Long getCalificacion() {
@@ -76,5 +66,36 @@ public class Estudiante_Examen implements Serializable {
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 17 * hash + Objects.hashCode(this.examen);
+        hash = 17 * hash + Objects.hashCode(this.usuario);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Estudiante_Examen other = (Estudiante_Examen) obj;
+        if (!Objects.equals(this.examen, other.examen)) {
+            return false;
+        }
+        if (!Objects.equals(this.usuario, other.usuario)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
 
 }

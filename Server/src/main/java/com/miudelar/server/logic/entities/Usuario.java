@@ -5,9 +5,11 @@ package com.miudelar.server.logic.entities;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
@@ -45,24 +47,24 @@ public class Usuario implements Serializable {
     private String password;
 
     @XmlTransient
-    @OneToMany(targetEntity = Estudiante_Examen.class, mappedBy = "usuario")
+    @OneToMany(targetEntity = Estudiante_Examen.class, mappedBy = "usuario", fetch = FetchType.EAGER)
     private List<Estudiante_Examen> calificacionesExamenes;
 
     @XmlTransient
-    @OneToMany(targetEntity = Estudiante_Curso.class, mappedBy = "usuario")
+    @OneToMany(targetEntity = Estudiante_Curso.class, mappedBy = "usuario", fetch = FetchType.EAGER)
     private List<Estudiante_Curso> calificacionesCursos;
 
-    @ManyToMany(targetEntity = Rol.class)
+    @ManyToMany(targetEntity = Rol.class, fetch = FetchType.EAGER)
     private List<Rol> roles;
 
-    @ManyToMany(targetEntity = Carrera.class)
+    @ManyToMany(targetEntity = Carrera.class, fetch = FetchType.EAGER)
     private List<Carrera> carreras;
 
-    @ManyToMany(targetEntity = Examen.class)
+    @ManyToMany(targetEntity = Examen.class, fetch = FetchType.EAGER)
     private List<Examen> inscripcionesExamenes;
 
-    @ManyToMany(targetEntity = Curso.class)
-    private List<Curso> cursoes;
+    @ManyToMany(targetEntity = Curso.class, fetch = FetchType.EAGER)
+    private List<Curso> cursos;
 
     public Usuario(String cedula, String nombre, String apellido, String email, String password) {
         this.cedula = cedula;
@@ -155,12 +157,39 @@ public class Usuario implements Serializable {
         this.inscripcionesExamenes = inscripcionesExamenes;
     }
 
-    public List<Curso> getCursoes() {
-        return this.cursoes;
+    public List<Curso> getCursos() {
+        return this.cursos;
     }
 
-    public void setCursoes(List<Curso> cursoes) {
-        this.cursoes = cursoes;
+    public void setCursos(List<Curso> cursos) {
+        this.cursos = cursos;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 97 * hash + Objects.hashCode(this.cedula);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Usuario other = (Usuario) obj;
+        if (!Objects.equals(this.cedula, other.cedula)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
 
 }
