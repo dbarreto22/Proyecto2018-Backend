@@ -43,6 +43,9 @@ public class Asignatura_Carrera implements Serializable {
 
     @ManyToOne(targetEntity = Asignatura.class)
     private Asignatura asignatura;
+    
+    @ManyToMany(targetEntity = Periodo_Examen.class, fetch = FetchType.EAGER)
+    private List<Periodo_Examen> periodos_Examen;
 
     @ManyToMany(targetEntity = Asignatura_Carrera.class, fetch = FetchType.EAGER)
     private List<Asignatura_Carrera> previas;

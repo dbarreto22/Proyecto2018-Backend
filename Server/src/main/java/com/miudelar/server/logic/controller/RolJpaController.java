@@ -7,6 +7,7 @@ package com.miudelar.server.logic.controller;
 
 import com.miudelar.server.logic.controller.exceptions.NonexistentEntityException;
 import com.miudelar.server.logic.entities.Rol;
+import com.miudelar.server.logic.factories.EntityManagerFactoryRepository;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -22,8 +23,8 @@ import javax.persistence.criteria.Root;
  */
 public class RolJpaController implements Serializable {
 
-    public RolJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
+    public RolJpaController() {
+        this.emf = EntityManagerFactoryRepository.getEntityManagerFactory();
     }
     private EntityManagerFactory emf = null;
 

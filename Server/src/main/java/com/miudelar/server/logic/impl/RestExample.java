@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.miudelar.server.logic.managers;
+package com.miudelar.server.logic.impl;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

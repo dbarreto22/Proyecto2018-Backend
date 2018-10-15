@@ -21,4 +21,10 @@
         <servlet-name>resteasy-servlet</servlet-name>
         <url-pattern>/*</url-pattern>
     </servlet-mapping>
+    
+    <listener>
+        <description>Application startup and shutdown events</description>
+        <display-name>Init</display-name>
+        <listener-class>com.miudelar.server.main</listener-class>
+    </listener>
 </web-app>

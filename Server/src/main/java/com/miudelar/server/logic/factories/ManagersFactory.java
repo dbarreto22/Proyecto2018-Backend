@@ -1,8 +1,11 @@
 package com.miudelar.server.logic.factories;
 
-import com.miudelar.server.logic.managers.SecurityMgr;
-import com.miudelar.server.logic.interfaces.SecurityMgt;
-import com.miudelar.server.logic.interfaces.initMgt;
+import com.miudelar.server.logic.impl.AdministradorServiceImpl;
+import com.miudelar.server.logic.impl.DirectorServiceImpl;
+import com.miudelar.server.logic.impl.InitMgr;
+import com.miudelar.server.logic.impl.EstudianteServiceImpl;
+import com.miudelar.server.logic.impl.BedeliaServiceImpl;
+import com.miudelar.server.logic.interfaces.*;
 
 /* @author Romina */
 public class ManagersFactory {
@@ -19,12 +22,24 @@ public class ManagersFactory {
         private static final ManagersFactory INSTANCE = new ManagersFactory();
     }
 
-/*    public initMgt getInitMgt() {
-        return new initMgr();
-    } */
-
-    public SecurityMgt getSecurityMgt() {
-        return new SecurityMgr();
+    public InitMgt getInitMgt() {
+        return new InitMgr();
     }
+
+    public AdministradorService getAdministradorService() {
+        return new AdministradorServiceImpl();
+    }
+    
+//    public BedeliaService getBedeliaService() {
+//        return new BedeliaServiceImpl();
+//    }
+//    
+//    public DirectorService getDirectorService() {
+//        return new DirectorServiceImpl();
+//    }
+//    
+//    public EstudianteService getEstudianteService() {
+//        return new EstudianteServiceImpl();
+//    }
     
 }

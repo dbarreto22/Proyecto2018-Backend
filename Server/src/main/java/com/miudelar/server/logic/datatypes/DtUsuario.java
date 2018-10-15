@@ -6,7 +6,9 @@ package com.miudelar.server.logic.datatypes;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement
 public class DtUsuario implements Serializable {
 
     private String cedula;

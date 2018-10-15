@@ -1,64 +1,37 @@
 package com.miudelar.server;
 
+import com.miudelar.server.logic.factories.ManagersFactory;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import com.miudelar.server.logic.interfaces.InitMgt;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
 
-public class main {
+public class main implements ServletContextListener {
+        
+        static InitMgt init = ManagersFactory.getInstance().getInitMgt();
+	        
+        @Override
+        public void contextInitialized(ServletContextEvent servletContextEvent)
+        {
+            //Context initialized code here
+            System.out.println("DFAJDSKFLADJSFKL");
 
-	private EntityManager manager;
-
-	public main(EntityManager manager) {
-		this.manager = manager;
-	}
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		EntityManagerFactory factory = Persistence.createEntityManagerFactory("persistenceUnit");
-		EntityManager manager = factory.createEntityManager();
-		main test = new main(manager);
-
-		EntityTransaction tx = manager.getTransaction();
-		tx.begin();
-		try {
-//			test.createEmployees();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		tx.commit();
-
-//		test.listEmployees();
-
-		System.out.println(".. done");
-	}
-
-
-
-
-//	private void createEmployees() {
-//		int numOfEmployees = manager.createQuery("Select a From Employee a", Employee.class).getResultList().size();
-//		if (numOfEmployees == 0) {
-//			Department department = new Department("java");
-//			manager.persist(department);
-//
-//			manager.persist(new Employee("Jakab Gipsz",department));
-//			manager.persist(new Employee("Captain Nemo",department));
-//
-//		}
-//	}
-//
-//
-//	private void listEmployees() {
-//		List<Employee> resultList = manager.createQuery("Select a From Employee a", Employee.class).getResultList();
-//		System.out.println("num of employess:" + resultList.size());
-//		for (Employee next : resultList) {
-//			System.out.println("next employee: " + next);
-//		}
-//	}
-
-
+            try {
+                init.initBaseData();
+            } catch (Exception e) {
+                  e.printStackTrace();
+            }
+            
+        }
+        
+        @Override
+        public void contextDestroyed(ServletContextEvent servletContextEvent) {
+             //Context destroyed code here
+        }
+        
 }

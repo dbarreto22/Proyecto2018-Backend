@@ -19,6 +19,7 @@ import javax.xml.bind.annotation.*;
  */
 //@XmlAccessorType(XmlAccessType.FIELD)
 @Entity
+@XmlRootElement
 //@NamedQueries({
 //    @NamedQuery(name = "Rol.findAll", query = "Select e from Rol e"),
 //    @NamedQuery(name = "Rol.findByTipo", query = "Select r from Rol r where r.tipo=:tipo")})
