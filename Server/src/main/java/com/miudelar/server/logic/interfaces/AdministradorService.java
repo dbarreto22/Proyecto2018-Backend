@@ -18,6 +18,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import org.jboss.logging.Param;
 
 
 /* @author Romina*/
@@ -60,6 +61,12 @@ public interface AdministradorService {
     @Path("usuario")
     @Produces(MediaType.APPLICATION_JSON)
     public List<DtUsuario> getAllUsuario() throws NoSuchAlgorithmException;
+    
+    @GET
+    @Path("usuario/{cedula}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public DtUsuario getUsuario(@PathParam("cedula")
+        final String cedula);
              
 //    @GET
 //    @Path("verifyThePassword/input/{inputPass}/stored/{storedPass}")

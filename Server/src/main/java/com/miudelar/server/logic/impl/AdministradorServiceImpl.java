@@ -49,8 +49,12 @@ public class AdministradorServiceImpl implements AdministradorService {
     
     @Override
     public String login(String username, String password){
-        
-        return "Ok";
+        Usuario usuario = usuarioJpaController.findUsuario(username);
+        if (usuario.getPassword() == password){
+            return "OK";
+        }else{
+            return "Error: Usuario o contraseña incorrecta";
+        }
     }
     
     @Override
@@ -67,8 +71,7 @@ public class AdministradorServiceImpl implements AdministradorService {
     
     @Override
     public void addRol(String cedula, Long idRol) throws NonexistentEntityException{
-        Usuario usuario;
-        usuario = usuarioJpaController.findUsuario(cedula);
+        Usuario usuario = usuarioJpaController.findUsuario(cedula);
         Rol rol = rolJpaController.findRol(idRol);
         usuario.addRol(rol);
         try {
@@ -81,8 +84,7 @@ public class AdministradorServiceImpl implements AdministradorService {
     
     @Override
     public void removeRol(String cedula, Long idRol) throws NonexistentEntityException{
-        Usuario usuario;
-        usuario = usuarioJpaController.findUsuario(cedula);
+        Usuario usuario = usuarioJpaController.findUsuario(cedula);
         Rol rol = rolJpaController.findRol(idRol);
         usuario.removeRol(rol);
         try {
@@ -100,6 +102,13 @@ public class AdministradorServiceImpl implements AdministradorService {
             usuarios.add(usuario.toDataType());
         });
         return usuarios;
+    }
+    
+    @Override
+    public DtUsuario getUsuario(String cedula){
+        Usuario usuario = usuarioJpaController.findUsuario(cedula);
+        DtUsuario dtusuario = usuario.toDataType();
+        return dtusuario;
     }
     
 //    @Override
