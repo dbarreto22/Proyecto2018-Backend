@@ -5,8 +5,11 @@
  */
 package com.miudelar.server.logic.impl;
 
+import com.miudelar.server.exceptions.NonexistentEntityException;
 import com.miudelar.server.exceptions.RolWithInvalidDataException;
+import com.miudelar.server.exceptions.UsuarioWithInvalidDataException;
 import com.miudelar.server.logic.datatypes.DtRol;
+import com.miudelar.server.logic.datatypes.DtUsuario;
 import com.miudelar.server.logic.factories.ManagersFactory;
 import com.miudelar.server.logic.interfaces.*;
 import java.security.NoSuchAlgorithmException;
@@ -22,26 +25,30 @@ public class InitMgr implements InitMgt {
 //    DirectorService directorService = ManagersFactory.getInstance().getDirectorService();
 //    EstudianteService estudianteService = ManagersFactory.getInstance().getEstudianteService();
 
-    private void rolGenerator() throws NoSuchAlgorithmException {
-        try {
-            System.out.println("getAllRol");
-            List<DtRol> listDtRol = administradorService.getAllRol();
-            
-            if (listDtRol.isEmpty()) {
-                System.out.println("isEmpty");
-                administradorService.rolSave("ADMIN");
-                administradorService.rolSave("BEDELIA");
-                administradorService.rolSave("DIRECTOR");
-                administradorService.rolSave("ESTUDIANTE");
-            }
-        } catch (RolWithInvalidDataException ex) {
-            Logger.getLogger(InitMgr.class.getName()).log(Level.SEVERE, null, ex);
+    private void rolGenerator() throws NoSuchAlgorithmException, RolWithInvalidDataException {
+        List<DtRol> listDtRol = administradorService.getAllRol();
+
+        if (listDtRol.isEmpty()) {
+            administradorService.rolSave("ADMIN");
+            administradorService.rolSave("BEDELIA");
+            administradorService.rolSave("DIRECTOR");
+            administradorService.rolSave("ESTUDIANTE");
+        }
+    }
+    
+    private void createDefaultUser() throws NoSuchAlgorithmException, UsuarioWithInvalidDataException, NonexistentEntityException{
+        List<DtUsuario> listDtUsuario = administradorService.getAllUsuario();
+        if (listDtUsuario.isEmpty()){
+            DtUsuario usuario = new DtUsuario("1111111", "Admin", "Admin", "admin@admin.com", "admin123");
+            administradorService.saveUsuario(usuario);
+            administradorService.addRol(usuario.getCedula(),1L);
         }
     }
 
     @Override
-    public void initBaseData() throws NoSuchAlgorithmException {
+    public void initBaseData() throws NoSuchAlgorithmException, RolWithInvalidDataException, UsuarioWithInvalidDataException, NonexistentEntityException{
         rolGenerator();
+        createDefaultUser();
     }
 
 }

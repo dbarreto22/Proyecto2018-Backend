@@ -3,6 +3,7 @@
  */
 package com.miudelar.server.logic.entities;
 
+import com.miudelar.server.logic.datatypes.DtUsuario;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
@@ -73,6 +74,14 @@ public class Usuario implements Serializable {
         this.email = email;
         this.password = password;
     }
+    
+    public Usuario(DtUsuario usuario) {
+        this.cedula = usuario.getCedula();
+        this.nombre = usuario.getNombre();
+        this.apellido = usuario.getApellido();
+        this.email = usuario.getEmail();
+        this.password = usuario.getPassword();
+    }
 
     public Usuario() {
     }
@@ -140,6 +149,14 @@ public class Usuario implements Serializable {
     public void setRoles(List<Rol> roles) {
         this.roles = roles;
     }
+    
+    public void addRol(Rol rol) {
+        this.roles.add(rol);
+    }
+    
+    public void removeRol(Rol rol) {
+        this.roles.remove(rol);
+    }
 
     public List<Carrera> getCarreras() {
         return this.carreras;
@@ -163,6 +180,11 @@ public class Usuario implements Serializable {
 
     public void setCursos(List<Curso> cursos) {
         this.cursos = cursos;
+    }
+    
+    public DtUsuario toDataType() {
+        DtUsuario dtUsuario = new DtUsuario(cedula, nombre, apellido, email, password);
+        return dtUsuario;
     }
 
     @Override

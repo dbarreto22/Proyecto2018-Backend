@@ -19,6 +19,7 @@ import com.miudelar.server.logic.entities.Estudiante_Curso;
 import com.miudelar.server.logic.entities.Examen;
 import com.miudelar.server.logic.entities.Curso;
 import com.miudelar.server.logic.entities.Usuario;
+import com.miudelar.server.logic.factories.EntityManagerFactoryRepository;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
@@ -28,8 +29,8 @@ import javax.persistence.EntityManagerFactory;
  */
 public class UsuarioJpaController implements Serializable {
 
-    public UsuarioJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
+    public UsuarioJpaController() {
+        this.emf = EntityManagerFactoryRepository.getEntityManagerFactory();
     }
     private EntityManagerFactory emf = null;
 

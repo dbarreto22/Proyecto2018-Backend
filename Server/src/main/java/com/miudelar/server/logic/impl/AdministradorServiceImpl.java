@@ -1,10 +1,15 @@
 package com.miudelar.server.logic.impl;
 
+import com.miudelar.server.exceptions.NonexistentEntityException;
+import com.miudelar.server.exceptions.UsuarioWithInvalidDataException;
 import com.miudelar.server.exceptions.RolWithInvalidDataException;
 import com.miudelar.server.logic.controller.RolJpaController;
+import com.miudelar.server.logic.controller.UsuarioJpaController;
 import com.miudelar.server.logic.datatypes.DtRol;
+import com.miudelar.server.logic.datatypes.DtUsuario;
 import com.miudelar.server.logic.factories.EntityManagerFactoryRepository;
 import com.miudelar.server.logic.entities.Rol;
+import com.miudelar.server.logic.entities.Usuario;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import com.miudelar.server.logic.interfaces.AdministradorService;
@@ -19,6 +24,7 @@ public class AdministradorServiceImpl implements AdministradorService {
     String SALT = "InYourFace";
        
     RolJpaController rolJpaController = new RolJpaController();
+    UsuarioJpaController usuarioJpaController = new UsuarioJpaController();
 
     @Override
     public void rolSave(String tipo) throws RolWithInvalidDataException{
@@ -39,6 +45,61 @@ public class AdministradorServiceImpl implements AdministradorService {
             roles.add(new DtRol(tipo.getId(),tipo.getTipo()));
         });
         return roles;
+    }
+    
+    @Override
+    public String login(String username, String password){
+        
+        return "Ok";
+    }
+    
+    @Override
+    public void saveUsuario(DtUsuario usuario) throws NoSuchAlgorithmException, UsuarioWithInvalidDataException{
+        System.out.println("saveUsuario");
+        Usuario usuarioEntity = new Usuario(usuario);
+        try {
+            usuarioJpaController.create(usuarioEntity);
+        } catch (Exception ex) {
+            Logger.getLogger(AdministradorServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            throw new UsuarioWithInvalidDataException();
+        }
+    }
+    
+    @Override
+    public void addRol(String cedula, Long idRol) throws NonexistentEntityException{
+        Usuario usuario;
+        usuario = usuarioJpaController.findUsuario(cedula);
+        Rol rol = rolJpaController.findRol(idRol);
+        usuario.addRol(rol);
+        try {
+            usuarioJpaController.edit(usuario);
+        } catch (Exception ex) {
+            Logger.getLogger(AdministradorServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            throw new NonexistentEntityException(ex.getMessage());
+        }
+    }
+    
+    @Override
+    public void removeRol(String cedula, Long idRol) throws NonexistentEntityException{
+        Usuario usuario;
+        usuario = usuarioJpaController.findUsuario(cedula);
+        Rol rol = rolJpaController.findRol(idRol);
+        usuario.removeRol(rol);
+        try {
+            usuarioJpaController.edit(usuario);
+        } catch (Exception ex) {
+            Logger.getLogger(AdministradorServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            throw new NonexistentEntityException(ex.getMessage());
+        }
+    }
+    
+    @Override
+    public List<DtUsuario> getAllUsuario() throws NoSuchAlgorithmException{
+        List<DtUsuario> usuarios = new ArrayList<>();
+        usuarioJpaController.findUsuarioEntities().forEach(usuario -> {
+            usuarios.add(usuario.toDataType());
+        });
+        return usuarios;
     }
     
 //    @Override
