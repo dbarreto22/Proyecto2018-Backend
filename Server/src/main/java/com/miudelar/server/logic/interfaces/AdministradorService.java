@@ -46,16 +46,18 @@ public interface AdministradorService {
     public void saveUsuario(DtUsuario usuario) throws NoSuchAlgorithmException, UsuarioWithInvalidDataException;
     
     @POST
-    @Path("usuario.addRol")
+    @Path("usuario.addRol/{cedula}/{idRol}")
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.TEXT_PLAIN)
-    public void addRol(String cedula, Long idRol) throws NonexistentEntityException;
+    public void addRol(@PathParam("cedula") final String cedula,
+            @PathParam("idRol") final Long idRol) throws NonexistentEntityException;
     
     @POST
-    @Path("usuario.removeRol")
+    @Path("usuario.removeRol/{cedula}/{idRol}")
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.TEXT_PLAIN)
-    public void removeRol(String cedula, Long idRol) throws NonexistentEntityException;
+    public void removeRol(@PathParam("cedula") final String cedula,
+            @PathParam("idRol") final Long idRol) throws NonexistentEntityException;
     
     @GET
     @Path("usuario")
