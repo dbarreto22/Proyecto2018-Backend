@@ -9,6 +9,7 @@ import com.miudelar.server.logic.controller.exceptions.NonexistentEntityExceptio
 import com.miudelar.server.logic.controller.exceptions.PreexistingEntityException;
 import com.miudelar.server.logic.entities.Estudiante_Examen;
 import com.miudelar.server.logic.entities.Examen;
+import com.miudelar.server.logic.factories.EntityManagerFactoryRepository;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -24,8 +25,8 @@ import javax.persistence.criteria.Root;
  */
 public class Estudiante_ExamenJpaController implements Serializable {
 
-    public Estudiante_ExamenJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
+    public Estudiante_ExamenJpaController() {
+        this.emf = EntityManagerFactoryRepository.getEntityManagerFactory();
     }
     private EntityManagerFactory emf = null;
 

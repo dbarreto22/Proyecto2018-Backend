@@ -23,8 +23,11 @@ public class DtCurso implements Serializable {
 
     private List<DtUsuario> inscriptos;
 
-    public DtCurso(Long id) {
+    public DtCurso(Long id, Date fecha, DtAsignatura_Carrera asignatura_Carrera, List<DtHorario> horarios) {
         this.id = id;
+        this.fecha = fecha;
+        this.asignatura_Carrera = asignatura_Carrera;
+        this.horarios = horarios;
     }
 
     public DtCurso() {

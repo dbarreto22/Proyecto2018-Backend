@@ -7,6 +7,7 @@ package com.miudelar.server.logic.controller;
 
 import com.miudelar.server.logic.controller.exceptions.NonexistentEntityException;
 import com.miudelar.server.logic.entities.Horario;
+import com.miudelar.server.logic.factories.EntityManagerFactoryRepository;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -22,15 +23,15 @@ import javax.persistence.criteria.Root;
  */
 public class HorarioJpaController implements Serializable {
 
-    public HorarioJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
+    public HorarioJpaController() {
+        this.emf = EntityManagerFactoryRepository.getEntityManagerFactory();
     }
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
-
+    
     public void create(Horario horario) {
         EntityManager em = null;
         try {

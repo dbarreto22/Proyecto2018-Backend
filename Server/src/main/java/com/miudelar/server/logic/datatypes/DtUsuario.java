@@ -33,6 +33,16 @@ public class DtUsuario implements Serializable {
 
     private List<DtCurso> cursos;
 
+    public DtUsuario(String cedula, String nombre, String apellido, String email, String password, List<DtRol> roles) {
+        this.cedula = cedula;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
+    }
+    
+ 
     public DtUsuario(String cedula, String nombre, String apellido, String email, String password) {
         this.cedula = cedula;
         this.nombre = nombre;

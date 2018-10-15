@@ -16,6 +16,7 @@ import com.miudelar.server.logic.entities.Asignatura_Carrera;
 import java.util.ArrayList;
 import java.util.List;
 import com.miudelar.server.logic.entities.Carrera;
+import com.miudelar.server.logic.factories.EntityManagerFactoryRepository;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
@@ -25,8 +26,8 @@ import javax.persistence.EntityManagerFactory;
  */
 public class AsignaturaJpaController implements Serializable {
 
-    public AsignaturaJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
+    public AsignaturaJpaController() {
+        this.emf = EntityManagerFactoryRepository.getEntityManagerFactory();
     }
     private EntityManagerFactory emf = null;
 

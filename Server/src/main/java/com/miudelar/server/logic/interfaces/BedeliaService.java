@@ -9,6 +9,6 @@ package com.miudelar.server.logic.interfaces;
  *
  * @author rmoreno
  */
-public class BedeliaService {
+public interface BedeliaService {
     
 }

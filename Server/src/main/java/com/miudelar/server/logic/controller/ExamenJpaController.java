@@ -17,6 +17,7 @@ import com.miudelar.server.logic.entities.Examen;
 import java.util.ArrayList;
 import java.util.List;
 import com.miudelar.server.logic.entities.Usuario;
+import com.miudelar.server.logic.factories.EntityManagerFactoryRepository;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
@@ -26,8 +27,8 @@ import javax.persistence.EntityManagerFactory;
  */
 public class ExamenJpaController implements Serializable {
 
-    public ExamenJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
+    public ExamenJpaController() {
+        this.emf = EntityManagerFactoryRepository.getEntityManagerFactory();
     }
     private EntityManagerFactory emf = null;
 

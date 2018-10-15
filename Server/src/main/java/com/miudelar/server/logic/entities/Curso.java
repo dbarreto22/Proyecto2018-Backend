@@ -3,8 +3,12 @@
  */
 package com.miudelar.server.logic.entities;
 
+import com.miudelar.server.logic.datatypes.DtAsignatura_Carrera;
+import com.miudelar.server.logic.datatypes.DtCurso;
+import com.miudelar.server.logic.datatypes.DtHorario;
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.Basic;
@@ -38,7 +42,7 @@ public class Curso implements Serializable {
     @ManyToOne(targetEntity = Asignatura_Carrera.class)
     private Asignatura_Carrera asignatura_Carrera;
 
-    @OneToMany(targetEntity = Horario.class)
+    @OneToMany(targetEntity = Horario.class, fetch = FetchType.EAGER)
     private List<Horario> horarios;
 
     @XmlTransient
@@ -64,14 +68,6 @@ public class Curso implements Serializable {
         this.id = id;
     }
 
-//    public Asignatura_Carrera getAsignatura_Carrera() {
-//        return this.asignatura_Carrera;
-//    }
-//
-//    public void setAsignatura_Carrera(Asignatura_Carrera asignatura_Carrera) {
-//        this.asignatura_Carrera = asignatura_Carrera;
-//    }
-
     public List<Horario> getHorarios() {
         return this.horarios;
     }
@@ -94,6 +90,16 @@ public class Curso implements Serializable {
 
     public void setInscriptos(List<Usuario> inscriptos) {
         this.inscriptos = inscriptos;
+    }
+    
+    public DtCurso toDataType(){
+        DtAsignatura_Carrera asignatura_Carrera = new DtAsignatura_Carrera(this.asignatura_Carrera.getId());
+        List <DtHorario> dthorarios = new ArrayList<DtHorario>();
+        this.horarios.forEach(horario -> {
+            dthorarios.add(new DtHorario(horario.getId(), horario.getHoraInicio(), horario.getHoraFin()));
+        });
+        DtCurso dtcurso = new DtCurso(id, fecha, asignatura_Carrera, dthorarios);
+        return dtcurso;
     }
 
     @Override

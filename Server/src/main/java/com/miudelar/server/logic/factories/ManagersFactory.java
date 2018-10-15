@@ -30,16 +30,16 @@ public class ManagersFactory {
         return new AdministradorServiceImpl();
     }
     
-//    public BedeliaService getBedeliaService() {
-//        return new BedeliaServiceImpl();
-//    }
-//    
-//    public DirectorService getDirectorService() {
-//        return new DirectorServiceImpl();
-//    }
-//    
-//    public EstudianteService getEstudianteService() {
-//        return new EstudianteServiceImpl();
-//    }
+    public BedeliaService getBedeliaService() {
+        return new BedeliaServiceImpl();
+    }
+    
+    public DirectorService getDirectorService() {
+        return new DirectorServiceImpl();
+    }
+    
+    public EstudianteService getEstudianteService() {
+        return new EstudianteServiceImpl();
+    }
     
 }

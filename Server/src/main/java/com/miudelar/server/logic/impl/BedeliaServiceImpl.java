@@ -11,6 +11,6 @@ import com.miudelar.server.logic.interfaces.*;
  *
  * @author rmoreno
  */
-public class BedeliaServiceImpl {
+public class BedeliaServiceImpl implements BedeliaService {
     
 }

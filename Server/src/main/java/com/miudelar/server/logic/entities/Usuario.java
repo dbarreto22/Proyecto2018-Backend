@@ -3,8 +3,10 @@
  */
 package com.miudelar.server.logic.entities;
 
+import com.miudelar.server.logic.datatypes.DtRol;
 import com.miudelar.server.logic.datatypes.DtUsuario;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.Basic;
@@ -183,7 +185,11 @@ public class Usuario implements Serializable {
     }
     
     public DtUsuario toDataType() {
-        DtUsuario dtUsuario = new DtUsuario(cedula, nombre, apellido, email, password);
+        List <DtRol> dtroles = new ArrayList<DtRol>();
+        this.roles.forEach(rol -> {
+            dtroles.add(new DtRol(rol.getId(), rol.getTipo()));
+        });
+        DtUsuario dtUsuario = new DtUsuario(cedula, nombre, apellido, email, password, dtroles);
         return dtUsuario;
     }
 

@@ -7,6 +7,7 @@ package com.miudelar.server.logic.controller;
 
 import com.miudelar.server.logic.controller.exceptions.NonexistentEntityException;
 import com.miudelar.server.logic.entities.Periodo_Examen;
+import com.miudelar.server.logic.factories.EntityManagerFactoryRepository;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -22,8 +23,8 @@ import javax.persistence.criteria.Root;
  */
 public class Periodo_ExamenJpaController implements Serializable {
 
-    public Periodo_ExamenJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
+   public Periodo_ExamenJpaController() {
+        this.emf = EntityManagerFactoryRepository.getEntityManagerFactory();
     }
     private EntityManagerFactory emf = null;
 
