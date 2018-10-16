@@ -46,9 +46,6 @@ public class Examen implements Serializable {
     @OneToMany(targetEntity = Estudiante_Examen.class, fetch = FetchType.EAGER)
     private List<Estudiante_Examen> calificacionesExamenes;
 
-    @XmlTransient
-    @ManyToMany(targetEntity = Usuario.class, mappedBy = "inscripcionesExamenes", fetch = FetchType.EAGER)
-    private List<Usuario> inscriptos;
 
     public Examen(Long id, Date fecha) {
         this.id = id;
@@ -88,14 +85,6 @@ public class Examen implements Serializable {
 
     public void setCalificacionesExamenes(List<Estudiante_Examen> calificacionesExamenes) {
         this.calificacionesExamenes = calificacionesExamenes;
-    }
-
-    public List<Usuario> getInscriptos() {
-        return this.inscriptos;
-    }
-
-    public void setInscriptos(List<Usuario> inscriptos) {
-        this.inscriptos = inscriptos;
     }
 
     @Override

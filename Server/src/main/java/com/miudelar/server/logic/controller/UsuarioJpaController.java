@@ -38,18 +38,12 @@ public class UsuarioJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Usuario usuario) throws PreexistingEntityException, Exception {
+   public void create(Usuario usuario) throws PreexistingEntityException, Exception {
         if (usuario.getCalificacionesExamenes() == null) {
             usuario.setCalificacionesExamenes(new ArrayList<Estudiante_Examen>());
         }
         if (usuario.getCalificacionesCursos() == null) {
             usuario.setCalificacionesCursos(new ArrayList<Estudiante_Curso>());
-        }
-        if (usuario.getInscripcionesExamenes() == null) {
-            usuario.setInscripcionesExamenes(new ArrayList<Examen>());
-        }
-        if (usuario.getCursos() == null) {
-            usuario.setCursos(new ArrayList<Curso>());
         }
         EntityManager em = null;
         try {
@@ -67,18 +61,6 @@ public class UsuarioJpaController implements Serializable {
                 attachedCalificacionesCursos.add(calificacionesCursosEstudiante_CursoToAttach);
             }
             usuario.setCalificacionesCursos(attachedCalificacionesCursos);
-            List<Examen> attachedInscripcionesExamenes = new ArrayList<Examen>();
-            for (Examen inscripcionesExamenesExamenToAttach : usuario.getInscripcionesExamenes()) {
-                inscripcionesExamenesExamenToAttach = em.getReference(inscripcionesExamenesExamenToAttach.getClass(), inscripcionesExamenesExamenToAttach.getId());
-                attachedInscripcionesExamenes.add(inscripcionesExamenesExamenToAttach);
-            }
-            usuario.setInscripcionesExamenes(attachedInscripcionesExamenes);
-            List<Curso> attachedCursos = new ArrayList<Curso>();
-            for (Curso cursosCursoToAttach : usuario.getCursos()) {
-                cursosCursoToAttach = em.getReference(cursosCursoToAttach.getClass(), cursosCursoToAttach.getId());
-                attachedCursos.add(cursosCursoToAttach);
-            }
-            usuario.setCursos(attachedCursos);
             em.persist(usuario);
             for (Estudiante_Examen calificacionesExamenesEstudiante_Examen : usuario.getCalificacionesExamenes()) {
                 Usuario oldUsuarioOfCalificacionesExamenesEstudiante_Examen = calificacionesExamenesEstudiante_Examen.getUsuario();
@@ -97,14 +79,6 @@ public class UsuarioJpaController implements Serializable {
                     oldUsuarioOfCalificacionesCursosEstudiante_Curso.getCalificacionesCursos().remove(calificacionesCursosEstudiante_Curso);
                     oldUsuarioOfCalificacionesCursosEstudiante_Curso = em.merge(oldUsuarioOfCalificacionesCursosEstudiante_Curso);
                 }
-            }
-            for (Examen inscripcionesExamenesExamen : usuario.getInscripcionesExamenes()) {
-                inscripcionesExamenesExamen.getInscriptos().add(usuario);
-                inscripcionesExamenesExamen = em.merge(inscripcionesExamenesExamen);
-            }
-            for (Curso cursosCurso : usuario.getCursos()) {
-                cursosCurso.getInscriptos().add(usuario);
-                cursosCurso = em.merge(cursosCurso);
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -129,10 +103,6 @@ public class UsuarioJpaController implements Serializable {
             List<Estudiante_Examen> calificacionesExamenesNew = usuario.getCalificacionesExamenes();
             List<Estudiante_Curso> calificacionesCursosOld = persistentUsuario.getCalificacionesCursos();
             List<Estudiante_Curso> calificacionesCursosNew = usuario.getCalificacionesCursos();
-            List<Examen> inscripcionesExamenesOld = persistentUsuario.getInscripcionesExamenes();
-            List<Examen> inscripcionesExamenesNew = usuario.getInscripcionesExamenes();
-            List<Curso> cursosOld = persistentUsuario.getCursos();
-            List<Curso> cursosNew = usuario.getCursos();
             List<Estudiante_Examen> attachedCalificacionesExamenesNew = new ArrayList<Estudiante_Examen>();
             for (Estudiante_Examen calificacionesExamenesNewEstudiante_ExamenToAttach : calificacionesExamenesNew) {
                 calificacionesExamenesNewEstudiante_ExamenToAttach = em.getReference(calificacionesExamenesNewEstudiante_ExamenToAttach.getClass(), calificacionesExamenesNewEstudiante_ExamenToAttach.getExamen());
@@ -147,20 +117,6 @@ public class UsuarioJpaController implements Serializable {
             }
             calificacionesCursosNew = attachedCalificacionesCursosNew;
             usuario.setCalificacionesCursos(calificacionesCursosNew);
-            List<Examen> attachedInscripcionesExamenesNew = new ArrayList<Examen>();
-            for (Examen inscripcionesExamenesNewExamenToAttach : inscripcionesExamenesNew) {
-                inscripcionesExamenesNewExamenToAttach = em.getReference(inscripcionesExamenesNewExamenToAttach.getClass(), inscripcionesExamenesNewExamenToAttach.getId());
-                attachedInscripcionesExamenesNew.add(inscripcionesExamenesNewExamenToAttach);
-            }
-            inscripcionesExamenesNew = attachedInscripcionesExamenesNew;
-            usuario.setInscripcionesExamenes(inscripcionesExamenesNew);
-            List<Curso> attachedCursosNew = new ArrayList<Curso>();
-            for (Curso cursosNewCursoToAttach : cursosNew) {
-                cursosNewCursoToAttach = em.getReference(cursosNewCursoToAttach.getClass(), cursosNewCursoToAttach.getId());
-                attachedCursosNew.add(cursosNewCursoToAttach);
-            }
-            cursosNew = attachedCursosNew;
-            usuario.setCursos(cursosNew);
             usuario = em.merge(usuario);
             for (Estudiante_Examen calificacionesExamenesOldEstudiante_Examen : calificacionesExamenesOld) {
                 if (!calificacionesExamenesNew.contains(calificacionesExamenesOldEstudiante_Examen)) {
@@ -196,31 +152,6 @@ public class UsuarioJpaController implements Serializable {
                     }
                 }
             }
-            for (Examen inscripcionesExamenesOldExamen : inscripcionesExamenesOld) {
-                if (!inscripcionesExamenesNew.contains(inscripcionesExamenesOldExamen)) {
-                    inscripcionesExamenesOldExamen.getInscriptos().remove(usuario);
-                    inscripcionesExamenesOldExamen = em.merge(inscripcionesExamenesOldExamen);
-                }
-            }
-            for (Examen inscripcionesExamenesNewExamen : inscripcionesExamenesNew) {
-                if (!inscripcionesExamenesOld.contains(inscripcionesExamenesNewExamen)) {
-                    inscripcionesExamenesNewExamen.getInscriptos().add(usuario);
-                    inscripcionesExamenesNewExamen = em.merge(inscripcionesExamenesNewExamen);
-                }
-            }
-            for (Curso cursosOldCurso : cursosOld) {
-                if (!cursosNew.contains(cursosOldCurso)) {
-                    cursosOldCurso.getInscriptos().remove(usuario);
-                    cursosOldCurso = em.merge(cursosOldCurso);
-                }
-            }
-            for (Curso cursosNewCurso : cursosNew) {
-                if (!cursosOld.contains(cursosNewCurso)) {
-                    cursosNewCurso.getInscriptos().add(usuario);
-                    cursosNewCurso = em.merge(cursosNewCurso);
-                }
-            }
-            usuario = em.merge(usuario);
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
@@ -259,16 +190,6 @@ public class UsuarioJpaController implements Serializable {
             for (Estudiante_Curso calificacionesCursosEstudiante_Curso : calificacionesCursos) {
                 calificacionesCursosEstudiante_Curso.setUsuario(null);
                 calificacionesCursosEstudiante_Curso = em.merge(calificacionesCursosEstudiante_Curso);
-            }
-            List<Examen> inscripcionesExamenes = usuario.getInscripcionesExamenes();
-            for (Examen inscripcionesExamenesExamen : inscripcionesExamenes) {
-                inscripcionesExamenesExamen.getInscriptos().remove(usuario);
-                inscripcionesExamenesExamen = em.merge(inscripcionesExamenesExamen);
-            }
-            List<Curso> cursos = usuario.getCursos();
-            for (Curso cursosCurso : cursos) {
-                cursosCurso.getInscriptos().remove(usuario);
-                cursosCurso = em.merge(cursosCurso);
             }
             em.remove(usuario);
             em.getTransaction().commit();
@@ -324,5 +245,4 @@ public class UsuarioJpaController implements Serializable {
             em.close();
         }
     }
-    
 }

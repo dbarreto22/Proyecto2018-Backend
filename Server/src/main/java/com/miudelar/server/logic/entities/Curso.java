@@ -49,9 +49,9 @@ public class Curso implements Serializable {
     @OneToMany(targetEntity = Estudiante_Curso.class, fetch = FetchType.EAGER)
     private List<Estudiante_Curso> calificacionesCursos;
 
-    @XmlTransient
-    @ManyToMany(targetEntity = Usuario.class, mappedBy = "cursos", fetch = FetchType.EAGER)
-    private List<Usuario> inscriptos;
+//    @XmlTransient
+//    @ManyToMany(targetEntity = Usuario.class, mappedBy = "cursos", fetch = FetchType.EAGER)
+//    private List<Usuario> inscriptos;
 
     public Curso(Long id) {
         this.id = id;
@@ -84,13 +84,13 @@ public class Curso implements Serializable {
         this.calificacionesCursos = calificacionesCursos;
     }
 
-    public List<Usuario> getInscriptos() {
-        return this.inscriptos;
-    }
+//    public List<Usuario> getInscriptos() {
+//        return this.inscriptos;
+//    }
 
-    public void setInscriptos(List<Usuario> inscriptos) {
-        this.inscriptos = inscriptos;
-    }
+//    public void setInscriptos(List<Usuario> inscriptos) {
+//        this.inscriptos = inscriptos;
+//    }
     
     public DtCurso toDataType(){
         DtAsignatura_Carrera asignatura_Carrera = new DtAsignatura_Carrera(this.asignatura_Carrera.getId());

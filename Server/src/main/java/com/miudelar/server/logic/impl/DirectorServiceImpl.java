@@ -146,4 +146,28 @@ public class DirectorServiceImpl implements DirectorService{
         }
         return message;
     }
+    
+    @Override
+    public void saveCarrera(DtCarrera carrera){
+        Carrera carreraEntity = new Carrera(carrera.getCodigo(),carrera.getNombre());
+        String message = "OK";
+        try {
+            carreraJpaController.create(carreraEntity);
+        } catch (Exception ex) {
+            Logger.getLogger(DirectorServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            message = ex.getMessage();
+        }
+    }
+    
+    @Override
+    public void saveAsignatura(DtAsignatura asignatura){
+        Asignatura asignaturaEntity = new Asignatura(asignatura.getCodigo(),asignatura.getNombre());
+        String message = "OK";
+        try {
+            asignaturaJpaController.create(asignaturaEntity);
+        } catch (Exception ex) {
+            Logger.getLogger(DirectorServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            message = ex.getMessage();
+        }
+    }
 }

@@ -40,9 +40,6 @@ public class ExamenJpaController implements Serializable {
         if (examen.getCalificacionesExamenes() == null) {
             examen.setCalificacionesExamenes(new ArrayList<Estudiante_Examen>());
         }
-        if (examen.getInscriptos() == null) {
-            examen.setInscriptos(new ArrayList<Usuario>());
-        }
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -58,12 +55,6 @@ public class ExamenJpaController implements Serializable {
                 attachedCalificacionesExamenes.add(calificacionesExamenesEstudiante_ExamenToAttach);
             }
             examen.setCalificacionesExamenes(attachedCalificacionesExamenes);
-            List<Usuario> attachedInscriptos = new ArrayList<Usuario>();
-            for (Usuario inscriptosUsuarioToAttach : examen.getInscriptos()) {
-                inscriptosUsuarioToAttach = em.getReference(inscriptosUsuarioToAttach.getClass(), inscriptosUsuarioToAttach.getCedula());
-                attachedInscriptos.add(inscriptosUsuarioToAttach);
-            }
-            examen.setInscriptos(attachedInscriptos);
             em.persist(examen);
             if (asignatura_Carrera != null) {
                 asignatura_Carrera.getExamenes().add(examen);
@@ -77,10 +68,6 @@ public class ExamenJpaController implements Serializable {
                     oldExamenOfCalificacionesExamenesEstudiante_Examen.getCalificacionesExamenes().remove(calificacionesExamenesEstudiante_Examen);
                     oldExamenOfCalificacionesExamenesEstudiante_Examen = em.merge(oldExamenOfCalificacionesExamenesEstudiante_Examen);
                 }
-            }
-            for (Usuario inscriptosUsuario : examen.getInscriptos()) {
-                inscriptosUsuario.getInscripcionesExamenes().add(examen);
-                inscriptosUsuario = em.merge(inscriptosUsuario);
             }
             em.getTransaction().commit();
         } finally {
@@ -100,8 +87,6 @@ public class ExamenJpaController implements Serializable {
             Asignatura_Carrera asignatura_CarreraNew = examen.getAsignatura_Carrera();
             List<Estudiante_Examen> calificacionesExamenesOld = persistentExamen.getCalificacionesExamenes();
             List<Estudiante_Examen> calificacionesExamenesNew = examen.getCalificacionesExamenes();
-            List<Usuario> inscriptosOld = persistentExamen.getInscriptos();
-            List<Usuario> inscriptosNew = examen.getInscriptos();
             if (asignatura_CarreraNew != null) {
                 asignatura_CarreraNew = em.getReference(asignatura_CarreraNew.getClass(), asignatura_CarreraNew.getId());
                 examen.setAsignatura_Carrera(asignatura_CarreraNew);
@@ -113,13 +98,6 @@ public class ExamenJpaController implements Serializable {
             }
             calificacionesExamenesNew = attachedCalificacionesExamenesNew;
             examen.setCalificacionesExamenes(calificacionesExamenesNew);
-            List<Usuario> attachedInscriptosNew = new ArrayList<Usuario>();
-            for (Usuario inscriptosNewUsuarioToAttach : inscriptosNew) {
-                inscriptosNewUsuarioToAttach = em.getReference(inscriptosNewUsuarioToAttach.getClass(), inscriptosNewUsuarioToAttach.getCedula());
-                attachedInscriptosNew.add(inscriptosNewUsuarioToAttach);
-            }
-            inscriptosNew = attachedInscriptosNew;
-            examen.setInscriptos(inscriptosNew);
             examen = em.merge(examen);
             if (asignatura_CarreraOld != null && !asignatura_CarreraOld.equals(asignatura_CarreraNew)) {
                 asignatura_CarreraOld.getExamenes().remove(examen);
@@ -144,18 +122,6 @@ public class ExamenJpaController implements Serializable {
                         oldExamenOfCalificacionesExamenesNewEstudiante_Examen.getCalificacionesExamenes().remove(calificacionesExamenesNewEstudiante_Examen);
                         oldExamenOfCalificacionesExamenesNewEstudiante_Examen = em.merge(oldExamenOfCalificacionesExamenesNewEstudiante_Examen);
                     }
-                }
-            }
-            for (Usuario inscriptosOldUsuario : inscriptosOld) {
-                if (!inscriptosNew.contains(inscriptosOldUsuario)) {
-                    inscriptosOldUsuario.getInscripcionesExamenes().remove(examen);
-                    inscriptosOldUsuario = em.merge(inscriptosOldUsuario);
-                }
-            }
-            for (Usuario inscriptosNewUsuario : inscriptosNew) {
-                if (!inscriptosOld.contains(inscriptosNewUsuario)) {
-                    inscriptosNewUsuario.getInscripcionesExamenes().add(examen);
-                    inscriptosNewUsuario = em.merge(inscriptosNewUsuario);
                 }
             }
             em.getTransaction().commit();
@@ -196,11 +162,6 @@ public class ExamenJpaController implements Serializable {
             for (Estudiante_Examen calificacionesExamenesEstudiante_Examen : calificacionesExamenes) {
                 calificacionesExamenesEstudiante_Examen.setExamen(null);
                 calificacionesExamenesEstudiante_Examen = em.merge(calificacionesExamenesEstudiante_Examen);
-            }
-            List<Usuario> inscriptos = examen.getInscriptos();
-            for (Usuario inscriptosUsuario : inscriptos) {
-                inscriptosUsuario.getInscripcionesExamenes().remove(examen);
-                inscriptosUsuario = em.merge(inscriptosUsuario);
             }
             em.remove(examen);
             em.getTransaction().commit();
@@ -256,5 +217,4 @@ public class ExamenJpaController implements Serializable {
             em.close();
         }
     }
-    
 }

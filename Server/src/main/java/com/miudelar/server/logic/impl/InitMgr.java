@@ -8,6 +8,8 @@ package com.miudelar.server.logic.impl;
 import com.miudelar.server.exceptions.NonexistentEntityException;
 import com.miudelar.server.exceptions.RolWithInvalidDataException;
 import com.miudelar.server.exceptions.UsuarioWithInvalidDataException;
+import com.miudelar.server.logic.datatypes.DtAsignatura;
+import com.miudelar.server.logic.datatypes.DtCarrera;
 import com.miudelar.server.logic.datatypes.DtRol;
 import com.miudelar.server.logic.datatypes.DtUsuario;
 import com.miudelar.server.logic.factories.ManagersFactory;
@@ -46,8 +48,11 @@ public class InitMgr implements InitMgt {
     }
     
     private void carrera_asginaturaGenerator(){
-        directorService.saveCarrera("{'codigo':1001,'nombre':'Computacion'','periodos_Examenes':[],'asignaturas':[]}");
-        directorService.saveAsignatura("{'codigo':1001,'nombre':'Calculo'}");
+        DtCarrera carrera = new DtCarrera(2001L, "Ing. en computación");
+        directorService.saveCarrera(carrera);
+        DtAsignatura asignatura = new DtAsignatura(1001L, "Cálculo1");
+        directorService.saveAsignatura(asignatura);
+        directorService.saveAsignaturaCarrera(1001L, 2001L);
     }
 
     @Override
