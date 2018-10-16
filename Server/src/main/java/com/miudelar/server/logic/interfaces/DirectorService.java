@@ -7,6 +7,8 @@ package com.miudelar.server.logic.interfaces;
 
 import com.miudelar.server.logic.datatypes.DtAsignatura;
 import com.miudelar.server.logic.datatypes.DtCarrera;
+import com.miudelar.server.logic.entities.Asignatura;
+import com.miudelar.server.logic.entities.Carrera;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import javax.ws.rs.GET;
@@ -31,7 +33,7 @@ public interface DirectorService {
     @GET
     @Path("carrera/{codigo}")
     @Produces(MediaType.APPLICATION_JSON)
-    public DtCarrera getCarrera(@PathParam("codigo")
+    public Carrera getCarrera(@PathParam("codigo")
         final Long codigo) throws NoSuchAlgorithmException;
     
     @POST
@@ -41,10 +43,10 @@ public interface DirectorService {
     public String saveCarrera(@PathParam("dtCarr") final String dtCarr);
     
     @POST
-    @Path("carrera.edit/{dtCarr}")
+    @Path("carrera.edit/{Carr}")
     @Produces(MediaType.TEXT_PLAIN)
 //    @Consumes(MediaType.APPLICATION_JSON)
-    public String editCarrera(@PathParam("dtCarr") final String dtCarr);
+    public String editCarrera(@PathParam("Carr") final String Carr);
     
     @POST
     @Path("asignatura/{dtAsig}")
@@ -53,13 +55,13 @@ public interface DirectorService {
     public String saveAsignatura(@PathParam("dtAsig") final String dtAsig);
     
     @POST
-    @Path("asignatura.edit/{dtAsig}")
+    @Path("asignatura.edit/{Asig}")
     @Produces(MediaType.TEXT_PLAIN)
 //    @Consumes(MediaType.APPLICATION_JSON)
-    public String editAsignatura(@PathParam("dtAsig") final String dtAsig);
+    public String editAsignatura(@PathParam("Asig") final String Asig);
     
     @GET
-    @Path("asignatura/{idCarrera}")
+    @Path("asignatura/carrera/{idCarrera}")
     @Produces(MediaType.APPLICATION_JSON)
     public List<DtAsignatura> getAsignaturasByCarrera(@PathParam("idCarrera")
         final Long idCarrera) throws NoSuchAlgorithmException;
@@ -67,7 +69,14 @@ public interface DirectorService {
     @GET
     @Path("asignatura/{codigo}")
     @Produces(MediaType.APPLICATION_JSON)
-    public DtAsignatura getAsignatura(@PathParam("codigo")
+    public Asignatura getAsignatura(@PathParam("codigo")
         final Long codigo) throws NoSuchAlgorithmException;
+    
+    @POST
+    @Path("asignaturacarrera/{codigoAsig}/{codigoCarrera}")
+    @Produces(MediaType.TEXT_PLAIN)
+//    @Consumes(MediaType.APPLICATION_JSON)
+    public String saveAsignaturaCarrera(@PathParam("codigoAsig") final Long codigoAsig,
+            @PathParam("codigoCarrera") final Long codigoCarrera);
     
 }

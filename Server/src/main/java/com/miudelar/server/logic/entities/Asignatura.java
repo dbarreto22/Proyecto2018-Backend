@@ -30,20 +30,15 @@ import javax.xml.bind.annotation.*;
 public class Asignatura implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long codigo;
 
     @Basic
     @Column(unique = true)
     private String nombre;
 
-    @XmlTransient
-    @OneToMany(targetEntity = Asignatura_Carrera.class, mappedBy = "asignatura", fetch = FetchType.EAGER)
+//    @XmlTransient
+    @OneToMany(targetEntity = Asignatura_Carrera.class, fetch = FetchType.EAGER)
     private List<Asignatura_Carrera> asignatura_Carreras;
-
-    @XmlTransient
-    @ManyToMany(targetEntity = Carrera.class, mappedBy = "asignaturas", fetch = FetchType.EAGER)
-    private List<Carrera> carreras;
 
     public Asignatura(Long codigo, String nombre) {
         this.codigo = codigo;
@@ -76,15 +71,15 @@ public class Asignatura implements Serializable {
     public void setAsignatura_Carreras(List<Asignatura_Carrera> asignatura_Carreras) {
         this.asignatura_Carreras = asignatura_Carreras;
     }
-
-    public List<Carrera> getCarreras() {
-        return this.carreras;
+    
+    public void addAsignatura_Carrera (Asignatura_Carrera asig_carrera){
+        this.asignatura_Carreras.add(asig_carrera);
     }
-
-    public void setCarreras(List<Carrera> carreras) {
-        this.carreras = carreras;
+    
+    public void removeAsignatura_Carrera (Asignatura_Carrera asig_carrera){
+        this.asignatura_Carreras.remove(asig_carrera);
     }
-
+  
     @Override
     public int hashCode() {
         int hash = 7;

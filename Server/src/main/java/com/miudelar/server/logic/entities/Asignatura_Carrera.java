@@ -6,6 +6,7 @@ package com.miudelar.server.logic.entities;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
+import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -37,7 +38,7 @@ public class Asignatura_Carrera implements Serializable {
     @XmlTransient
     @OneToMany(targetEntity = Curso.class, fetch = FetchType.EAGER)
     private List<Curso> cursos;
-
+    
     @ManyToOne(targetEntity = Carrera.class)
     private Carrera carrera;
 
@@ -54,10 +55,11 @@ public class Asignatura_Carrera implements Serializable {
     @ManyToMany(targetEntity = Asignatura_Carrera.class, mappedBy = "previas", fetch = FetchType.EAGER)
     private List<Asignatura_Carrera> esPreviaDe;
 
-    public Asignatura_Carrera(Long id) {
-        this.id = id;
+    public Asignatura_Carrera(Asignatura asignatura, Carrera carrera) {
+        this.carrera = carrera;
+        this.asignatura = asignatura;
     }
-
+    
     public Asignatura_Carrera() {
     }
 

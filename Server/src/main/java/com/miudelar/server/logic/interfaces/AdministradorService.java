@@ -6,6 +6,7 @@ import com.miudelar.server.exceptions.UsuarioWithInvalidDataException;
 import com.miudelar.server.logic.datatypes.DtRol;
 import com.miudelar.server.logic.datatypes.DtUsuario;
 import com.miudelar.server.logic.entities.Rol;
+import com.miudelar.server.logic.entities.Usuario;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import javax.jws.WebService;
@@ -44,10 +45,10 @@ public interface AdministradorService {
     public String saveUsuario(@PathParam("dtUsrStr") final String dtUsrStr);
     
     @POST
-    @Path("usuario.edit/{dtUsrStr}")
+    @Path("usuario.edit/{UsrStr}")
     @Produces(MediaType.APPLICATION_JSON)
 //    @Consumes(MediaType.TE)
-    public String editUsuario(@PathParam("dtUsrStr") final String dtUsrStr);
+    public String editUsuario(@PathParam("UsrStr") final String UsrStr);
         
     @POST
     @Path("usuario.addRol/{cedula}/{idRol}")
@@ -71,7 +72,7 @@ public interface AdministradorService {
     @GET
     @Path("usuario/{cedula}")
     @Produces(MediaType.APPLICATION_JSON)
-    public DtUsuario getUsuario(@PathParam("cedula")
+    public Usuario getUsuario(@PathParam("cedula")
         final String cedula);
              
 //    @GET

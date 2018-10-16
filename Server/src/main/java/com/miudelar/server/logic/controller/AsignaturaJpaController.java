@@ -39,9 +39,6 @@ public class AsignaturaJpaController implements Serializable {
         if (asignatura.getAsignatura_Carreras() == null) {
             asignatura.setAsignatura_Carreras(new ArrayList<Asignatura_Carrera>());
         }
-        if (asignatura.getCarreras() == null) {
-            asignatura.setCarreras(new ArrayList<Carrera>());
-        }
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -53,11 +50,6 @@ public class AsignaturaJpaController implements Serializable {
             }
             asignatura.setAsignatura_Carreras(attachedAsignatura_Carreras);
             List<Carrera> attachedCarreras = new ArrayList<Carrera>();
-            for (Carrera carrerasCarreraToAttach : asignatura.getCarreras()) {
-                carrerasCarreraToAttach = em.getReference(carrerasCarreraToAttach.getClass(), carrerasCarreraToAttach.getCodigo());
-                attachedCarreras.add(carrerasCarreraToAttach);
-            }
-            asignatura.setCarreras(attachedCarreras);
             em.persist(asignatura);
             for (Asignatura_Carrera asignatura_CarrerasAsignatura_Carrera : asignatura.getAsignatura_Carreras()) {
                 Asignatura oldAsignaturaOfAsignatura_CarrerasAsignatura_Carrera = asignatura_CarrerasAsignatura_Carrera.getAsignatura();
@@ -68,10 +60,6 @@ public class AsignaturaJpaController implements Serializable {
                     oldAsignaturaOfAsignatura_CarrerasAsignatura_Carrera = em.merge(oldAsignaturaOfAsignatura_CarrerasAsignatura_Carrera);
                 }
             }
-            for (Carrera carrerasCarrera : asignatura.getCarreras()) {
-                carrerasCarrera.getAsignaturas().add(asignatura);
-                carrerasCarrera = em.merge(carrerasCarrera);
-            }
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -79,7 +67,7 @@ public class AsignaturaJpaController implements Serializable {
             }
         }
     }
-
+    
     public void edit(Asignatura asignatura) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
@@ -88,8 +76,6 @@ public class AsignaturaJpaController implements Serializable {
             Asignatura persistentAsignatura = em.find(Asignatura.class, asignatura.getCodigo());
             List<Asignatura_Carrera> asignatura_CarrerasOld = persistentAsignatura.getAsignatura_Carreras();
             List<Asignatura_Carrera> asignatura_CarrerasNew = asignatura.getAsignatura_Carreras();
-            List<Carrera> carrerasOld = persistentAsignatura.getCarreras();
-            List<Carrera> carrerasNew = asignatura.getCarreras();
             List<Asignatura_Carrera> attachedAsignatura_CarrerasNew = new ArrayList<Asignatura_Carrera>();
             for (Asignatura_Carrera asignatura_CarrerasNewAsignatura_CarreraToAttach : asignatura_CarrerasNew) {
                 asignatura_CarrerasNewAsignatura_CarreraToAttach = em.getReference(asignatura_CarrerasNewAsignatura_CarreraToAttach.getClass(), asignatura_CarrerasNewAsignatura_CarreraToAttach.getId());
@@ -97,13 +83,6 @@ public class AsignaturaJpaController implements Serializable {
             }
             asignatura_CarrerasNew = attachedAsignatura_CarrerasNew;
             asignatura.setAsignatura_Carreras(asignatura_CarrerasNew);
-            List<Carrera> attachedCarrerasNew = new ArrayList<Carrera>();
-            for (Carrera carrerasNewCarreraToAttach : carrerasNew) {
-                carrerasNewCarreraToAttach = em.getReference(carrerasNewCarreraToAttach.getClass(), carrerasNewCarreraToAttach.getCodigo());
-                attachedCarrerasNew.add(carrerasNewCarreraToAttach);
-            }
-            carrerasNew = attachedCarrerasNew;
-            asignatura.setCarreras(carrerasNew);
             asignatura = em.merge(asignatura);
             for (Asignatura_Carrera asignatura_CarrerasOldAsignatura_Carrera : asignatura_CarrerasOld) {
                 if (!asignatura_CarrerasNew.contains(asignatura_CarrerasOldAsignatura_Carrera)) {
@@ -120,18 +99,6 @@ public class AsignaturaJpaController implements Serializable {
                         oldAsignaturaOfAsignatura_CarrerasNewAsignatura_Carrera.getAsignatura_Carreras().remove(asignatura_CarrerasNewAsignatura_Carrera);
                         oldAsignaturaOfAsignatura_CarrerasNewAsignatura_Carrera = em.merge(oldAsignaturaOfAsignatura_CarrerasNewAsignatura_Carrera);
                     }
-                }
-            }
-            for (Carrera carrerasOldCarrera : carrerasOld) {
-                if (!carrerasNew.contains(carrerasOldCarrera)) {
-                    carrerasOldCarrera.getAsignaturas().remove(asignatura);
-                    carrerasOldCarrera = em.merge(carrerasOldCarrera);
-                }
-            }
-            for (Carrera carrerasNewCarrera : carrerasNew) {
-                if (!carrerasOld.contains(carrerasNewCarrera)) {
-                    carrerasNewCarrera.getAsignaturas().add(asignatura);
-                    carrerasNewCarrera = em.merge(carrerasNewCarrera);
                 }
             }
             em.getTransaction().commit();
@@ -167,11 +134,6 @@ public class AsignaturaJpaController implements Serializable {
             for (Asignatura_Carrera asignatura_CarrerasAsignatura_Carrera : asignatura_Carreras) {
                 asignatura_CarrerasAsignatura_Carrera.setAsignatura(null);
                 asignatura_CarrerasAsignatura_Carrera = em.merge(asignatura_CarrerasAsignatura_Carrera);
-            }
-            List<Carrera> carreras = asignatura.getCarreras();
-            for (Carrera carrerasCarrera : carreras) {
-                carrerasCarrera.getAsignaturas().remove(asignatura);
-                carrerasCarrera = em.merge(carrerasCarrera);
             }
             em.remove(asignatura);
             em.getTransaction().commit();

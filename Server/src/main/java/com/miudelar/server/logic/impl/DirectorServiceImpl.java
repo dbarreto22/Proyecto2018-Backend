@@ -7,10 +7,13 @@ package com.miudelar.server.logic.impl;
 
 import com.google.gson.Gson;
 import com.miudelar.server.logic.controller.AsignaturaJpaController;
+import com.miudelar.server.logic.controller.Asignatura_CarreraJpaController;
 import com.miudelar.server.logic.controller.CarreraJpaController;
 import com.miudelar.server.logic.datatypes.DtAsignatura;
+import com.miudelar.server.logic.datatypes.DtAsignatura_Carrera;
 import com.miudelar.server.logic.datatypes.DtCarrera;
 import com.miudelar.server.logic.entities.Asignatura;
+import com.miudelar.server.logic.entities.Asignatura_Carrera;
 import com.miudelar.server.logic.entities.Carrera;
 import com.miudelar.server.logic.interfaces.*;
 import java.security.NoSuchAlgorithmException;
@@ -30,6 +33,7 @@ public class DirectorServiceImpl implements DirectorService{
     
     CarreraJpaController carreraJpaController = new CarreraJpaController();
     AsignaturaJpaController asignaturaJpaController = new AsignaturaJpaController();
+    Asignatura_CarreraJpaController asig_carJpaController = new Asignatura_CarreraJpaController();
     
     @Override
     public List<DtCarrera> getAllCarrera() throws NoSuchAlgorithmException{
@@ -50,10 +54,9 @@ public class DirectorServiceImpl implements DirectorService{
     }
     
     @Override
-    public DtCarrera getCarrera(Long codigo) {
+    public Carrera getCarrera(Long codigo) {
         Carrera carrera = carreraJpaController.findCarrera(codigo);
-        DtCarrera dtcarrera = new DtCarrera(carrera.getCodigo(), carrera.getNombre());
-        return dtcarrera;
+        return carrera;
     }
     
     @Override
@@ -71,14 +74,13 @@ public class DirectorServiceImpl implements DirectorService{
     }
     
     @Override
-    public String editCarrera(String dtCarr){
-        DtCarrera carrera = gson.fromJson(dtCarr, DtCarrera.class);
-        Carrera carreraEntity = new Carrera(carrera.getCodigo(),carrera.getNombre());
+    public String editCarrera(String Carr){
+        Carrera carrera = gson.fromJson(Carr, Carrera.class);
         String message = "OK";
         try {
-            carreraJpaController.edit(carreraEntity);
+            carreraJpaController.edit(carrera);
         } catch (Exception ex) {
-            Logger.getLogger(AdministradorServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DirectorServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
             message = ex.getMessage();
         }
         return message;
@@ -99,24 +101,49 @@ public class DirectorServiceImpl implements DirectorService{
     }
     
     @Override
-    public String editAsignatura(String dtAsig){
-        DtAsignatura asignatura = gson.fromJson(dtAsig, DtAsignatura.class);
-        Asignatura asignaturaEntity = new Asignatura(asignatura.getCodigo(),asignatura.getNombre());
+    public String editAsignatura(String Asig){
+        Asignatura asignatura = gson.fromJson(Asig, Asignatura.class);
         String message = "OK";
         try {
-            asignaturaJpaController.edit(asignaturaEntity);
+            asignaturaJpaController.edit(asignatura);
         } catch (Exception ex) {
-            Logger.getLogger(AdministradorServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DirectorServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
             message = ex.getMessage();
         }
         return message;
     }
     
     @Override
-    public DtAsignatura getAsignatura(Long codigo) throws NoSuchAlgorithmException{
+    public Asignatura getAsignatura(Long codigo) throws NoSuchAlgorithmException{
         Asignatura asignatura = asignaturaJpaController.findAsignatura(codigo);
-        DtAsignatura dtasignatura = new DtAsignatura(asignatura.getCodigo(), asignatura.getNombre());
-        return dtasignatura;
+        return asignatura;
     }
     
+    @Override
+    public String saveAsignaturaCarrera(Long codigoAsig, Long codigoCarrera){
+        String message = "OK";
+        try {
+//        Creo asociacion
+            Asignatura asignatura = asignaturaJpaController.findAsignatura(codigoAsig);
+            Carrera carrera = carreraJpaController.findCarrera(codigoCarrera);
+            carrera.addAsignatura(asignatura);
+            carreraJpaController.edit(carrera);
+
+////        Creo entidad relación
+            Asignatura_Carrera asignatura_carreraEntity = new Asignatura_Carrera(asignatura, carrera);
+            asig_carJpaController.create(asignatura_carreraEntity);
+ 
+////        Asocio entidad relación
+            asignatura.addAsignatura_Carrera(asignatura_carreraEntity);
+            asignaturaJpaController.edit(asignatura);
+            
+            carrera.addAsignatura_Carrera(asignatura_carreraEntity);
+            carreraJpaController.edit(carrera);
+            
+        } catch (Exception ex) {
+            Logger.getLogger(DirectorServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            message = ex.getMessage();
+        }
+        return message;
+    }
 }

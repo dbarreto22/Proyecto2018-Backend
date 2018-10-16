@@ -88,13 +88,11 @@ public class AdministradorServiceImpl implements AdministradorService {
     }
     
     @Override
-    public String editUsuario(String dtUsrStr){
-        DtUsuario usuario = gson.fromJson(dtUsrStr, DtUsuario.class);
-        Usuario usr = new Usuario(usuario);
-//        Usuario usr = usuarioJpaController.findUsuario(usuario.getCedula());
+    public String editUsuario(String UsrStr){
+        Usuario usuario = gson.fromJson(UsrStr, Usuario.class);
         String message = "OK";
         try {
-            usuarioJpaController.edit(usr);
+            usuarioJpaController.edit(usuario);
         } catch (Exception ex) {
             Logger.getLogger(AdministradorServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
             message = ex.getMessage();
@@ -109,7 +107,7 @@ public class AdministradorServiceImpl implements AdministradorService {
         usuario.addRol(rol);
         String message = "OK";
         try {
-            usuarioJpaController.edit(usuario);
+        usuarioJpaController.edit(usuario);
         } catch (Exception ex) {
             Logger.getLogger(AdministradorServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
             message = ex.getMessage();
@@ -142,10 +140,9 @@ public class AdministradorServiceImpl implements AdministradorService {
     }
     
     @Override
-    public DtUsuario getUsuario(String cedula){
+    public Usuario getUsuario(String cedula){
         Usuario usuario = usuarioJpaController.findUsuario(cedula);
-        DtUsuario dtusuario = usuario.toDataType();
-        return dtusuario;
+        return usuario;
     }
     
 //    @Override

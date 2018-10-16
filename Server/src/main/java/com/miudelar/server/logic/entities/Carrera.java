@@ -36,8 +36,8 @@ public class Carrera implements Serializable {
     @Column(unique = true)
     private String nombre;
 
-    @XmlTransient
-    @OneToMany(targetEntity = Asignatura_Carrera.class, mappedBy = "carrera", fetch = FetchType.EAGER)
+//    @XmlTransient
+    @OneToMany(targetEntity = Asignatura_Carrera.class, fetch = FetchType.EAGER)
     private List<Asignatura_Carrera> asignatura_Carreras;
 
     /*@XmlTransient
@@ -96,6 +96,14 @@ public class Carrera implements Serializable {
 
     public void setAsignaturas(List<Asignatura> asignaturas) {
         this.asignaturas = asignaturas;
+    }
+    
+    public void addAsignatura_Carrera(Asignatura_Carrera asignatura_Carreras){
+        this.asignatura_Carreras.add(asignatura_Carreras);
+    }
+    
+    public void addAsignatura(Asignatura asignatura){
+        this.asignaturas.add(asignatura);
     }
 
     @Override

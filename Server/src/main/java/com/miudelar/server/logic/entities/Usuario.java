@@ -49,12 +49,11 @@ public class Usuario implements Serializable {
     @Basic
     private String password;
 
-    @XmlTransient
-    @OneToMany(targetEntity = Estudiante_Examen.class, mappedBy = "usuario", fetch = FetchType.EAGER)
+
+    @OneToMany(targetEntity = Estudiante_Examen.class, fetch = FetchType.EAGER)
     private List<Estudiante_Examen> calificacionesExamenes;
 
-    @XmlTransient
-    @OneToMany(targetEntity = Estudiante_Curso.class, mappedBy = "usuario", fetch = FetchType.EAGER)
+    @OneToMany(targetEntity = Estudiante_Curso.class, fetch = FetchType.EAGER)
     private List<Estudiante_Curso> calificacionesCursos;
 
     @ManyToMany(targetEntity = Rol.class, fetch = FetchType.EAGER)

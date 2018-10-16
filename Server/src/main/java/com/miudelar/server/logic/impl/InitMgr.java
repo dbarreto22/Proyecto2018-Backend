@@ -21,9 +21,9 @@ import java.util.logging.Logger;
 public class InitMgr implements InitMgt {
 
     AdministradorService administradorService = ManagersFactory.getInstance().getAdministradorService();
-//    BedeliaService bedeliaService = ManagersFactory.getInstance().getBedeliaService();
-//    DirectorService directorService = ManagersFactory.getInstance().getDirectorService();
-//    EstudianteService estudianteService = ManagersFactory.getInstance().getEstudianteService();
+    BedeliaService bedeliaService = ManagersFactory.getInstance().getBedeliaService();
+    DirectorService directorService = ManagersFactory.getInstance().getDirectorService();
+    EstudianteService estudianteService = ManagersFactory.getInstance().getEstudianteService();
 
     private void rolGenerator() throws NoSuchAlgorithmException, RolWithInvalidDataException {
         List<DtRol> listDtRol = administradorService.getAllRol();
@@ -44,11 +44,17 @@ public class InitMgr implements InitMgt {
             administradorService.addRol(usuario.getCedula(),1L);
         }
     }
+    
+    private void carrera_asginaturaGenerator(){
+        directorService.saveCarrera("{'codigo':1001,'nombre':'Computacion'','periodos_Examenes':[],'asignaturas':[]}");
+        directorService.saveAsignatura("{'codigo':1001,'nombre':'Calculo'}");
+    }
 
     @Override
     public void initBaseData() throws NoSuchAlgorithmException, RolWithInvalidDataException, UsuarioWithInvalidDataException, NonexistentEntityException{
         rolGenerator();
         createDefaultUser();
+        carrera_asginaturaGenerator();
     }
 
 }
