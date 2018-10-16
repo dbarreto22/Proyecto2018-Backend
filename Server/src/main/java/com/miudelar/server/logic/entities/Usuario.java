@@ -183,6 +183,10 @@ public class Usuario implements Serializable {
         this.cursos = cursos;
     }
     
+    public void addCurso(Curso curso) {
+        this.cursos.add(curso);
+    }
+    
     public DtUsuario toDataType() {
         List <DtRol> dtroles = new ArrayList<DtRol>();
         this.roles.forEach(rol -> {

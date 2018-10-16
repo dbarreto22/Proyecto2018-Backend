@@ -9,7 +9,9 @@ import com.miudelar.server.logic.datatypes.DtCurso;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
@@ -24,4 +26,10 @@ public interface EstudianteService {
     @Path("curso")
     @Produces(MediaType.APPLICATION_JSON)
     public List<DtCurso> getAllCurso() throws NoSuchAlgorithmException;
+    
+    @POST
+    @Path("inscripcionCurso/{cedula}/{idCurso}")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String inscripcionCurso(@PathParam("cedula") final String cedula,
+            @PathParam("idCurso") final Long idCurso);
 }
