@@ -44,7 +44,7 @@ public interface AdministradorService {
     public String saveUsuario(@PathParam("dtUsrStr") final String dtUsrStr);
     
     @POST
-    @Path("edit.usuario/{dtUsrStr}")
+    @Path("usuario.edit/{dtUsrStr}")
     @Produces(MediaType.APPLICATION_JSON)
 //    @Consumes(MediaType.TE)
     public String editUsuario(@PathParam("dtUsrStr") final String dtUsrStr);

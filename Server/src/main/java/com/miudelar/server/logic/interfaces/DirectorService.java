@@ -41,7 +41,7 @@ public interface DirectorService {
     public String saveCarrera(@PathParam("dtCarr") final String dtCarr);
     
     @POST
-    @Path("edit.carrera/{dtCarr}")
+    @Path("carrera.edit/{dtCarr}")
     @Produces(MediaType.TEXT_PLAIN)
 //    @Consumes(MediaType.APPLICATION_JSON)
     public String editCarrera(@PathParam("dtCarr") final String dtCarr);
@@ -53,7 +53,7 @@ public interface DirectorService {
     public String saveAsignatura(@PathParam("dtAsig") final String dtAsig);
     
     @POST
-    @Path("edit.asignatura/{dtAsig}")
+    @Path("asignatura.edit/{dtAsig}")
     @Produces(MediaType.TEXT_PLAIN)
 //    @Consumes(MediaType.APPLICATION_JSON)
     public String editAsignatura(@PathParam("dtAsig") final String dtAsig);
