@@ -90,7 +90,8 @@ public class AdministradorServiceImpl implements AdministradorService {
     @Override
     public String editUsuario(String dtUsrStr){
         DtUsuario usuario = gson.fromJson(dtUsrStr, DtUsuario.class);
-        Usuario usr = usuarioJpaController.findUsuario(usuario.getCedula());
+        Usuario usr = new Usuario(usuario);
+//        Usuario usr = usuarioJpaController.findUsuario(usuario.getCedula());
         String message = "OK";
         try {
             usuarioJpaController.edit(usr);
