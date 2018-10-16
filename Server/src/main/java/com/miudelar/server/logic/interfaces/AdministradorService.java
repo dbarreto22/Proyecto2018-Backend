@@ -18,7 +18,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import org.jboss.logging.Param;
 
 
 /* @author Romina*/
@@ -26,7 +25,6 @@ import org.jboss.logging.Param;
 public interface AdministradorService {
      
     //Services
-    
     @GET
     @Path("rol")
     @Produces(MediaType.APPLICATION_JSON)
@@ -37,27 +35,33 @@ public interface AdministradorService {
     @Produces(MediaType.TEXT_PLAIN)
     public String login(
             @FormParam("username") String username, 
-            @FormParam("password") String password) throws NoSuchAlgorithmException;
+            @FormParam("password") String password);
     
     @POST
-    @Path("usuario")
+    @Path("usuario/{dtUsrStr}")
     @Produces(MediaType.TEXT_PLAIN)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void saveUsuario(DtUsuario usuario) throws NoSuchAlgorithmException, UsuarioWithInvalidDataException;
+//    @Consumes(MediaType.APPLICATION_JSON)
+    public String saveUsuario(@PathParam("dtUsrStr") final String dtUsrStr);
     
+    @POST
+    @Path("edit.usuario/{dtUsrStr}")
+    @Produces(MediaType.APPLICATION_JSON)
+//    @Consumes(MediaType.TE)
+    public String editUsuario(@PathParam("dtUsrStr") final String dtUsrStr);
+        
     @POST
     @Path("usuario.addRol/{cedula}/{idRol}")
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.TEXT_PLAIN)
-    public void addRol(@PathParam("cedula") final String cedula,
-            @PathParam("idRol") final Long idRol) throws NonexistentEntityException;
+    public String addRol(@PathParam("cedula") final String cedula,
+            @PathParam("idRol") final Long idRol);
     
     @POST
     @Path("usuario.removeRol/{cedula}/{idRol}")
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.TEXT_PLAIN)
-    public void removeRol(@PathParam("cedula") final String cedula,
-            @PathParam("idRol") final Long idRol) throws NonexistentEntityException;
+    public String removeRol(@PathParam("cedula") final String cedula,
+            @PathParam("idRol") final Long idRol);
     
     @GET
     @Path("usuario")
@@ -85,5 +89,7 @@ public interface AdministradorService {
     
     //Managers
     void rolSave(String tipo) throws RolWithInvalidDataException;
+    
+    public String saveUsuario(DtUsuario usuario);
    
 }

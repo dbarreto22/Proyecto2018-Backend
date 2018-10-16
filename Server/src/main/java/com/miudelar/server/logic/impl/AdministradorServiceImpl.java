@@ -1,5 +1,6 @@
 package com.miudelar.server.logic.impl;
 
+import com.google.gson.Gson;
 import com.miudelar.server.exceptions.NonexistentEntityException;
 import com.miudelar.server.exceptions.UsuarioWithInvalidDataException;
 import com.miudelar.server.exceptions.RolWithInvalidDataException;
@@ -22,6 +23,7 @@ import javax.persistence.EntityManagerFactory;
 public class AdministradorServiceImpl implements AdministradorService {
 
     String SALT = "InYourFace";
+    Gson gson = new Gson();
        
     RolJpaController rolJpaController = new RolJpaController();
     UsuarioJpaController usuarioJpaController = new UsuarioJpaController();
@@ -58,41 +60,75 @@ public class AdministradorServiceImpl implements AdministradorService {
     }
     
     @Override
-    public void saveUsuario(DtUsuario usuario) throws NoSuchAlgorithmException, UsuarioWithInvalidDataException{
-        System.out.println("saveUsuario");
+    public String saveUsuario(String dtUsrStr){
+        DtUsuario usuario = gson.fromJson(dtUsrStr, DtUsuario.class);
         Usuario usuarioEntity = new Usuario(usuario);
+        String message = "OK";
         try {
             usuarioJpaController.create(usuarioEntity);
         } catch (Exception ex) {
             Logger.getLogger(AdministradorServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
-            throw new UsuarioWithInvalidDataException();
+            message = ex.getMessage();
         }
+        return message;
     }
     
     @Override
-    public void addRol(String cedula, Long idRol) throws NonexistentEntityException{
+    public String saveUsuario(DtUsuario usuario){
+        System.out.println("usuarioToJson: " + gson.toJson(usuario));
+        Usuario usuarioEntity = new Usuario(usuario);
+        String message = "OK";
+        try {
+            usuarioJpaController.create(usuarioEntity);
+        } catch (Exception ex) {
+            Logger.getLogger(AdministradorServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            message = ex.getMessage();
+        }
+        return message;
+    }
+    
+    @Override
+    public String editUsuario(String dtUsrStr){
+        DtUsuario usuario = gson.fromJson(dtUsrStr, DtUsuario.class);
+        Usuario usr = usuarioJpaController.findUsuario(usuario.getCedula());
+        String message = "OK";
+        try {
+            usuarioJpaController.edit(usr);
+        } catch (Exception ex) {
+            Logger.getLogger(AdministradorServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            message = ex.getMessage();
+        }
+        return message;
+    }
+    
+    @Override
+    public String addRol(String cedula, Long idRol){
         Usuario usuario = usuarioJpaController.findUsuario(cedula);
         Rol rol = rolJpaController.findRol(idRol);
         usuario.addRol(rol);
+        String message = "OK";
         try {
             usuarioJpaController.edit(usuario);
         } catch (Exception ex) {
             Logger.getLogger(AdministradorServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
-            throw new NonexistentEntityException(ex.getMessage());
+            message = ex.getMessage();
         }
+       return message;
     }
     
     @Override
-    public void removeRol(String cedula, Long idRol) throws NonexistentEntityException{
+    public String removeRol(String cedula, Long idRol) {
         Usuario usuario = usuarioJpaController.findUsuario(cedula);
         Rol rol = rolJpaController.findRol(idRol);
         usuario.removeRol(rol);
+        String message = "OK";
         try {
             usuarioJpaController.edit(usuario);
         } catch (Exception ex) {
             Logger.getLogger(AdministradorServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
-            throw new NonexistentEntityException(ex.getMessage());
+            message = ex.getMessage();
         }
+        return message;
     }
     
     @Override
