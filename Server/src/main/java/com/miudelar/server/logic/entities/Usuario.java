@@ -166,6 +166,10 @@ public class Usuario implements Serializable {
     public void setCarreras(List<Carrera> carreras) {
         this.carreras = carreras;
     }
+    
+    public void addCarrera(Carrera carrera) {
+        this.carreras.add(carrera);
+    }
 
     public List<Examen> getInscripcionesExamenes() {
         return this.inscripcionesExamenes;
@@ -174,6 +178,10 @@ public class Usuario implements Serializable {
     public void setInscripcionesExamenes(List<Examen> inscripcionesExamenes) {
         this.inscripcionesExamenes = inscripcionesExamenes;
     }
+    
+    public void addInscripcionesExamenes(Examen examen) {
+        this.inscripcionesExamenes.add(examen);
+    }   
 
     public List<Curso> getCursos() {
         return this.cursos;

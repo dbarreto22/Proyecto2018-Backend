@@ -32,4 +32,16 @@ public interface EstudianteService {
     @Produces(MediaType.TEXT_PLAIN)
     public String inscripcionCurso(@PathParam("cedula") final String cedula,
             @PathParam("idCurso") final Long idCurso);
+    
+    @POST
+    @Path("inscripcionCarrera/{cedula}/{codigo}")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String inscripcionCarrera(@PathParam("cedula") final String cedula,
+            @PathParam("codigo") final Long codigo);
+    
+    @POST
+    @Path("inscripcionExamen/{cedula}/{idExmamen}")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String inscripcionExamen(@PathParam("cedula") final String cedula,
+            @PathParam("idExmamen") final Long idExmamen);
 }
