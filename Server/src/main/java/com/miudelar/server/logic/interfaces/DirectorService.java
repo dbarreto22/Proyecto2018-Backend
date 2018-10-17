@@ -8,6 +8,7 @@ package com.miudelar.server.logic.interfaces;
 import com.miudelar.server.logic.datatypes.DtAsignatura;
 import com.miudelar.server.logic.datatypes.DtCarrera;
 import com.miudelar.server.logic.entities.Asignatura;
+import com.miudelar.server.logic.entities.Asignatura_Carrera;
 import com.miudelar.server.logic.entities.Carrera;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -79,9 +80,32 @@ public interface DirectorService {
     public String saveAsignaturaCarrera(@PathParam("codigoAsig") final Long codigoAsig,
             @PathParam("codigoCarrera") final Long codigoCarrera);
     
+    @POST
+    @Path("previas.addPrevia/{idAignatura_Carrera_Madre}/{idAignatura_Carrera_Previa}")
+    @Produces(MediaType.TEXT_PLAIN)
+//    @Consumes(MediaType.APPLICATION_JSON)
+    public String addPrevia(@PathParam("idAignatura_Carrera_Madre") final Long idMadre,
+            @PathParam("idAignatura_Carrera_Previa") final Long idPrevia);
+    
+    @POST
+    @Path("previas.removePrevia/{idAignatura_Carrera_Madre}/{idAignatura_Carrera_Previa}")
+    @Produces(MediaType.TEXT_PLAIN)
+//    @Consumes(MediaType.APPLICATION_JSON)
+    public String removePrevia(@PathParam("idAignatura_Carrera_Madre") final Long idMadre,
+            @PathParam("idAignatura_Carrera_Previa") final Long idPrevia);
     
     public void saveCarrera(DtCarrera dtCarr);
         
     public void saveAsignatura(DtAsignatura dtAsig);
+    
+    @GET
+    @Path("director/previas/{idAignatura_Carrera_Madre}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Asignatura_Carrera> getPrevias(@PathParam("idAignatura_Carrera_Madre") final Long idMadre);
+    
+    @GET
+    @Path("director/asignaturacarrera")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Asignatura_Carrera> getAllAsignaturaCarrera();
     
 }

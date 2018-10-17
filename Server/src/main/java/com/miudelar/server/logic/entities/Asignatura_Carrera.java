@@ -24,9 +24,12 @@ import javax.xml.bind.annotation.*;
  */
 //@XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-//@NamedQuery(name = "Asignatura_Carrera.findAll", query = "Select e from Asignatura_Carrera e")
+//@NamedQuery(name = Asignatura_Carrera.FIND_BY_CODS, query = "SELECT A FROM Asignatura_Carrera A "
+//            + "WHERE A.carrera_codigo = :carrera AND A.asignatura_codigo = :asignatura)")
 public class Asignatura_Carrera implements Serializable {
 
+//    public final static String FIND_BY_CODS = "Asignatura_Carrera.FIND_BY_CODS";
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -109,6 +112,14 @@ public class Asignatura_Carrera implements Serializable {
 
     public void setPrevias(List<Asignatura_Carrera> previas) {
         this.previas = previas;
+    }
+    
+    public void addPrevia(Asignatura_Carrera previa) {
+        this.previas.add(previa);
+    }
+    
+    public void removePrevia(Asignatura_Carrera previa) {
+        this.previas.remove(previa);
     }
 
     public List<Asignatura_Carrera> getEsPreviaDe() {

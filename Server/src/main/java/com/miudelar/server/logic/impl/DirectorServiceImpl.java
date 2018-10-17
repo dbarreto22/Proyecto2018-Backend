@@ -7,6 +7,7 @@ package com.miudelar.server.logic.impl;
 
 import com.google.gson.Gson;
 import com.miudelar.server.logic.controller.AsignaturaJpaController;
+import com.miudelar.server.logic.controller.Asignatura_CarreraExtController;
 import com.miudelar.server.logic.controller.Asignatura_CarreraJpaController;
 import com.miudelar.server.logic.controller.CarreraJpaController;
 import com.miudelar.server.logic.datatypes.DtAsignatura;
@@ -33,7 +34,8 @@ public class DirectorServiceImpl implements DirectorService{
     
     CarreraJpaController carreraJpaController = new CarreraJpaController();
     AsignaturaJpaController asignaturaJpaController = new AsignaturaJpaController();
-    Asignatura_CarreraJpaController asig_carJpaController = new Asignatura_CarreraJpaController();
+//    Asignatura_CarreraJpaController asig_carJpaController = new Asignatura_CarreraJpaController();
+    Asignatura_CarreraExtController asig_carJpaController = new Asignatura_CarreraExtController();
     
     @Override
     public List<DtCarrera> getAllCarrera() throws NoSuchAlgorithmException{
@@ -170,4 +172,45 @@ public class DirectorServiceImpl implements DirectorService{
             message = ex.getMessage();
         }
     }
+    
+    @Override
+    public String addPrevia(Long idMadre, Long idPrevia){
+        String message = "OK";
+        Asignatura_Carrera madre = asig_carJpaController.findAsignatura_Carrera(idMadre);
+        Asignatura_Carrera previa = asig_carJpaController.findAsignatura_Carrera(idPrevia);
+        madre.addPrevia(previa);
+        try {
+            asig_carJpaController.edit(madre);
+        } catch (Exception ex) {
+            Logger.getLogger(DirectorServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            message = "No existe la asignatura madre en Asignatura_Carrera";
+        }
+        return message;   
+    }
+    
+    @Override
+    public String removePrevia(Long idMadre, Long idPrevia){
+        String message = "OK";
+        Asignatura_Carrera madre = asig_carJpaController.findAsignatura_Carrera(idMadre);
+        Asignatura_Carrera previa = asig_carJpaController.findAsignatura_Carrera(idPrevia);
+        madre.removePrevia(previa);
+        try {
+            asig_carJpaController.edit(madre);
+        } catch (Exception ex) {
+            Logger.getLogger(DirectorServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            message = "No existe la asignatura madre en Asignatura_Carrera";
+        }
+        return message;   
+    }
+    
+    @Override
+    public List<Asignatura_Carrera> getPrevias(Long idMadre){
+        return asig_carJpaController.findAsignatura_Carrera(idMadre).getPrevias();
+    }
+    
+    @Override
+    public List<Asignatura_Carrera> getAllAsignaturaCarrera(){
+        return asig_carJpaController.findAsignatura_CarreraEntities();
+    }
+            
 }
