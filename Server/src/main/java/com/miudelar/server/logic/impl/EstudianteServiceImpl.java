@@ -10,6 +10,7 @@ import com.miudelar.server.logic.controller.CursoJpaController;
 import com.miudelar.server.logic.controller.ExamenJpaController;
 import com.miudelar.server.logic.controller.RolJpaController;
 import com.miudelar.server.logic.controller.UsuarioJpaController;
+import com.miudelar.server.logic.datatypes.DtCarrera;
 import com.miudelar.server.logic.datatypes.DtCurso;
 import com.miudelar.server.logic.entities.Carrera;
 import com.miudelar.server.logic.entities.Curso;
@@ -35,6 +36,15 @@ public class EstudianteServiceImpl implements EstudianteService {
     RolJpaController rolJpaController = new RolJpaController();
     ExamenJpaController examenJpaController = new ExamenJpaController();
     CarreraJpaController carreraJpaController = new CarreraJpaController();
+    
+    @Override
+    public List<DtCarrera> getAllCarrera() throws NoSuchAlgorithmException{
+        List<DtCarrera> carreras = new ArrayList<>();
+        carreraJpaController.findCarreraEntities().forEach(carrera -> {
+            carreras.add(new DtCarrera(carrera.getCodigo(), carrera.getNombre()));
+        });
+        return carreras;
+    }
     
     @Override
     public List<DtCurso> getAllCurso() throws NoSuchAlgorithmException{

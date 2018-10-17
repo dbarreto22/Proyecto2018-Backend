@@ -26,6 +26,12 @@ public class DtAsignatura_Carrera implements Serializable {
     public DtAsignatura_Carrera(Long id) {
         this.id = id;
     }
+    
+    public DtAsignatura_Carrera(Long id, DtCarrera carrera, DtAsignatura asignatura) {
+        this.id = id;
+        this.carrera = carrera;
+        this.asignatura = asignatura;
+    }
 
     public DtAsignatura_Carrera() {
     }

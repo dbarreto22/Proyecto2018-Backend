@@ -204,13 +204,25 @@ public class DirectorServiceImpl implements DirectorService{
     }
     
     @Override
-    public List<Asignatura_Carrera> getPrevias(Long idMadre){
-        return asig_carJpaController.findAsignatura_Carrera(idMadre).getPrevias();
+    public List<DtAsignatura_Carrera> getPrevias(Long idMadre){
+        List<DtAsignatura_Carrera> asigCar = new ArrayList<>();
+        asig_carJpaController.findAsignatura_Carrera(idMadre).getPrevias().forEach(previa -> {
+            asigCar.add(new DtAsignatura_Carrera(previa.getId(), 
+                    new DtCarrera(previa.getCarrera().getCodigo(), previa.getCarrera().getNombre()),
+                    new DtAsignatura(previa.getAsignatura().getCodigo(), previa.getAsignatura().getNombre())));
+        });
+        return asigCar;
     }
     
     @Override
-    public List<Asignatura_Carrera> getAllAsignaturaCarrera(){
-        return asig_carJpaController.findAsignatura_CarreraEntities();
+    public List<DtAsignatura_Carrera> getAllAsignaturaCarrera(){
+        List<DtAsignatura_Carrera> asigCar = new ArrayList<>();
+        asig_carJpaController.findAsignatura_CarreraEntities().forEach(previa -> {
+            asigCar.add(new DtAsignatura_Carrera(previa.getId(), 
+                    new DtCarrera(previa.getCarrera().getCodigo(), previa.getCarrera().getNombre()),
+                    new DtAsignatura(previa.getAsignatura().getCodigo(), previa.getAsignatura().getNombre())));
+        });
+        return asigCar;
     }
             
 }

@@ -5,6 +5,7 @@
  */
 package com.miudelar.server.logic.interfaces;
 
+import com.miudelar.server.logic.datatypes.DtCarrera;
 import com.miudelar.server.logic.datatypes.DtCurso;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -21,6 +22,11 @@ import javax.ws.rs.core.MediaType;
  */
 @Path("/estudiante")
 public interface EstudianteService {
+    
+    @GET
+    @Path("carrera")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<DtCarrera> getAllCarrera() throws NoSuchAlgorithmException;
     
     @GET
     @Path("curso")

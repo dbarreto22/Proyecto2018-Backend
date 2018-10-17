@@ -6,6 +6,7 @@
 package com.miudelar.server.logic.interfaces;
 
 import com.miudelar.server.logic.datatypes.DtAsignatura;
+import com.miudelar.server.logic.datatypes.DtAsignatura_Carrera;
 import com.miudelar.server.logic.datatypes.DtCarrera;
 import com.miudelar.server.logic.entities.Asignatura;
 import com.miudelar.server.logic.entities.Asignatura_Carrera;
@@ -94,18 +95,18 @@ public interface DirectorService {
     public String removePrevia(@PathParam("idAignatura_Carrera_Madre") final Long idMadre,
             @PathParam("idAignatura_Carrera_Previa") final Long idPrevia);
     
+    @GET
+    @Path("previas/{idAignatura_Carrera_Madre}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<DtAsignatura_Carrera> getPrevias(@PathParam("idAignatura_Carrera_Madre") final Long idMadre);
+    
+    @GET
+    @Path("asignaturacarrera")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<DtAsignatura_Carrera> getAllAsignaturaCarrera();
+    
     public void saveCarrera(DtCarrera dtCarr);
         
     public void saveAsignatura(DtAsignatura dtAsig);
-    
-    @GET
-    @Path("director/previas/{idAignatura_Carrera_Madre}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Asignatura_Carrera> getPrevias(@PathParam("idAignatura_Carrera_Madre") final Long idMadre);
-    
-    @GET
-    @Path("director/asignaturacarrera")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Asignatura_Carrera> getAllAsignaturaCarrera();
     
 }
