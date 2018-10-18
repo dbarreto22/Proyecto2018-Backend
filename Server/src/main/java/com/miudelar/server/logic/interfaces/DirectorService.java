@@ -13,6 +13,7 @@ import com.miudelar.server.logic.entities.Asignatura_Carrera;
 import com.miudelar.server.logic.entities.Carrera;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -39,28 +40,28 @@ public interface DirectorService {
         final Long codigo) throws NoSuchAlgorithmException;
     
     @POST
-    @Path("carrera/{dtCarr}")
+    @Path("carrera")
     @Produces(MediaType.TEXT_PLAIN)
-//    @Consumes(MediaType.APPLICATION_JSON)
-    public String saveCarrera(@PathParam("dtCarr") final String dtCarr);
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String saveCarrera(final DtCarrera dtCarr);
     
     @POST
-    @Path("carrera.edit/{Carr}")
+    @Path("carrera.edit")
     @Produces(MediaType.TEXT_PLAIN)
-//    @Consumes(MediaType.APPLICATION_JSON)
-    public String editCarrera(@PathParam("Carr") final String Carr);
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String editCarrera(Carrera carrera);
     
     @POST
-    @Path("asignatura/{dtAsig}")
+    @Path("asignatura")
     @Produces(MediaType.TEXT_PLAIN)
-//    @Consumes(MediaType.APPLICATION_JSON)
-    public String saveAsignatura(@PathParam("dtAsig") final String dtAsig);
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String saveAsignatura(DtAsignatura dtasignatura);
     
     @POST
-    @Path("asignatura.edit/{Asig}")
+    @Path("asignatura.edit")
     @Produces(MediaType.TEXT_PLAIN)
-//    @Consumes(MediaType.APPLICATION_JSON)
-    public String editAsignatura(@PathParam("Asig") final String Asig);
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String editAsignatura(final Asignatura asignatura);
     
     @GET
     @Path("asignatura/carrera/{idCarrera}")
@@ -75,25 +76,22 @@ public interface DirectorService {
         final Long codigo) throws NoSuchAlgorithmException;
     
     @POST
-    @Path("asignaturacarrera/{codigoAsig}/{codigoCarrera}")
+    @Path("asignaturacarrera")
     @Produces(MediaType.TEXT_PLAIN)
-//    @Consumes(MediaType.APPLICATION_JSON)
-    public String saveAsignaturaCarrera(@PathParam("codigoAsig") final Long codigoAsig,
-            @PathParam("codigoCarrera") final Long codigoCarrera);
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String saveAsignaturaCarrera(String jsonObject);
     
     @POST
-    @Path("previas.addPrevia/{idAignatura_Carrera_Madre}/{idAignatura_Carrera_Previa}")
+    @Path("previas.addPrevia")
     @Produces(MediaType.TEXT_PLAIN)
-//    @Consumes(MediaType.APPLICATION_JSON)
-    public String addPrevia(@PathParam("idAignatura_Carrera_Madre") final Long idMadre,
-            @PathParam("idAignatura_Carrera_Previa") final Long idPrevia);
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String addPrevia(String json);
     
     @POST
-    @Path("previas.removePrevia/{idAignatura_Carrera_Madre}/{idAignatura_Carrera_Previa}")
+    @Path("previas.removePrevia")
     @Produces(MediaType.TEXT_PLAIN)
-//    @Consumes(MediaType.APPLICATION_JSON)
-    public String removePrevia(@PathParam("idAignatura_Carrera_Madre") final Long idMadre,
-            @PathParam("idAignatura_Carrera_Previa") final Long idPrevia);
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String removePrevia(String json);
     
     @GET
     @Path("previas/{idAignatura_Carrera_Madre}")
@@ -105,8 +103,8 @@ public interface DirectorService {
     @Produces(MediaType.APPLICATION_JSON)
     public List<DtAsignatura_Carrera> getAllAsignaturaCarrera();
     
-    public void saveCarrera(DtCarrera dtCarr);
+//    public void saveCarrera(DtCarrera dtCarr);
         
-    public void saveAsignatura(DtAsignatura dtAsig);
+//    public void saveAsignatura(DtAsignatura dtAsig);
     
 }

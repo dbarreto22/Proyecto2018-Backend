@@ -1,6 +1,9 @@
 package com.miudelar.server.logic.impl;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.miudelar.server.exceptions.NonexistentEntityException;
 import com.miudelar.server.exceptions.UsuarioWithInvalidDataException;
 import com.miudelar.server.exceptions.RolWithInvalidDataException;
@@ -23,7 +26,8 @@ import javax.persistence.EntityManagerFactory;
 public class AdministradorServiceImpl implements AdministradorService {
 
     String SALT = "InYourFace";
-    Gson gson = new Gson();
+//    Gson gson = new Gson();
+    JsonParser parser = new JsonParser();
        
     RolJpaController rolJpaController = new RolJpaController();
     UsuarioJpaController usuarioJpaController = new UsuarioJpaController();
@@ -50,22 +54,25 @@ public class AdministradorServiceImpl implements AdministradorService {
     }
     
     @Override
-    public String login(String username, String password){
-        Usuario usuario = usuarioJpaController.findUsuario(username);
-        if (usuario.getPassword() == password){
-            return "OK";
-        }else{
-            return "Error: Usuario o contraseña incorrecta";
-        }
-    }
-    
-    @Override
-    public String saveUsuario(String dtUsrStr){
-        DtUsuario usuario = gson.fromJson(dtUsrStr, DtUsuario.class);
-        Usuario usuarioEntity = new Usuario(usuario);
-        String message = "OK";
+    public String login(String json) {
+        String message;
         try {
-            usuarioJpaController.create(usuarioEntity);
+            JsonElement jsonTree = parser.parse(json);
+
+            if (jsonTree.isJsonObject()) {
+                JsonObject jsonObject = jsonTree.getAsJsonObject();
+                String username = jsonObject.get("username").getAsString();
+                String password = jsonObject.get("password").getAsString();
+
+                Usuario usuario = usuarioJpaController.findUsuario(username);
+                if (usuario.getPassword().equals(password)) {
+                    message = "OK";
+                } else {
+                    message = "Error: Usuario o contraseña incorrecta";
+                }
+            } else {
+                message = "Esto no es un json o no lo entiendo: " + json;
+            }
         } catch (Exception ex) {
             Logger.getLogger(AdministradorServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
             message = ex.getMessage();
@@ -75,7 +82,7 @@ public class AdministradorServiceImpl implements AdministradorService {
     
     @Override
     public String saveUsuario(DtUsuario usuario){
-        System.out.println("usuarioToJson: " + gson.toJson(usuario));
+//        DtUsuario usuario = gson.fromJson(dtUsrStr, DtUsuario.class);
         Usuario usuarioEntity = new Usuario(usuario);
         String message = "OK";
         try {
@@ -87,9 +94,23 @@ public class AdministradorServiceImpl implements AdministradorService {
         return message;
     }
     
+//    @Override
+//    public String saveUsuario(DtUsuario usuario){
+//        System.out.println("usuarioToJson: " + gson.toJson(usuario));
+//        Usuario usuarioEntity = new Usuario(usuario);
+//        String message = "OK";
+//        try {
+//            usuarioJpaController.create(usuarioEntity);
+//        } catch (Exception ex) {
+//            Logger.getLogger(AdministradorServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+//            message = ex.getMessage();
+//        }
+//        return message;
+//    }
+    
     @Override
-    public String editUsuario(String UsrStr){
-        Usuario usuario = gson.fromJson(UsrStr, Usuario.class);
+    public String editUsuario(Usuario usuario){
+//        Usuario usuario = gson.fromJson(UsrStr, Usuario.class);
         String message = "OK";
         try {
             usuarioJpaController.edit(usuario);
@@ -101,28 +122,52 @@ public class AdministradorServiceImpl implements AdministradorService {
     }
     
     @Override
-    public String addRol(String cedula, Long idRol){
-        Usuario usuario = usuarioJpaController.findUsuario(cedula);
-        Rol rol = rolJpaController.findRol(idRol);
-        usuario.addRol(rol);
+    public String addRol(String json) {
         String message = "OK";
         try {
-        usuarioJpaController.edit(usuario);
+            JsonElement jsonTree = parser.parse(json);
+
+            if (jsonTree.isJsonObject()) {
+                JsonObject jsonObject = jsonTree.getAsJsonObject();
+                String cedula = jsonObject.get("cedula").getAsString();
+                Long idRol = jsonObject.get("idRol").getAsLong();
+
+                Usuario usuario = usuarioJpaController.findUsuario(cedula);
+                Rol rol = rolJpaController.findRol(idRol);
+                usuario.addRol(rol);
+
+                usuarioJpaController.edit(usuario);
+
+            } else {
+                message = "Esto no es un json o no lo entiendo: " + json;
+            }
         } catch (Exception ex) {
             Logger.getLogger(AdministradorServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
             message = ex.getMessage();
         }
-       return message;
+        return message;
     }
     
     @Override
-    public String removeRol(String cedula, Long idRol) {
-        Usuario usuario = usuarioJpaController.findUsuario(cedula);
-        Rol rol = rolJpaController.findRol(idRol);
-        usuario.removeRol(rol);
+    public String removeRol(String json) {
         String message = "OK";
         try {
-            usuarioJpaController.edit(usuario);
+            JsonElement jsonTree = parser.parse(json);
+
+            if (jsonTree.isJsonObject()) {
+                JsonObject jsonObject = jsonTree.getAsJsonObject();
+                String cedula = jsonObject.get("cedula").getAsString();
+                Long idRol = jsonObject.get("idRol").getAsLong();
+
+                Usuario usuario = usuarioJpaController.findUsuario(cedula);
+                Rol rol = rolJpaController.findRol(idRol);
+                usuario.removeRol(rol);
+
+                usuarioJpaController.edit(usuario);
+
+            } else {
+                message = "Esto no es un json o no lo entiendo: " + json;
+            }
         } catch (Exception ex) {
             Logger.getLogger(AdministradorServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
             message = ex.getMessage();

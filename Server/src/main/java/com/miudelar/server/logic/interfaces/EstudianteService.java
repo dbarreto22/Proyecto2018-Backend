@@ -9,6 +9,7 @@ import com.miudelar.server.logic.datatypes.DtCarrera;
 import com.miudelar.server.logic.datatypes.DtCurso;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -34,20 +35,20 @@ public interface EstudianteService {
     public List<DtCurso> getAllCurso() throws NoSuchAlgorithmException;
     
     @POST
-    @Path("inscripcionCurso/{cedula}/{idCurso}")
+    @Path("inscripcionCurso")
     @Produces(MediaType.TEXT_PLAIN)
-    public String inscripcionCurso(@PathParam("cedula") final String cedula,
-            @PathParam("idCurso") final Long idCurso);
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String inscripcionCurso(String json);
     
     @POST
-    @Path("inscripcionCarrera/{cedula}/{codigo}")
+    @Path("inscripcionCarrera")
     @Produces(MediaType.TEXT_PLAIN)
-    public String inscripcionCarrera(@PathParam("cedula") final String cedula,
-            @PathParam("codigo") final Long codigo);
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String inscripcionCarrera(String json);
     
     @POST
-    @Path("inscripcionExamen/{cedula}/{idExmamen}")
+    @Path("inscripcionExamen")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
-    public String inscripcionExamen(@PathParam("cedula") final String cedula,
-            @PathParam("idExmamen") final Long idExmamen);
+    public String inscripcionExamen(String json);
 }

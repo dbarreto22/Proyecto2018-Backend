@@ -34,35 +34,32 @@ public interface AdministradorService {
     @POST
     @Path("login")
     @Produces(MediaType.TEXT_PLAIN)
-    public String login(
-            @FormParam("username") String username, 
-            @FormParam("password") String password);
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String login(String json);
     
     @POST
-    @Path("usuario/{dtUsrStr}")
+    @Path("usuario")
     @Produces(MediaType.TEXT_PLAIN)
-//    @Consumes(MediaType.APPLICATION_JSON)
-    public String saveUsuario(@PathParam("dtUsrStr") final String dtUsrStr);
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String saveUsuario(final DtUsuario usuario);
     
     @POST
-    @Path("usuario.edit/{UsrStr}")
-    @Produces(MediaType.APPLICATION_JSON)
-//    @Consumes(MediaType.TE)
-    public String editUsuario(@PathParam("UsrStr") final String UsrStr);
+    @Path("usuario.edit")
+    @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String editUsuario(final Usuario usuario);
         
     @POST
-    @Path("usuario.addRol/{cedula}/{idRol}")
+    @Path("usuario.addRol")
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.TEXT_PLAIN)
-    public String addRol(@PathParam("cedula") final String cedula,
-            @PathParam("idRol") final Long idRol);
+    public String addRol(String json);
     
     @POST
-    @Path("usuario.removeRol/{cedula}/{idRol}")
+    @Path("usuario.removeRol")
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.TEXT_PLAIN)
-    public String removeRol(@PathParam("cedula") final String cedula,
-            @PathParam("idRol") final Long idRol);
+    public String removeRol(String json);
     
     @GET
     @Path("usuario")
@@ -91,6 +88,6 @@ public interface AdministradorService {
     //Managers
     void rolSave(String tipo) throws RolWithInvalidDataException;
     
-    public String saveUsuario(DtUsuario usuario);
+//    public String saveUsuario(DtUsuario usuario);
    
 }

@@ -5,6 +5,9 @@
  */
 package com.miudelar.server.logic.impl;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.miudelar.server.logic.controller.CarreraJpaController;
 import com.miudelar.server.logic.controller.CursoJpaController;
 import com.miudelar.server.logic.controller.ExamenJpaController;
@@ -36,6 +39,7 @@ public class EstudianteServiceImpl implements EstudianteService {
     RolJpaController rolJpaController = new RolJpaController();
     ExamenJpaController examenJpaController = new ExamenJpaController();
     CarreraJpaController carreraJpaController = new CarreraJpaController();
+    JsonParser parser = new JsonParser();
     
     @Override
     public List<DtCarrera> getAllCarrera() throws NoSuchAlgorithmException{
@@ -56,59 +60,98 @@ public class EstudianteServiceImpl implements EstudianteService {
      }
     
     @Override
-    public String inscripcionCurso(String cedula, Long idCurso){
-        Usuario usuario = usuarioJpaController.findUsuario(cedula);
-        Rol rol = rolJpaController.findRol(4L);
-        if (usuario.getRoles().contains(rol)){
-            Curso curso = cursoJpaController.findCurso(idCurso);
-            usuario.addCurso(curso);
-            String message = "OK";
-            try {
-            usuarioJpaController.edit(usuario);
-            } catch (Exception ex) {
-                Logger.getLogger(AdministradorServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
-                message = ex.getMessage();
+    public String inscripcionCurso(String json) {
+        String message = "OK";
+        try {
+            JsonElement jsonTree = parser.parse(json);
+
+            if (jsonTree.isJsonObject()) {
+                JsonObject jsonObject = jsonTree.getAsJsonObject();
+                String cedula = jsonObject.get("cedula").getAsString();
+                Long idCurso = jsonObject.get("idCurso").getAsLong();
+
+                Usuario usuario = usuarioJpaController.findUsuario(cedula);
+                Rol rol = rolJpaController.findRol(4L);
+                if (usuario.getRoles().contains(rol)) {
+                    Curso curso = cursoJpaController.findCurso(idCurso);
+                    usuario.addCurso(curso);
+
+                    usuarioJpaController.edit(usuario);
+
+                } else {
+                    message = "El usuario no tiene rol estudiante";
+                }
+            } else {
+                message = "Esto no es un json o no lo entiendo: " + json;
             }
-           return message;
-        }else
-            return "El usuario no tiene rol estudiante";
-     }
+        } catch (Exception ex) {
+            Logger.getLogger(EstudianteServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            message = ex.getMessage();
+        }
+        return message;
+    }
      
     @Override
-     public String inscripcionCarrera(String cedula, Long codigo){
-        Usuario usuario = usuarioJpaController.findUsuario(cedula);
-        Rol rol = rolJpaController.findRol(4L);
-        if (usuario.getRoles().contains(rol)){
-            Carrera carrera = carreraJpaController.findCarrera(codigo);
-            usuario.addCarrera(carrera);
-            String message = "OK";
-            try {
-            usuarioJpaController.edit(usuario);
-            } catch (Exception ex) {
-                Logger.getLogger(AdministradorServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
-                message = ex.getMessage();
+    public String inscripcionCarrera(String json) {
+        String message = "OK";
+        try {
+            JsonElement jsonTree = parser.parse(json);
+
+            if (jsonTree.isJsonObject()) {
+                JsonObject jsonObject = jsonTree.getAsJsonObject();
+                String cedula = jsonObject.get("cedula").getAsString();
+                Long codigo = jsonObject.get("codigo").getAsLong();
+
+                Usuario usuario = usuarioJpaController.findUsuario(cedula);
+                Rol rol = rolJpaController.findRol(4L);
+                if (usuario.getRoles().contains(rol)) {
+                    Carrera carrera = carreraJpaController.findCarrera(codigo);
+                    usuario.addCarrera(carrera);
+
+                    usuarioJpaController.edit(usuario);
+
+                } else {
+                    message = "El usuario no tiene rol estudiante";
+                }
+            } else {
+                message = "Esto no es un json o no lo entiendo: " + json;
             }
-           return message;
-        }else
-            return "El usuario no tiene rol estudiante";
-     }
+        } catch (Exception ex) {
+            Logger.getLogger(AdministradorServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            message = ex.getMessage();
+        }
+        return message;
+    }
      
-     @Override
-     public String inscripcionExamen(String cedula, Long idExmamen){
-        Usuario usuario = usuarioJpaController.findUsuario(cedula);
-        Rol rol = rolJpaController.findRol(4L);
-        if (usuario.getRoles().contains(rol)){
-            Examen examen = examenJpaController.findExamen(idExmamen);
-            usuario.addInscripcionesExamenes(examen);
-            String message = "OK";
-            try {
-            usuarioJpaController.edit(usuario);
-            } catch (Exception ex) {
-                Logger.getLogger(AdministradorServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
-                message = ex.getMessage();
+    @Override
+    public String inscripcionExamen(String json) {
+        String message = "OK";
+        try {
+            JsonElement jsonTree = parser.parse(json);
+
+            if (jsonTree.isJsonObject()) {
+                JsonObject jsonObject = jsonTree.getAsJsonObject();
+                String cedula = jsonObject.get("cedula").getAsString();
+                Long idExamen = jsonObject.get("idExamen").getAsLong();
+
+                Usuario usuario = usuarioJpaController.findUsuario(cedula);
+                Rol rol = rolJpaController.findRol(4L);
+                if (usuario.getRoles().contains(rol)) {
+                    Examen examen = examenJpaController.findExamen(idExamen);
+                    usuario.addInscripcionesExamenes(examen);
+
+                    usuarioJpaController.edit(usuario);
+
+                } else {
+                    message = "El usuario no tiene rol estudiante";
+                }
+            } else {
+                message = "Esto no es un json o no lo entiendo: " + json;
             }
-           return message;
-        }else
-            return "El usuario no tiene rol estudiante";
-     }
+        } catch (Exception ex) {
+            Logger.getLogger(AdministradorServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            message = ex.getMessage();
+        }
+        return message;
+    }
 }

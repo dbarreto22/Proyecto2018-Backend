@@ -6,6 +6,9 @@
 package com.miudelar.server.logic.impl;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.miudelar.server.logic.controller.AsignaturaJpaController;
 import com.miudelar.server.logic.controller.Asignatura_CarreraExtController;
 import com.miudelar.server.logic.controller.Asignatura_CarreraJpaController;
@@ -30,7 +33,8 @@ import javax.ws.rs.PathParam;
  */
 public class DirectorServiceImpl implements DirectorService{
     
-    Gson gson = new Gson();
+//    Gson gson = new Gson();
+    JsonParser parser = new JsonParser();
     
     CarreraJpaController carreraJpaController = new CarreraJpaController();
     AsignaturaJpaController asignaturaJpaController = new AsignaturaJpaController();
@@ -61,23 +65,23 @@ public class DirectorServiceImpl implements DirectorService{
         return carrera;
     }
     
-    @Override
-    public String saveCarrera(String dtCarr){
-        DtCarrera carrera = gson.fromJson(dtCarr, DtCarrera.class);
-        Carrera carreraEntity = new Carrera(carrera.getCodigo(),carrera.getNombre());
-        String message = "OK";
-        try {
-            carreraJpaController.create(carreraEntity);
-        } catch (Exception ex) {
-            Logger.getLogger(DirectorServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
-            message = ex.getMessage();
-        }
-        return message;
-    }
+//    @Override
+//    public String saveCarrera(String dtCarr){
+//        DtCarrera carrera = gson.fromJson(dtCarr, DtCarrera.class);
+//        Carrera carreraEntity = new Carrera(carrera.getCodigo(),carrera.getNombre());
+//        String message = "OK";
+//        try {
+//            carreraJpaController.create(carreraEntity);
+//        } catch (Exception ex) {
+//            Logger.getLogger(DirectorServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+//            message = ex.getMessage();
+//        }
+//        return message;
+//    }
     
     @Override
-    public String editCarrera(String Carr){
-        Carrera carrera = gson.fromJson(Carr, Carrera.class);
+    public String editCarrera(Carrera carrera){
+//        Carrera carrera = gson.fromJson(Carr, Carrera.class);
         String message = "OK";
         try {
             carreraJpaController.edit(carrera);
@@ -88,23 +92,23 @@ public class DirectorServiceImpl implements DirectorService{
         return message;
     }
     
-    @Override
-    public String saveAsignatura(String dtAsig){
-        DtAsignatura asignatura = gson.fromJson(dtAsig, DtAsignatura.class);
-        Asignatura asignaturaEntity = new Asignatura(asignatura.getCodigo(),asignatura.getNombre());
-        String message = "OK";
-        try {
-            asignaturaJpaController.create(asignaturaEntity);
-        } catch (Exception ex) {
-            Logger.getLogger(DirectorServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
-            message = ex.getMessage();
-        }
-        return message;
-    }
+//    @Override
+//    public String saveAsignatura(String dtAsig){
+//        DtAsignatura asignatura = gson.fromJson(dtAsig, DtAsignatura.class);
+//        Asignatura asignaturaEntity = new Asignatura(asignatura.getCodigo(),asignatura.getNombre());
+//        String message = "OK";
+//        try {
+//            asignaturaJpaController.create(asignaturaEntity);
+//        } catch (Exception ex) {
+//            Logger.getLogger(DirectorServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+//            message = ex.getMessage();
+//        }
+//        return message;
+//    }
     
     @Override
-    public String editAsignatura(String Asig){
-        Asignatura asignatura = gson.fromJson(Asig, Asignatura.class);
+    public String editAsignatura(Asignatura asignatura){
+//        Asignatura asignatura = gson.fromJson(Asig, Asignatura.class);
         String message = "OK";
         try {
             asignaturaJpaController.edit(asignatura);
@@ -122,26 +126,33 @@ public class DirectorServiceImpl implements DirectorService{
     }
     
     @Override
-    public String saveAsignaturaCarrera(Long codigoAsig, Long codigoCarrera){
+    public String saveAsignaturaCarrera(String json) {
         String message = "OK";
         try {
-//        Creo asociacion
-            Asignatura asignatura = asignaturaJpaController.findAsignatura(codigoAsig);
-            Carrera carrera = carreraJpaController.findCarrera(codigoCarrera);
-            carrera.addAsignatura(asignatura);
-            carreraJpaController.edit(carrera);
+            JsonElement jsonTree = parser.parse(json);
+            if (jsonTree.isJsonObject()) {
+                JsonObject jsonObject = jsonTree.getAsJsonObject();
+                Long codigoAsignatura = jsonObject.get("codigoAsignatura").getAsLong();
+                Long codigoCarrera = jsonObject.get("codigoCarrera").getAsLong();
 
-////        Creo entidad relación
-            Asignatura_Carrera asignatura_carreraEntity = new Asignatura_Carrera(asignatura, carrera);
-            asig_carJpaController.create(asignatura_carreraEntity);
- 
-////        Asocio entidad relación
-            asignatura.addAsignatura_Carrera(asignatura_carreraEntity);
-            asignaturaJpaController.edit(asignatura);
-            
-            carrera.addAsignatura_Carrera(asignatura_carreraEntity);
-            carreraJpaController.edit(carrera);
-            
+                //        Creo asociacion
+                Asignatura asignatura = asignaturaJpaController.findAsignatura(codigoAsignatura);
+                Carrera carrera = carreraJpaController.findCarrera(codigoCarrera);
+                carrera.addAsignatura(asignatura);
+
+                ////        Creo entidad relación
+                Asignatura_Carrera asignatura_carreraEntity = new Asignatura_Carrera(asignatura, carrera);
+                asig_carJpaController.create(asignatura_carreraEntity);
+
+                ////        Asocio entidad relación
+                asignatura.addAsignatura_Carrera(asignatura_carreraEntity);
+                asignaturaJpaController.edit(asignatura);
+
+                carrera.addAsignatura_Carrera(asignatura_carreraEntity);
+                carreraJpaController.edit(carrera);
+            } else {
+                message = "Esto no es un json o no lo entiendo: " + json;
+            }
         } catch (Exception ex) {
             Logger.getLogger(DirectorServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
             message = ex.getMessage();
@@ -150,7 +161,7 @@ public class DirectorServiceImpl implements DirectorService{
     }
     
     @Override
-    public void saveCarrera(DtCarrera carrera){
+    public String saveCarrera(DtCarrera carrera){
         Carrera carreraEntity = new Carrera(carrera.getCodigo(),carrera.getNombre());
         String message = "OK";
         try {
@@ -159,10 +170,11 @@ public class DirectorServiceImpl implements DirectorService{
             Logger.getLogger(DirectorServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
             message = ex.getMessage();
         }
+        return message;
     }
     
     @Override
-    public void saveAsignatura(DtAsignatura asignatura){
+    public String saveAsignatura(DtAsignatura asignatura){
         Asignatura asignaturaEntity = new Asignatura(asignatura.getCodigo(),asignatura.getNombre());
         String message = "OK";
         try {
@@ -171,36 +183,57 @@ public class DirectorServiceImpl implements DirectorService{
             Logger.getLogger(DirectorServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
             message = ex.getMessage();
         }
+        return message;
     }
     
     @Override
-    public String addPrevia(Long idMadre, Long idPrevia){
+    public String addPrevia(String json) {
         String message = "OK";
-        Asignatura_Carrera madre = asig_carJpaController.findAsignatura_Carrera(idMadre);
-        Asignatura_Carrera previa = asig_carJpaController.findAsignatura_Carrera(idPrevia);
-        madre.addPrevia(previa);
         try {
-            asig_carJpaController.edit(madre);
+            JsonElement jsonTree = parser.parse(json);
+            if (jsonTree.isJsonObject()) {
+                JsonObject jsonObject = jsonTree.getAsJsonObject();
+                Long idMadre = jsonObject.get("idMadre").getAsLong();
+                Long idPrevia = jsonObject.get("idPrevia").getAsLong();
+                Asignatura_Carrera madre = asig_carJpaController.findAsignatura_Carrera(idMadre);
+                Asignatura_Carrera previa = asig_carJpaController.findAsignatura_Carrera(idPrevia);
+                madre.addPrevia(previa);
+
+                asig_carJpaController.edit(madre);
+
+            } else {
+                message = "Esto no es un json o no lo entiendo: " + json;
+            }
         } catch (Exception ex) {
             Logger.getLogger(DirectorServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
-            message = "No existe la asignatura madre en Asignatura_Carrera";
+            message = ex.getMessage();
         }
         return message;   
     }
     
     @Override
-    public String removePrevia(Long idMadre, Long idPrevia){
+    public String removePrevia(String json) {
         String message = "OK";
-        Asignatura_Carrera madre = asig_carJpaController.findAsignatura_Carrera(idMadre);
-        Asignatura_Carrera previa = asig_carJpaController.findAsignatura_Carrera(idPrevia);
-        madre.removePrevia(previa);
         try {
-            asig_carJpaController.edit(madre);
+            JsonElement jsonTree = parser.parse(json);
+
+            if (jsonTree.isJsonObject()) {
+                JsonObject jsonObject = jsonTree.getAsJsonObject();
+                Long idMadre = jsonObject.get("idMadre").getAsLong();
+                Long idPrevia = jsonObject.get("idPrevia").getAsLong();
+                Asignatura_Carrera madre = asig_carJpaController.findAsignatura_Carrera(idMadre);
+                Asignatura_Carrera previa = asig_carJpaController.findAsignatura_Carrera(idPrevia);
+                madre.removePrevia(previa);
+                asig_carJpaController.edit(madre);
+
+            } else {
+                message = "Esto no es un json o no lo entiendo: " + json;
+            }
         } catch (Exception ex) {
             Logger.getLogger(DirectorServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
-            message = "No existe la asignatura madre en Asignatura_Carrera";
+            message = ex.getMessage();
         }
-        return message;   
+        return message;
     }
     
     @Override

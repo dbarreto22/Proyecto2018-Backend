@@ -43,7 +43,7 @@ public class InitMgr implements InitMgt {
         if (listDtUsuario.isEmpty()){
             DtUsuario usuario = new DtUsuario("1111111", "Admin", "Admin", "admin@admin.com", "admin123");
             administradorService.saveUsuario(usuario);
-            administradorService.addRol(usuario.getCedula(),1L);
+//            administradorService.addRol(usuario.getCedula(),1L);
         }
     }
     
@@ -52,7 +52,7 @@ public class InitMgr implements InitMgt {
         directorService.saveCarrera(carrera);
         DtAsignatura asignatura = new DtAsignatura(1001L, "Cálculo1");
         directorService.saveAsignatura(asignatura);
-        directorService.saveAsignaturaCarrera(1001L, 2001L);
+//        directorService.saveAsignaturaCarrera(1001L, 2001L);
     }
 
     @Override
