@@ -52,7 +52,7 @@ public class Estudiante_CursoJpaController implements Serializable {
             }
         }
     }
-
+    
     public void edit(Estudiante_Curso estudiante_Curso) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
@@ -146,6 +146,16 @@ public class Estudiante_CursoJpaController implements Serializable {
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();
+        } finally {
+            em.close();
+        }
+    }
+    
+    public List<Estudiante_Curso> findEstudiante_CursoByUsuario_Asignatura(String cedula, Long asignatura_carrera) {
+        EntityManager em = getEntityManager();
+        try {
+            Query q = em.createNamedQuery(Estudiante_Curso.FINDBY_USUARIO_ASIGNATURA).setParameter("cedula", cedula).setParameter("asignatura_carrera", asignatura_carrera);
+            return q.getResultList();
         } finally {
             em.close();
         }

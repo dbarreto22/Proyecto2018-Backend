@@ -20,11 +20,15 @@ import javax.xml.bind.annotation.*;
  */
 //@XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-//@NamedQueries({
+@NamedQueries({
 //    @NamedQuery(name = "Estudiante_Curso.findAll", query = "Select e from Estudiante_Curso e"),
-//    @NamedQuery(name = "Estudiante_Curso.findByCalificacion", query = "Select e from Estudiante_Curso e where e.calificacion=:calificacion")})
+//    @NamedQuery(name = "Estudiante_Curso.findByCalificacion", query = "Select e from Estudiante_Curso e where e.calificacion=:calificacion")
+        @NamedQuery(name = Estudiante_Curso.FINDBY_USUARIO_ASIGNATURA, 
+                query = "SELECT C FROM Estudiante_Curso C, Usuario U, Asignatura_Carrera A \n"
+                + "WHERE U.cedula = :cedula AND C.usuario = U \n"
+                + "AND A.id = :asignatura_carrera AND C.curso member of A.cursos")})
 public class Estudiante_Curso implements Serializable {
-
+    public final static String FINDBY_USUARIO_ASIGNATURA = "Estudiante_Curso.FINDBY_USUARIO_ASIGNATURA";
     @Basic
     private Long calificacion;
     

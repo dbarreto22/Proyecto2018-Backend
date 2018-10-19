@@ -57,9 +57,10 @@ public class InitMgr implements InitMgt {
 
     @Override
     public void initBaseData() throws NoSuchAlgorithmException, RolWithInvalidDataException, UsuarioWithInvalidDataException, NonexistentEntityException{
-        rolGenerator();
-        createDefaultUser();
-        carrera_asginaturaGenerator();
+// TODO: hacelo bien 
+//        rolGenerator();
+//        createDefaultUser();
+//        carrera_asginaturaGenerator();
     }
 
 }
