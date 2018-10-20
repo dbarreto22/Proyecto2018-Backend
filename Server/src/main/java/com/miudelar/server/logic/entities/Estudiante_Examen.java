@@ -39,6 +39,12 @@ public class Estudiante_Examen implements Serializable {
     public Estudiante_Examen(Long id, Long calificacion) {
         this.calificacion = calificacion;
     }
+    
+    public Estudiante_Examen(Usuario usuario,Examen examen, Long calificacion) {
+        this.usuario = usuario;
+        this.examen = examen;
+        this.calificacion = calificacion;
+    }
 
     public Estudiante_Examen() {
     }

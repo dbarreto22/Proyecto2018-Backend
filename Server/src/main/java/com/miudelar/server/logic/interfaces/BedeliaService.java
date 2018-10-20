@@ -6,9 +6,14 @@
 package com.miudelar.server.logic.interfaces;
 
 import com.miudelar.server.logic.datatypes.DtCarrera;
+import com.miudelar.server.logic.datatypes.DtPeriodo_Examen;
 import com.miudelar.server.logic.datatypes.DtUsuario;
+import com.miudelar.server.logic.entities.Horario;
+import com.miudelar.server.logic.entities.Periodo_Examen;
 import java.util.List;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -21,11 +26,50 @@ import javax.ws.rs.core.MediaType;
 @Path("/director")
 public interface BedeliaService {
     
-//    @GET
-//    @Path("estudiantesExamen/{idExamen}")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public List<DtUsuario> getEstudiantesInscriptosExamen(@PathParam("codigo")
-//        final Long codigo){
-//        
-//    }
+    @GET
+    @Path("estudiantesExamen/{idExamen}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<DtUsuario> getEstudiantesInscriptosExamen(@PathParam("idExamen")
+        final Long idExamen);
+    
+    @GET
+    @Path("estudiantesCurso/{idCurso}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<DtUsuario> getEstudiantesInscriptosCurso(@PathParam("idCurso")
+        final Long idCurso);
+    
+    @POST
+    @Path("horario")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String saveHorario(String json);
+    
+    @POST
+    @Path("horario.edit")
+    @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String editHorario(Horario horario);
+    
+    @POST
+    @Path("periodo")
+    @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String savePeriodoExamen(final DtPeriodo_Examen periodo);
+    
+    @POST
+    @Path("periodo.edit")
+    @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String editPeriodoExamen(final Periodo_Examen periodo);
+    
+    @POST
+    @Path("notasCurso")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String cargarNotasCurso(String json);
+    
+    @POST
+    @Path("notasExamen")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String cargarNotasExamen(String json);
+    
+    
 }

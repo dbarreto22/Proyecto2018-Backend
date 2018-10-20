@@ -35,8 +35,7 @@ public class Horario implements Serializable {
     @Basic
     private int horaFin;
 
-    public Horario(Long id, int horaInicio, int horaFin) {
-        this.id = id;
+    public Horario(int horaInicio, int horaFin) {
         this.horaInicio = horaInicio;
         this.horaFin = horaFin;
     }

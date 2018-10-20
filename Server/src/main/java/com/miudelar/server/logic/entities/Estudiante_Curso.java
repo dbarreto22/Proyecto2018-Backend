@@ -43,6 +43,12 @@ public class Estudiante_Curso implements Serializable {
     public Estudiante_Curso() {
     }
 
+    public Estudiante_Curso(Long calificacion, Usuario usuario, Curso curso) {
+        this.calificacion = calificacion;
+        this.usuario = usuario;
+        this.curso = curso;
+    }
+    
      public Long getCalificacion() {
         return this.calificacion;
     }

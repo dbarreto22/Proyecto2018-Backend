@@ -67,6 +67,7 @@ public class EstudianteServiceImpl implements EstudianteService {
     
     @Override
     public List<Estudiante_Curso> getCalificaciones(String cedula, Long idAsig_Carrera){
+        //TODO
         List<Estudiante_Curso> cursos = new ArrayList<>();
         cursos = estudiante_cursoJpaController.findEstudiante_CursoByUsuario_Asignatura(cedula, idAsig_Carrera);
 //        List<DtCalificaciones> calificaciones = new ArrayList<>();

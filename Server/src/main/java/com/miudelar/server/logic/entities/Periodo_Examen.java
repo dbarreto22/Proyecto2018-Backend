@@ -3,6 +3,7 @@
  */
 package com.miudelar.server.logic.entities;
 
+import com.miudelar.server.logic.datatypes.DtPeriodo_Examen;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Basic;
@@ -44,6 +45,12 @@ public class Periodo_Examen implements Serializable {
         this.tipo = tipo;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
+    }
+    
+    public Periodo_Examen(DtPeriodo_Examen periodo_Examen) {
+        this.tipo = periodo_Examen.getTipo();
+        this.fechaInicio = periodo_Examen.getFechaInicio();
+        this.fechaFin = periodo_Examen.getFechaFin();
     }
 
     public Periodo_Examen() {

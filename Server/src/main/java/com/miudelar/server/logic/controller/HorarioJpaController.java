@@ -37,7 +37,7 @@ public class HorarioJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            em.persist(horario);
+            em.persist(em);
             em.getTransaction().commit();
         } finally {
             if (em != null) {
