@@ -7,7 +7,7 @@ import com.miudelar.server.logic.datatypes.DtAsignatura_Carrera;
 import com.miudelar.server.logic.datatypes.DtCurso;
 import com.miudelar.server.logic.datatypes.DtHorario;
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -55,6 +55,12 @@ public class Curso implements Serializable {
 
     public Curso(Long id) {
         this.id = id;
+    }
+    
+    public Curso(DtCurso curso) {
+        this.fecha = curso.getFecha();
+        Asignatura_Carrera asig_carrera = new Asignatura_Carrera(curso.getAsignatura_Carrera().getAsignatura(), curso.getAsignatura_Carrera().getCarrera()); 
+        this.asignatura_Carrera = asig_carrera;
     }
 
     public Curso() {

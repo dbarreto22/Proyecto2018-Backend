@@ -16,6 +16,7 @@ import com.miudelar.server.logic.controller.ExamenJpaController;
 import com.miudelar.server.logic.controller.HorarioJpaController;
 import com.miudelar.server.logic.controller.Periodo_ExamenJpaController;
 import com.miudelar.server.logic.controller.UsuarioJpaController;
+import com.miudelar.server.logic.datatypes.DtCurso;
 import com.miudelar.server.logic.datatypes.DtHorario;
 import com.miudelar.server.logic.datatypes.DtPeriodo_Examen;
 import com.miudelar.server.logic.datatypes.DtUsuario;
@@ -29,6 +30,9 @@ import com.miudelar.server.logic.entities.Usuario;
 import com.miudelar.server.logic.interfaces.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  *
@@ -59,6 +63,19 @@ public class BedeliaServiceImpl implements BedeliaService {
         //TODO
         List<DtUsuario> usuarios = new ArrayList<>();
         return usuarios;
+    }
+    
+    @Override
+    public String saveCurso(DtCurso dtCurso){
+        String message = "OK";
+        try {
+            Curso curso = new Curso(dtCurso);
+            cursoJpaController.create(curso);
+        } catch (Exception ex) {
+            System.out.println("Class:BedeliaServiceImpl: "+ ex.getMessage());
+            message = ex.getMessage();
+        }
+        return message;
     }
     
     @Override

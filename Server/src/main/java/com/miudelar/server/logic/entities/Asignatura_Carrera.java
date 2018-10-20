@@ -3,6 +3,8 @@
  */
 package com.miudelar.server.logic.entities;
 
+import com.miudelar.server.logic.datatypes.DtAsignatura;
+import com.miudelar.server.logic.datatypes.DtCarrera;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
@@ -61,6 +63,11 @@ public class Asignatura_Carrera implements Serializable {
     public Asignatura_Carrera(Asignatura asignatura, Carrera carrera) {
         this.carrera = carrera;
         this.asignatura = asignatura;
+    }
+    
+    public Asignatura_Carrera(DtAsignatura asignatura, DtCarrera carrera) {
+        this.carrera = new Carrera(carrera.getCodigo(), carrera.getNombre());
+        this.asignatura = new Asignatura(asignatura.getCodigo(), asignatura.getNombre());
     }
     
     public Asignatura_Carrera() {
