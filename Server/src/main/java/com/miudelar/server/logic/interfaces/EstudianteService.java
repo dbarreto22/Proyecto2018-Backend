@@ -11,6 +11,7 @@ import com.miudelar.server.logic.datatypes.DtCurso;
 import com.miudelar.server.logic.entities.Estudiante_Curso;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -24,12 +25,8 @@ import javax.ws.rs.core.MediaType;
  * @author rmoreno
  */
 @Path("/estudiante")
+@RolesAllowed({"ESTUDIANTE"})
 public interface EstudianteService {
-    
-    @GET
-    @Path("carrera")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<DtCarrera> getAllCarrera() throws NoSuchAlgorithmException;
     
     @GET
     @Path("curso")

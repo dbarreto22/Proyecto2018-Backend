@@ -48,15 +48,6 @@ public class EstudianteServiceImpl implements EstudianteService {
     JsonParser parser = new JsonParser();
     
     @Override
-    public List<DtCarrera> getAllCarrera() throws NoSuchAlgorithmException{
-        List<DtCarrera> carreras = new ArrayList<>();
-        carreraJpaController.findCarreraEntities().forEach(carrera -> {
-            carreras.add(new DtCarrera(carrera.getCodigo(), carrera.getNombre()));
-        });
-        return carreras;
-    }
-    
-    @Override
     public List<DtCurso> getAllCurso() throws NoSuchAlgorithmException{
         List<DtCurso> cursos = new ArrayList<>();
         cursoJpaController.findCursoEntities().forEach(curso -> {

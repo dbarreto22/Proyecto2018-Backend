@@ -80,8 +80,6 @@ public class SecurityFilter implements javax.ws.rs.container.ContainerRequestFil
             UriInfo uriinfo = requestContext.getUriInfo();
             if (!uriinfo.getPath().isEmpty()) {
                 System.out.println("uriinfo.getPath(): " + uriinfo.getPath());
-                if (!uriinfo.getPath().endsWith("login")) {
-                    System.out.println("not login");
                     if ((authorization == null || authorization.isEmpty())) {
                         requestContext.abortWith(ACCESS_DENIED);
                         return;
@@ -136,7 +134,6 @@ public class SecurityFilter implements javax.ws.rs.container.ContainerRequestFil
                         return;
                     }
 
-                }
             }
 
         }
