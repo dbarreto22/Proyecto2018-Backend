@@ -5,6 +5,7 @@ import com.miudelar.server.logic.impl.DirectorServiceImpl;
 import com.miudelar.server.logic.impl.InitMgr;
 import com.miudelar.server.logic.impl.EstudianteServiceImpl;
 import com.miudelar.server.logic.impl.BedeliaServiceImpl;
+import com.miudelar.server.logic.impl.SecurityMgr;
 import com.miudelar.server.logic.interfaces.*;
 
 /* @author Romina */
@@ -40,6 +41,10 @@ public class ManagersFactory {
     
     public EstudianteService getEstudianteService() {
         return new EstudianteServiceImpl();
+    }
+    
+    public SecurityMgt getSecurityMgt(){
+        return new SecurityMgr();
     }
     
 }

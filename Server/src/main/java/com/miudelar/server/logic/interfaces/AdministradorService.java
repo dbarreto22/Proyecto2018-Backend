@@ -9,6 +9,7 @@ import com.miudelar.server.logic.entities.Rol;
 import com.miudelar.server.logic.entities.Usuario;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import javax.annotation.security.RolesAllowed;
 import javax.jws.WebService;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
@@ -28,13 +29,13 @@ public interface AdministradorService {
     //Services
     @GET
     @Path("rol")
+    @RolesAllowed({"ADMIN"})
     @Produces(MediaType.APPLICATION_JSON)
     public List<DtRol> getAllRol() throws NoSuchAlgorithmException;
     
     @POST
     @Path("login")
     @Produces(MediaType.TEXT_PLAIN)
-    @Consumes(MediaType.APPLICATION_JSON)
     public String login(String json);
     
     @POST

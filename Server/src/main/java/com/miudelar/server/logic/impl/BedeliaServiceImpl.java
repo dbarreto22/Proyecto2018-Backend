@@ -85,7 +85,6 @@ public class BedeliaServiceImpl implements BedeliaService {
             JsonElement jsonTree = parser.parse(json);
             if (jsonTree.isJsonObject()) {
                 JsonObject jsonObject = jsonTree.getAsJsonObject();
-                if (jsonObject.get("idCurso").isJsonObject() && jsonObject.get("jsonHora").isJsonObject()) {
                     Long idCurso = jsonObject.get("idCurso").getAsLong();
                     JsonObject jsonHora = jsonObject.get("jsonHora").getAsJsonObject();
                     DtHorario dtHorario = gson.fromJson(jsonHora, DtHorario.class);
@@ -99,15 +98,12 @@ public class BedeliaServiceImpl implements BedeliaService {
                     curso.addHorario(horario);
                     cursoJpaController.edit(curso);
                     
-                }else{
-                    message = "Formato incorrecto";
-                }
             } else {
                 message = "Esto no es un json o no lo entiendo: " + json;
             }
         } catch (Exception ex) {
-            System.out.println("Class:BedeliaServiceImpl: "+ ex.getMessage());
-            message = ex.getMessage();
+            System.out.println("Class:BedeliaServiceImpl: "+ ex.getMessage()+ " " +json);
+            message = ex.getMessage()+ " " +json;
         }
         return message;
     }
@@ -156,7 +152,6 @@ public class BedeliaServiceImpl implements BedeliaService {
             JsonElement jsonTree = parser.parse(json);
             if (jsonTree.isJsonObject()) {
                 JsonObject jsonObject = jsonTree.getAsJsonObject();
-                if (jsonObject.get("cedula").isJsonObject() && jsonObject.get("idCurso").isJsonObject() && jsonObject.get("calificacion").isJsonObject()) {
                     Long idCurso = jsonObject.get("idCurso").getAsLong();
                     String cedula = jsonObject.get("cedula").getAsString();
                     Long calificacion = jsonObject.get("calificacion").getAsLong();
@@ -168,15 +163,12 @@ public class BedeliaServiceImpl implements BedeliaService {
                     }else{
                         message = "Calificacion: " + calificacion.toString() + " no es un valor válido";
                     }
-                }else{
-                    message = "Formato incorrecto";
-                }
             } else {
                 message = "Esto no es un json o no lo entiendo: " + json;
             }
         } catch (Exception ex) {
-            System.out.println("Class:BedeliaServiceImpl: "+ ex.getMessage());
-            message = ex.getMessage();
+            System.out.println("Class:BedeliaServiceImpl: "+ ex.getMessage()+ " " +json);
+            message = ex.getMessage()+ " " +json;
         }
         return message;
     }
@@ -207,8 +199,8 @@ public class BedeliaServiceImpl implements BedeliaService {
                 message = "Esto no es un json o no lo entiendo: " + json;
             }
         } catch (Exception ex) {
-            System.out.println("Class:BedeliaServiceImpl: "+ ex.getMessage());
-            message = ex.getMessage();
+            System.out.println("Class:BedeliaServiceImpl: "+ ex.getMessage()+ " " +json);
+            message = ex.getMessage()+ " " +json;
         }
         return message;
     }

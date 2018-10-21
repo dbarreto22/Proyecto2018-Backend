@@ -12,6 +12,7 @@ import com.miudelar.server.logic.datatypes.DtUsuario;
 import com.miudelar.server.logic.entities.Horario;
 import com.miudelar.server.logic.entities.Periodo_Examen;
 import java.util.List;
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;

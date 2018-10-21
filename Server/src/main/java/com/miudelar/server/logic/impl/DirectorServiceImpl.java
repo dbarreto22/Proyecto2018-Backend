@@ -132,7 +132,6 @@ public class DirectorServiceImpl implements DirectorService{
             JsonElement jsonTree = parser.parse(json);
             if (jsonTree.isJsonObject()) {
                 JsonObject jsonObject = jsonTree.getAsJsonObject();
-                if (jsonObject.get("codigoAsignatura").isJsonObject() && jsonObject.get("codigoCarrera").isJsonObject()) {
                     Long codigoAsignatura = jsonObject.get("codigoAsignatura").getAsLong();
                     Long codigoCarrera = jsonObject.get("codigoCarrera").getAsLong();
 
@@ -151,15 +150,12 @@ public class DirectorServiceImpl implements DirectorService{
 
                     carrera.addAsignatura_Carrera(asignatura_carreraEntity);
                     carreraJpaController.edit(carrera);
-                }else{
-                    message = "Formato incorrecto";
-                }
             } else {
                 message = "Esto no es un json o no lo entiendo: " + json;
             }
         } catch (Exception ex) {
-            System.out.println("Class:DirectorServiceImpl: "+ ex.getMessage());
-            message = ex.getMessage();
+            System.out.println("Class:DirectorServiceImpl: "+ ex.getMessage()+ " " +json);
+            message = ex.getMessage() + " " +json;
         }
         return message;
     }
@@ -197,7 +193,6 @@ public class DirectorServiceImpl implements DirectorService{
             JsonElement jsonTree = parser.parse(json);
             if (jsonTree.isJsonObject()) {
                 JsonObject jsonObject = jsonTree.getAsJsonObject();
-                if (jsonObject.get("idMadre").isJsonObject() && jsonObject.get("idPrevia").isJsonObject()) {
                     Long idMadre = jsonObject.get("idMadre").getAsLong();
                     Long idPrevia = jsonObject.get("idPrevia").getAsLong();
                     Asignatura_Carrera madre = asig_carJpaController.findAsignatura_Carrera(idMadre);
@@ -205,16 +200,12 @@ public class DirectorServiceImpl implements DirectorService{
                     madre.addPrevia(previa);
 
                     asig_carJpaController.edit(madre);
-                }else{
-                    message = "Formato incorrecto";
-                }
-
             } else {
                 message = "Esto no es un json o no lo entiendo: " + json;
             }
         } catch (Exception ex) {
-            System.out.println("Class:DirectorServiceImpl: "+ ex.getMessage());
-            message = ex.getMessage();
+            System.out.println("Class:DirectorServiceImpl: "+ ex.getMessage()+ " " +json);
+            message = ex.getMessage()+ " " +json;
         }
         return message;   
     }
@@ -227,23 +218,18 @@ public class DirectorServiceImpl implements DirectorService{
 
             if (jsonTree.isJsonObject()) {
                 JsonObject jsonObject = jsonTree.getAsJsonObject();
-                if (jsonObject.get("idMadre").isJsonObject() && jsonObject.get("idPrevia").isJsonObject()) {
                     Long idMadre = jsonObject.get("idMadre").getAsLong();
                     Long idPrevia = jsonObject.get("idPrevia").getAsLong();
                     Asignatura_Carrera madre = asig_carJpaController.findAsignatura_Carrera(idMadre);
                     Asignatura_Carrera previa = asig_carJpaController.findAsignatura_Carrera(idPrevia);
                     madre.removePrevia(previa);
                     asig_carJpaController.edit(madre);
-                }else{
-                    message = "Formato incorrecto";
-                }
-
             } else {
                 message = "Esto no es un json o no lo entiendo: " + json;
             }
         } catch (Exception ex) {
-            System.out.println("Class:DirectorServiceImpl: "+ ex.getMessage());
-            message = ex.getMessage();
+            System.out.println("Class:DirectorServiceImpl: "+ ex.getMessage()+ " " +json);
+            message = ex.getMessage()+ " " +json;
         }
         return message;
     }

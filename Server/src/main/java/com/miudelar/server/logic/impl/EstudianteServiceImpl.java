@@ -82,7 +82,6 @@ public class EstudianteServiceImpl implements EstudianteService {
 
             if (jsonTree.isJsonObject()) {
                 JsonObject jsonObject = jsonTree.getAsJsonObject();
-                if (jsonObject.get("cedula").isJsonObject() && jsonObject.get("idCurso").isJsonObject()) {
                     String cedula = jsonObject.get("cedula").getAsString();
                     Long idCurso = jsonObject.get("idCurso").getAsLong();
 
@@ -97,15 +96,12 @@ public class EstudianteServiceImpl implements EstudianteService {
                     } else {
                         message = "El usuario no tiene rol estudiante";
                     }
-                } else {
-                    message = "Formato incorrecto";
-                }
             } else {
                 message = "Esto no es un json o no lo entiendo: " + json;
             }
         } catch (Exception ex) {
-            System.out.println("Class:EstudianteServiceImpl: "+ ex.getMessage());
-            message = ex.getMessage();
+            System.out.println("Class:EstudianteServiceImpl: "+ ex.getMessage()+ " " +json);
+            message = ex.getMessage()+ " " +json;
         }
         return message;
     }
@@ -118,7 +114,6 @@ public class EstudianteServiceImpl implements EstudianteService {
 
             if (jsonTree.isJsonObject()) {
                 JsonObject jsonObject = jsonTree.getAsJsonObject();
-                if (jsonObject.get("cedula").isJsonObject() && jsonObject.get("codigo").isJsonObject()) {
                     String cedula = jsonObject.get("cedula").getAsString();
                     Long codigo = jsonObject.get("codigo").getAsLong();
 
@@ -136,15 +131,12 @@ public class EstudianteServiceImpl implements EstudianteService {
                     } else {
                         message = "No existe el usuario";
                     }
-                } else {
-                    message = "Formato incorrecto";
-                }
             } else {
                 message = "Esto no es un json o no lo entiendo: " + json;
             }
         } catch (Exception ex) {
-            System.out.println("Class:EstudianteServiceImpl: " + ex.getMessage());
-            message = ex.getMessage();
+            System.out.println("Class:EstudianteServiceImpl: " + ex.getMessage()+ " " +json);
+            message = ex.getMessage()+ " " +json;
         }
         return message;
     }
@@ -156,7 +148,6 @@ public class EstudianteServiceImpl implements EstudianteService {
             JsonElement jsonTree = parser.parse(json);
             if (jsonTree.isJsonObject()) {
                 JsonObject jsonObject = jsonTree.getAsJsonObject();
-                if (jsonObject.get("cedula").isJsonObject() && jsonObject.get("idExamen").isJsonObject()) {
                     String cedula = jsonObject.get("cedula").getAsString();
                     Long idExamen = jsonObject.get("idExamen").getAsLong();
 
@@ -171,15 +162,13 @@ public class EstudianteServiceImpl implements EstudianteService {
                     } else {
                         message = "El usuario no tiene rol estudiante";
                     }
-                } else {
-                    message = "Formato incorrecto";
-                }
+              
                 }else {
                 message = "Esto no es un json o no lo entiendo: " + json;
             }
             }catch (Exception ex) {
-            System.out.println("Class:EstudianteServiceImpl: "+ ex.getMessage());
-            message = ex.getMessage();
+            System.out.println("Class:EstudianteServiceImpl: "+ ex.getMessage()+ " " +json);
+            message = ex.getMessage()+ " " +json;
         }
             return message;
         }
