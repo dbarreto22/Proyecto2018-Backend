@@ -13,6 +13,7 @@ import com.miudelar.server.logic.entities.Asignatura_Carrera;
 import com.miudelar.server.logic.entities.Carrera;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -26,10 +27,12 @@ import javax.ws.rs.core.MediaType;
  * @author rmoreno
  */
 @Path("/director")
+@RolesAllowed({"DIRECTOR"})
 public interface DirectorService {
     
     @GET
     @Path("carrera")
+    @RolesAllowed({"ESTUDIANTE"})
     @Produces(MediaType.APPLICATION_JSON)
     public List<DtCarrera> getAllCarrera() throws NoSuchAlgorithmException;
     

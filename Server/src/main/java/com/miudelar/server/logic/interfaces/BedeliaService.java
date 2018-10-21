@@ -26,6 +26,7 @@ import javax.ws.rs.core.MediaType;
  * @author rmoreno
  */
 @Path("/bedelia")
+@RolesAllowed({"BEDELIA"})
 public interface BedeliaService {
     
     @GET
