@@ -9,10 +9,10 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.miudelar.server.logic.controller.AsignaturaJpaController;
-import com.miudelar.server.logic.controller.Asignatura_CarreraExtController;
-import com.miudelar.server.logic.controller.Asignatura_CarreraJpaController;
-import com.miudelar.server.logic.controller.CarreraJpaController;
+import com.miudelar.server.logic.sessionbeans.AsignaturaFacade;
+import com.miudelar.server.logic.sessionbeans.Asignatura_CarreraFacade;
+import com.miudelar.server.logic.sessionbeans.Asignatura_CarreraFacade;
+import com.miudelar.server.logic.sessionbeans.CarreraFacade;
 import com.miudelar.server.logic.datatypes.DtAsignatura;
 import com.miudelar.server.logic.datatypes.DtAsignatura_Carrera;
 import com.miudelar.server.logic.datatypes.DtCarrera;
@@ -36,15 +36,14 @@ public class DirectorServiceImpl implements DirectorService{
 //    Gson gson = new Gson();
     JsonParser parser = new JsonParser();
     
-    CarreraJpaController carreraJpaController = new CarreraJpaController();
-    AsignaturaJpaController asignaturaJpaController = new AsignaturaJpaController();
-//    Asignatura_CarreraJpaController asig_carJpaController = new Asignatura_CarreraJpaController();
-    Asignatura_CarreraExtController asig_carJpaController = new Asignatura_CarreraExtController();
+    CarreraFacade carreraFacade = new CarreraFacade();
+    AsignaturaFacade asignaturaFacade = new AsignaturaFacade();
+    Asignatura_CarreraFacade asig_carFacade = new Asignatura_CarreraFacade();
     
     @Override
     public List<DtCarrera> getAllCarrera() throws NoSuchAlgorithmException{
         List<DtCarrera> carreras = new ArrayList<>();
-        carreraJpaController.findCarreraEntities().forEach(carrera -> {
+        carreraFacade.findAll().forEach(carrera -> {
             carreras.add(new DtCarrera(carrera.getCodigo(), carrera.getNombre()));
         });
         return carreras;
@@ -53,7 +52,7 @@ public class DirectorServiceImpl implements DirectorService{
     @Override
     public List<DtAsignatura> getAsignaturasByCarrera(Long idCarrera) throws NoSuchAlgorithmException{
         List<DtAsignatura> asignaturas = new ArrayList<>();
-        carreraJpaController.findCarrera(idCarrera).getAsignaturas().forEach(asignatura -> {
+        carreraFacade.find(idCarrera).getAsignaturas().forEach(asignatura -> {
             asignaturas.add(new DtAsignatura(asignatura.getCodigo(), asignatura.getNombre()));
         });
         return asignaturas;
@@ -61,7 +60,7 @@ public class DirectorServiceImpl implements DirectorService{
     
     @Override
     public Carrera getCarrera(Long codigo) {
-        Carrera carrera = carreraJpaController.findCarrera(codigo);
+        Carrera carrera = carreraFacade.find(codigo);
         return carrera;
     }
     
@@ -71,7 +70,7 @@ public class DirectorServiceImpl implements DirectorService{
 //        Carrera carreraEntity = new Carrera(carrera.getCodigo(),carrera.getNombre());
 //        String message = "OK";
 //        try {
-//            carreraJpaController.create(carreraEntity);
+//            carreraFacade.create(carreraEntity);
 //        } catch (Exception ex) {
 //            System.out.println("Class:DirectorServiceImpl: "+ ex.getMessage());
 //            message = ex.getMessage();
@@ -84,7 +83,7 @@ public class DirectorServiceImpl implements DirectorService{
 //        Carrera carrera = gson.fromJson(Carr, Carrera.class);
         String message = "OK";
         try {
-            carreraJpaController.edit(carrera);
+            carreraFacade.edit(carrera);
         } catch (Exception ex) {
             System.out.println("Class:DirectorServiceImpl: "+ ex.getMessage());
             message = ex.getMessage();
@@ -98,7 +97,7 @@ public class DirectorServiceImpl implements DirectorService{
 //        Asignatura asignaturaEntity = new Asignatura(asignatura.getCodigo(),asignatura.getNombre());
 //        String message = "OK";
 //        try {
-//            asignaturaJpaController.create(asignaturaEntity);
+//            asignaturaFacade.create(asignaturaEntity);
 //        } catch (Exception ex) {
 //            System.out.println("Class:DirectorServiceImpl: "+ ex.getMessage());
 //            message = ex.getMessage();
@@ -111,7 +110,7 @@ public class DirectorServiceImpl implements DirectorService{
 //        Asignatura asignatura = gson.fromJson(Asig, Asignatura.class);
         String message = "OK";
         try {
-            asignaturaJpaController.edit(asignatura);
+            asignaturaFacade.edit(asignatura);
         } catch (Exception ex) {
             System.out.println("Class:DirectorServiceImpl: "+ ex.getMessage());
             message = ex.getMessage();
@@ -121,7 +120,7 @@ public class DirectorServiceImpl implements DirectorService{
     
     @Override
     public Asignatura getAsignatura(Long codigo) throws NoSuchAlgorithmException{
-        Asignatura asignatura = asignaturaJpaController.findAsignatura(codigo);
+        Asignatura asignatura = asignaturaFacade.find(codigo);
         return asignatura;
     }
     
@@ -136,20 +135,20 @@ public class DirectorServiceImpl implements DirectorService{
                     Long codigoCarrera = jsonObject.get("codigoCarrera").getAsLong();
 
                     //        Creo asociacion
-                    Asignatura asignatura = asignaturaJpaController.findAsignatura(codigoAsignatura);
-                    Carrera carrera = carreraJpaController.findCarrera(codigoCarrera);
+                    Asignatura asignatura = asignaturaFacade.find(codigoAsignatura);
+                    Carrera carrera = carreraFacade.find(codigoCarrera);
                     carrera.addAsignatura(asignatura);
 
                     ////        Creo entidad relación
                     Asignatura_Carrera asignatura_carreraEntity = new Asignatura_Carrera(asignatura, carrera);
-                    asig_carJpaController.create(asignatura_carreraEntity);
+                    asig_carFacade.create(asignatura_carreraEntity);
 
                     ////        Asocio entidad relación
                     asignatura.addAsignatura_Carrera(asignatura_carreraEntity);
-                    asignaturaJpaController.edit(asignatura);
+                    asignaturaFacade.edit(asignatura);
 
                     carrera.addAsignatura_Carrera(asignatura_carreraEntity);
-                    carreraJpaController.edit(carrera);
+                    carreraFacade.edit(carrera);
             } else {
                 message = "Esto no es un json o no lo entiendo: " + json;
             }
@@ -165,7 +164,7 @@ public class DirectorServiceImpl implements DirectorService{
         Carrera carreraEntity = new Carrera(carrera.getCodigo(),carrera.getNombre());
         String message = "OK";
         try {
-            carreraJpaController.create(carreraEntity);
+            carreraFacade.create(carreraEntity);
         } catch (Exception ex) {
             System.out.println("Class:DirectorServiceImpl: "+ ex.getMessage());
             message = ex.getMessage();
@@ -178,7 +177,7 @@ public class DirectorServiceImpl implements DirectorService{
         Asignatura asignaturaEntity = new Asignatura(asignatura.getCodigo(),asignatura.getNombre());
         String message = "OK";
         try {
-            asignaturaJpaController.create(asignaturaEntity);
+            asignaturaFacade.create(asignaturaEntity);
         } catch (Exception ex) {
             System.out.println("Class:DirectorServiceImpl: "+ ex.getMessage());
             message = ex.getMessage();
@@ -195,11 +194,11 @@ public class DirectorServiceImpl implements DirectorService{
                 JsonObject jsonObject = jsonTree.getAsJsonObject();
                     Long idMadre = jsonObject.get("idMadre").getAsLong();
                     Long idPrevia = jsonObject.get("idPrevia").getAsLong();
-                    Asignatura_Carrera madre = asig_carJpaController.findAsignatura_Carrera(idMadre);
-                    Asignatura_Carrera previa = asig_carJpaController.findAsignatura_Carrera(idPrevia);
+                    Asignatura_Carrera madre = asig_carFacade.find(idMadre);
+                    Asignatura_Carrera previa = asig_carFacade.find(idPrevia);
                     madre.addPrevia(previa);
 
-                    asig_carJpaController.edit(madre);
+                    asig_carFacade.edit(madre);
             } else {
                 message = "Esto no es un json o no lo entiendo: " + json;
             }
@@ -220,10 +219,10 @@ public class DirectorServiceImpl implements DirectorService{
                 JsonObject jsonObject = jsonTree.getAsJsonObject();
                     Long idMadre = jsonObject.get("idMadre").getAsLong();
                     Long idPrevia = jsonObject.get("idPrevia").getAsLong();
-                    Asignatura_Carrera madre = asig_carJpaController.findAsignatura_Carrera(idMadre);
-                    Asignatura_Carrera previa = asig_carJpaController.findAsignatura_Carrera(idPrevia);
+                    Asignatura_Carrera madre = asig_carFacade.find(idMadre);
+                    Asignatura_Carrera previa = asig_carFacade.find(idPrevia);
                     madre.removePrevia(previa);
-                    asig_carJpaController.edit(madre);
+                    asig_carFacade.edit(madre);
             } else {
                 message = "Esto no es un json o no lo entiendo: " + json;
             }
@@ -237,7 +236,7 @@ public class DirectorServiceImpl implements DirectorService{
     @Override
     public List<DtAsignatura_Carrera> getPrevias(Long idMadre){
         List<DtAsignatura_Carrera> asigCar = new ArrayList<>();
-        asig_carJpaController.findAsignatura_Carrera(idMadre).getPrevias().forEach(previa -> {
+        asig_carFacade.find(idMadre).getPrevias().forEach(previa -> {
             asigCar.add(new DtAsignatura_Carrera(previa.getId(), 
                     new DtCarrera(previa.getCarrera().getCodigo(), previa.getCarrera().getNombre()),
                     new DtAsignatura(previa.getAsignatura().getCodigo(), previa.getAsignatura().getNombre())));
@@ -248,7 +247,7 @@ public class DirectorServiceImpl implements DirectorService{
     @Override
     public List<DtAsignatura_Carrera> getAllAsignaturaCarrera(){
         List<DtAsignatura_Carrera> asigCar = new ArrayList<>();
-        asig_carJpaController.findAsignatura_CarreraEntities().forEach(previa -> {
+        asig_carFacade.findAll().forEach(previa -> {
             asigCar.add(new DtAsignatura_Carrera(previa.getId(), 
                     new DtCarrera(previa.getCarrera().getCodigo(), previa.getCarrera().getNombre()),
                     new DtAsignatura(previa.getAsignatura().getCodigo(), previa.getAsignatura().getNombre())));

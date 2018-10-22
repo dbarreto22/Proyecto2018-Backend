@@ -9,13 +9,13 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.miudelar.server.logic.controller.CursoJpaController;
-import com.miudelar.server.logic.controller.Estudiante_CursoJpaController;
-import com.miudelar.server.logic.controller.Estudiante_ExamenJpaController;
-import com.miudelar.server.logic.controller.ExamenJpaController;
-import com.miudelar.server.logic.controller.HorarioJpaController;
-import com.miudelar.server.logic.controller.Periodo_ExamenJpaController;
-import com.miudelar.server.logic.controller.UsuarioJpaController;
+import com.miudelar.server.logic.sessionbeans.CursoFacade;
+import com.miudelar.server.logic.sessionbeans.Estudiante_CursoFacade;
+import com.miudelar.server.logic.sessionbeans.Estudiante_ExamenFacade;
+import com.miudelar.server.logic.sessionbeans.ExamenFacade;
+import com.miudelar.server.logic.sessionbeans.HorarioFacade;
+import com.miudelar.server.logic.sessionbeans.Periodo_ExamenFacade;
+import com.miudelar.server.logic.sessionbeans.UsuarioFacade;
 import com.miudelar.server.logic.datatypes.DtCurso;
 import com.miudelar.server.logic.datatypes.DtHorario;
 import com.miudelar.server.logic.datatypes.DtPeriodo_Examen;
@@ -43,13 +43,13 @@ public class BedeliaServiceImpl implements BedeliaService {
     JsonParser parser = new JsonParser();
     Gson gson = new Gson();
     
-    HorarioJpaController horarioJpaController = new HorarioJpaController();
-    CursoJpaController cursoJpaController = new CursoJpaController();
-    Periodo_ExamenJpaController periodoJpaController = new Periodo_ExamenJpaController();
-    Estudiante_CursoJpaController e_cJpaController = new Estudiante_CursoJpaController();
-    Estudiante_ExamenJpaController e_eJpaController = new Estudiante_ExamenJpaController();
-    UsuarioJpaController usaurioJpaController = new UsuarioJpaController();
-    ExamenJpaController examenJpaController = new ExamenJpaController();
+    HorarioFacade horarioFacade = new HorarioFacade();
+    CursoFacade cursoFacade = new CursoFacade();
+    Periodo_ExamenFacade periodoFacade = new Periodo_ExamenFacade();
+    Estudiante_CursoFacade e_cJFacade = new Estudiante_CursoFacade();
+    Estudiante_ExamenFacade e_eJFacade = new Estudiante_ExamenFacade();
+    UsuarioFacade usaurioJpaController = new UsuarioFacade();
+    ExamenFacade examenFacade = new ExamenFacade();
     
     @Override
     public List<DtUsuario> getEstudiantesInscriptosExamen(Long idExamen){
@@ -70,7 +70,7 @@ public class BedeliaServiceImpl implements BedeliaService {
         String message = "OK";
         try {
             Curso curso = new Curso(dtCurso);
-            cursoJpaController.create(curso);
+            cursoFacade.create(curso);
         } catch (Exception ex) {
             System.out.println("Class:BedeliaServiceImpl: "+ ex.getMessage());
             message = ex.getMessage();
@@ -91,12 +91,12 @@ public class BedeliaServiceImpl implements BedeliaService {
 
                     //        Creo Horario
                     Horario horario = new Horario(dtHorario.getHoraInicio(), dtHorario.getHoraFin());
-                    horarioJpaController.create(horario);
+                    horarioFacade.create(horario);
                     
                     ////        Creo realación
-                    Curso curso = cursoJpaController.findCurso(idCurso);
+                    Curso curso = cursoFacade.find(idCurso);
                     curso.addHorario(horario);
-                    cursoJpaController.edit(curso);
+                    cursoFacade.edit(curso);
                     
             } else {
                 message = "Esto no es un json o no lo entiendo: " + json;
@@ -112,7 +112,7 @@ public class BedeliaServiceImpl implements BedeliaService {
     public String editHorario(Horario horario){
         String message = "OK";
         try {
-            horarioJpaController.edit(horario);
+            horarioFacade.edit(horario);
         } catch (Exception ex) {
             System.out.println("Class:BedeliaServiceImpl: "+ ex.getMessage());
             message = ex.getMessage();
@@ -125,7 +125,7 @@ public class BedeliaServiceImpl implements BedeliaService {
     String message = "OK";
         try {
             Periodo_Examen periodo = new Periodo_Examen(dtPeriodo);
-            periodoJpaController.create(periodo);
+            periodoFacade.create(periodo);
         } catch (Exception ex) {
             System.out.println("Class:BedeliaServiceImpl: "+ ex.getMessage());
             message = ex.getMessage();
@@ -137,7 +137,7 @@ public class BedeliaServiceImpl implements BedeliaService {
     public String editPeriodoExamen(Periodo_Examen periodo){
         String message = "OK";
         try {
-            periodoJpaController.edit(periodo);
+            periodoFacade.edit(periodo);
         } catch (Exception ex) {
             System.out.println("Class:BedeliaServiceImpl: "+ ex.getMessage());
             message = ex.getMessage();
@@ -157,9 +157,9 @@ public class BedeliaServiceImpl implements BedeliaService {
                     Long calificacion = jsonObject.get("calificacion").getAsLong();
                     
                     if (calificacion < 13 && calificacion >= 0) {
-                        Usuario usuario = usaurioJpaController.findUsuario(cedula);
-                        Curso curso = cursoJpaController.findCurso(idCurso);
-                        e_cJpaController.create(new Estudiante_Curso(calificacion, usuario, curso));
+                        Usuario usuario = usaurioJpaController.find(cedula);
+                        Curso curso = cursoFacade.find(idCurso);
+                        e_cJFacade.create(new Estudiante_Curso(calificacion, usuario, curso));
                     }else{
                         message = "Calificacion: " + calificacion.toString() + " no es un valor válido";
                     }
@@ -186,9 +186,9 @@ public class BedeliaServiceImpl implements BedeliaService {
                     Long calificacion = jsonObject.get("calificacion").getAsLong();
                     
                     if (calificacion < 13 && calificacion >= 0) {
-                        Usuario usuario = usaurioJpaController.findUsuario(cedula);
-                        Examen examen = examenJpaController.findExamen(idExamen);
-                        e_eJpaController.create(new Estudiante_Examen(usuario, examen, calificacion));
+                        Usuario usuario = usaurioJpaController.find(cedula);
+                        Examen examen = examenFacade.find(idExamen);
+                        e_eJFacade.create(new Estudiante_Examen(usuario, examen, calificacion));
                     }else{
                         message = "Calificacion: " + calificacion.toString() + " no es un valor válido";
                     }

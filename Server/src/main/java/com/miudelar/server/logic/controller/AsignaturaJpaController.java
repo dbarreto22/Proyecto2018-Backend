@@ -5,7 +5,7 @@
  */
 package com.miudelar.server.logic.controller;
 
-import com.miudelar.server.logic.controller.exceptions.NonexistentEntityException;
+import com.miudelar.server.exceptions.NonexistentEntityException;
 import com.miudelar.server.logic.entities.Asignatura;
 import java.io.Serializable;
 import javax.persistence.Query;

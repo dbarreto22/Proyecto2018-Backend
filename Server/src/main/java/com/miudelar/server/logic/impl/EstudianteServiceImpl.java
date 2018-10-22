@@ -8,13 +8,13 @@ package com.miudelar.server.logic.impl;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.miudelar.server.logic.controller.CarreraJpaController;
-import com.miudelar.server.logic.controller.CursoJpaController;
-import com.miudelar.server.logic.controller.Estudiante_CursoJpaController;
-import com.miudelar.server.logic.controller.Estudiante_ExamenJpaController;
-import com.miudelar.server.logic.controller.ExamenJpaController;
-import com.miudelar.server.logic.controller.RolJpaController;
-import com.miudelar.server.logic.controller.UsuarioJpaController;
+import com.miudelar.server.logic.sessionbeans.CarreraFacade;
+import com.miudelar.server.logic.sessionbeans.CursoFacade;
+import com.miudelar.server.logic.sessionbeans.Estudiante_CursoFacade;
+import com.miudelar.server.logic.sessionbeans.Estudiante_ExamenFacade;
+import com.miudelar.server.logic.sessionbeans.ExamenFacade;
+import com.miudelar.server.logic.sessionbeans.RolFacade;
+import com.miudelar.server.logic.sessionbeans.UsuarioFacade;
 import com.miudelar.server.logic.datatypes.DtCalificaciones;
 import com.miudelar.server.logic.datatypes.DtCarrera;
 import com.miudelar.server.logic.datatypes.DtCurso;
@@ -38,19 +38,19 @@ import javax.ws.rs.PathParam;
  */
 public class EstudianteServiceImpl implements EstudianteService {
     
-    CursoJpaController cursoJpaController = new CursoJpaController();
-    UsuarioJpaController usuarioJpaController = new UsuarioJpaController();
-    RolJpaController rolJpaController = new RolJpaController();
-    ExamenJpaController examenJpaController = new ExamenJpaController();
-    CarreraJpaController carreraJpaController = new CarreraJpaController();
-    Estudiante_CursoJpaController estudiante_cursoJpaController = new Estudiante_CursoJpaController();
-    Estudiante_ExamenJpaController estudiante_examenJpaController = new Estudiante_ExamenJpaController();
+    CursoFacade cursoFacade = new CursoFacade();
+    UsuarioFacade usuarioFacade = new UsuarioFacade();
+    RolFacade rolFacade = new RolFacade();
+    ExamenFacade examenFacade = new ExamenFacade();
+    CarreraFacade carreraFacade = new CarreraFacade();
+    Estudiante_CursoFacade estudiante_cursoFacade = new Estudiante_CursoFacade();
+    Estudiante_ExamenFacade estudiante_ExamenFacade = new Estudiante_ExamenFacade();
     JsonParser parser = new JsonParser();
     
     @Override
     public List<DtCurso> getAllCurso() throws NoSuchAlgorithmException{
         List<DtCurso> cursos = new ArrayList<>();
-        cursoJpaController.findCursoEntities().forEach(curso -> {
+        cursoFacade.findAll().forEach(curso -> {
             cursos.add(curso.toDataType());
         });
          return cursos;
@@ -60,7 +60,7 @@ public class EstudianteServiceImpl implements EstudianteService {
     public List<Estudiante_Curso> getCalificaciones(String cedula, Long idAsig_Carrera){
         //TODO
         List<Estudiante_Curso> cursos = new ArrayList<>();
-        cursos = estudiante_cursoJpaController.findEstudiante_CursoByUsuario_Asignatura(cedula, idAsig_Carrera);
+        cursos = estudiante_cursoFacade.findEstudiante_CursoByUsuario_Asignatura(cedula, idAsig_Carrera);
 //        List<DtCalificaciones> calificaciones = new ArrayList<>();
         return cursos;
     }
@@ -76,13 +76,13 @@ public class EstudianteServiceImpl implements EstudianteService {
                     String cedula = jsonObject.get("cedula").getAsString();
                     Long idCurso = jsonObject.get("idCurso").getAsLong();
 
-                    Usuario usuario = usuarioJpaController.findUsuario(cedula);
-                    Rol rol = rolJpaController.findRol(4L);
+                    Usuario usuario = usuarioFacade.find(cedula);
+                    Rol rol = rolFacade.find(4L);
                     if (usuario.getRoles().contains(rol)) {
-                        Curso curso = cursoJpaController.findCurso(idCurso);
+                        Curso curso = cursoFacade.find(idCurso);
                         usuario.addCurso(curso);
 
-                        usuarioJpaController.edit(usuario);
+                        usuarioFacade.edit(usuario);
 
                     } else {
                         message = "El usuario no tiene rol estudiante";
@@ -108,14 +108,14 @@ public class EstudianteServiceImpl implements EstudianteService {
                     String cedula = jsonObject.get("cedula").getAsString();
                     Long codigo = jsonObject.get("codigo").getAsLong();
 
-                    Usuario usuario = usuarioJpaController.findUsuario(cedula);
-                    Rol rol = rolJpaController.findRol(4L);
+                    Usuario usuario = usuarioFacade.find(cedula);
+                    Rol rol = rolFacade.find(4L);
                     if (usuario != null) {
                         if (usuario.getRoles().contains(rol)) {
-                            Carrera carrera = carreraJpaController.findCarrera(codigo);
+                            Carrera carrera = carreraFacade.find(codigo);
                             usuario.addCarrera(carrera);
 
-                            usuarioJpaController.edit(usuario);
+                            usuarioFacade.edit(usuario);
                         } else {
                             message = "El usuario no tiene rol estudiante";
                         }
@@ -142,13 +142,13 @@ public class EstudianteServiceImpl implements EstudianteService {
                     String cedula = jsonObject.get("cedula").getAsString();
                     Long idExamen = jsonObject.get("idExamen").getAsLong();
 
-                    Usuario usuario = usuarioJpaController.findUsuario(cedula);
-                    Rol rol = rolJpaController.findRol(4L);
+                    Usuario usuario = usuarioFacade.find(cedula);
+                    Rol rol = rolFacade.find(4L);
                     if (usuario.getRoles().contains(rol)) {
-                        Examen examen = examenJpaController.findExamen(idExamen);
+                        Examen examen = examenFacade.find(idExamen);
                         usuario.addInscripcionesExamenes(examen);
 
-                        usuarioJpaController.edit(usuario);
+                        usuarioFacade.edit(usuario);
 
                     } else {
                         message = "El usuario no tiene rol estudiante";

@@ -10,12 +10,12 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.miudelar.server.logic.controller.RolJpaController;
-import com.miudelar.server.logic.controller.UsuarioJpaController;
 import com.miudelar.server.logic.entities.Rol;
 import com.miudelar.server.logic.entities.Usuario;
 import com.miudelar.server.logic.factories.ManagersFactory;
 import com.miudelar.server.logic.interfaces.SecurityMgt;
+import com.miudelar.server.logic.sessionbeans.RolFacade;
+import com.miudelar.server.logic.sessionbeans.UsuarioFacade;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -23,12 +23,16 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.StringTokenizer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.Priority;
 
 import javax.annotation.security.DenyAll;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.MultivaluedMap;
@@ -48,15 +52,16 @@ import org.jboss.resteasy.util.Base64;
 @Priority(Priorities.AUTHENTICATION)
 public class SecurityFilter implements javax.ws.rs.container.ContainerRequestFilter {
 
+    RolFacade rolFacade = new RolFacade();
+    UsuarioFacade usuarioFacade = new UsuarioFacade();
+    SecurityMgt securityMgt = ManagersFactory.getInstance().getSecurityMgt();
+
     private static final String AUTHORIZATION_PROPERTY = "Authorization";
     private static final String AUTHENTICATION_SCHEME = "Basic";
     private static final ServerResponse ACCESS_DENIED = new ServerResponse("Access denied for this resource", 401, new Headers<Object>());
     private static final ServerResponse ACCESS_FORBIDDEN = new ServerResponse("Nobody can access this resource", 403, new Headers<Object>());
     private static final ServerResponse SERVER_ERROR = new ServerResponse("INTERNAL SERVER ERROR", 500, new Headers<Object>());
 
-    SecurityMgt securityMgt = ManagersFactory.getInstance().getSecurityMgt();
-    RolJpaController rolController = new RolJpaController();
-    UsuarioJpaController usuarioController = new UsuarioJpaController();
 
     @Override
     public void filter(ContainerRequestContext requestContext) {
@@ -130,10 +135,9 @@ public class SecurityFilter implements javax.ws.rs.container.ContainerRequestFil
                         }
                     } catch (Exception e) {
                         System.out.println("SecurityFilter: " + e.getMessage());
-                        requestContext.abortWith(SERVER_ERROR);
+                        requestContext.abortWith(ACCESS_FORBIDDEN);
                         return;
                     }
-
             }
 
         }
@@ -142,7 +146,7 @@ public class SecurityFilter implements javax.ws.rs.container.ContainerRequestFil
     private boolean isUserAllowed(final String username, final String password, final Set<String> rolesSet) {
         boolean isAllowed = false;
 
-        Usuario usuario = usuarioController.findUsuario(username);
+        Usuario usuario = usuarioFacade.find(username);
         if (usuario.getPassword().equals(password)) {
             List<Rol> roles = usuario.getRoles();
             for (Rol rol : roles) {

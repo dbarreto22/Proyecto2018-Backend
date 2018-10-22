@@ -5,8 +5,8 @@
  */
 package com.miudelar.server.logic.controller;
 
-import com.miudelar.server.logic.controller.exceptions.NonexistentEntityException;
-import com.miudelar.server.logic.controller.exceptions.PreexistingEntityException;
+import com.miudelar.server.exceptions.NonexistentEntityException;
+import com.miudelar.server.exceptions.PreexistingEntityException;
 import com.miudelar.server.logic.entities.Estudiante_Curso;
 import com.miudelar.server.logic.entities.Usuario;
 import com.miudelar.server.logic.factories.EntityManagerFactoryRepository;

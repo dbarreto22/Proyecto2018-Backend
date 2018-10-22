@@ -7,8 +7,8 @@ import com.google.gson.JsonParser;
 import com.miudelar.server.exceptions.NonexistentEntityException;
 import com.miudelar.server.exceptions.UsuarioWithInvalidDataException;
 import com.miudelar.server.exceptions.RolWithInvalidDataException;
-import com.miudelar.server.logic.controller.RolJpaController;
-import com.miudelar.server.logic.controller.UsuarioJpaController;
+import com.miudelar.server.logic.sessionbeans.RolFacade;
+import com.miudelar.server.logic.sessionbeans.UsuarioFacade;
 import com.miudelar.server.logic.datatypes.DtRol;
 import com.miudelar.server.logic.datatypes.DtUsuario;
 import com.miudelar.server.logic.factories.EntityManagerFactoryRepository;
@@ -27,8 +27,8 @@ public class AdministradorServiceImpl implements AdministradorService {
 
     JsonParser parser = new JsonParser();
 
-    RolJpaController rolJpaController = new RolJpaController();
-    UsuarioJpaController usuarioJpaController = new UsuarioJpaController();
+    RolFacade rolFacade = new RolFacade();
+    UsuarioFacade usuarioFacade = new UsuarioFacade();
     SecurityMgr security = new SecurityMgr();
 
     @Override
@@ -36,7 +36,7 @@ public class AdministradorServiceImpl implements AdministradorService {
         System.out.println("tipo: " + tipo);
         Rol rolEntity = new Rol(tipo);
         try {
-            rolJpaController.create(rolEntity);
+            rolFacade.create(rolEntity);
         } catch (Exception ex) {
             System.out.println("Class:AdministradorServiceImpl: " + ex.getMessage());
             throw new RolWithInvalidDataException();
@@ -46,7 +46,7 @@ public class AdministradorServiceImpl implements AdministradorService {
     @Override
     public List<DtRol> getAllRol() throws NoSuchAlgorithmException {
         List<DtRol> roles = new ArrayList<>();
-        rolJpaController.findRolEntities().forEach(tipo -> {
+        rolFacade.findAll().forEach(tipo -> {
             roles.add(new DtRol(tipo.getId(), tipo.getTipo()));
         });
         return roles;
@@ -62,10 +62,9 @@ public class AdministradorServiceImpl implements AdministradorService {
                 System.out.println("jsonObject: " + jsonObject);
                 String username = jsonObject.get("username").getAsString();
                 String password = jsonObject.get("password").getAsString();
-                System.out.println("username: " + username);
-                System.out.println("password: " + password);
 
-                Usuario usuario = usuarioJpaController.findUsuario(username);
+                Usuario usuario = usuarioFacade.find(username);
+                System.out.println("usuario: " + usuario.toString());
                 if (usuario.getPassword().equals(password)) {
                     message = security.createAndSignToken(username,password);
                 } else {
@@ -88,7 +87,7 @@ public class AdministradorServiceImpl implements AdministradorService {
         Usuario usuarioEntity = new Usuario(usuario);
         String message = "OK";
         try {
-            usuarioJpaController.create(usuarioEntity);
+            usuarioFacade.create(usuarioEntity);
         } catch (Exception ex) {
             System.out.println("Class:AdministradorServiceImpl: " + ex.getMessage());
             message = ex.getMessage();
@@ -102,7 +101,7 @@ public class AdministradorServiceImpl implements AdministradorService {
 //        Usuario usuarioEntity = new Usuario(usuario);
 //        String message = "OK";
 //        try {
-//            usuarioJpaController.create(usuarioEntity);
+//            usuarioFacade.create(usuarioEntity);
 //        } catch (Exception ex) {
 //            System.out.println("Class:AdministradorServiceImpl: "+ ex.getMessage());
 //            message = ex.getMessage();
@@ -114,7 +113,7 @@ public class AdministradorServiceImpl implements AdministradorService {
 //        Usuario usuario = gson.fromJson(UsrStr, Usuario.class);
         String message = "OK";
         try {
-            usuarioJpaController.edit(usuario);
+            usuarioFacade.edit(usuario);
         } catch (Exception ex) {
             System.out.println("Class:AdministradorServiceImpl: " + ex.getMessage());
             message = ex.getMessage();
@@ -133,11 +132,11 @@ public class AdministradorServiceImpl implements AdministradorService {
                 String cedula = jsonObject.get("cedula").getAsString();
                 Long idRol = jsonObject.get("idRol").getAsLong();
 
-                Usuario usuario = usuarioJpaController.findUsuario(cedula);
-                Rol rol = rolJpaController.findRol(idRol);
+                Usuario usuario = usuarioFacade.find(cedula);
+                Rol rol = rolFacade.find(idRol);
                 usuario.addRol(rol);
 
-                usuarioJpaController.edit(usuario);
+                usuarioFacade.edit(usuario);
             } else {
                 message = "Esto no es un json o no lo entiendo: " + json;
             }
@@ -159,11 +158,11 @@ public class AdministradorServiceImpl implements AdministradorService {
                 String cedula = jsonObject.get("cedula").getAsString();
                 Long idRol = jsonObject.get("idRol").getAsLong();
 
-                Usuario usuario = usuarioJpaController.findUsuario(cedula);
-                Rol rol = rolJpaController.findRol(idRol);
+                Usuario usuario = usuarioFacade.find(cedula);
+                Rol rol = rolFacade.find(idRol);
                 usuario.removeRol(rol);
 
-                usuarioJpaController.edit(usuario);
+                usuarioFacade.edit(usuario);
             } else {
                 message = "Esto no es un json o no lo entiendo: " + json;
             }
@@ -177,7 +176,7 @@ public class AdministradorServiceImpl implements AdministradorService {
     @Override
     public List<DtUsuario> getAllUsuario() throws NoSuchAlgorithmException {
         List<DtUsuario> usuarios = new ArrayList<>();
-        usuarioJpaController.findUsuarioEntities().forEach(usuario -> {
+        usuarioFacade.findAll().forEach(usuario -> {
             usuarios.add(usuario.toDataType());
         });
         return usuarios;
@@ -185,7 +184,7 @@ public class AdministradorServiceImpl implements AdministradorService {
 
     @Override
     public Usuario getUsuario(String cedula) {
-        Usuario usuario = usuarioJpaController.findUsuario(cedula);
+        Usuario usuario = usuarioFacade.find(cedula);
         return usuario;
     }
 
