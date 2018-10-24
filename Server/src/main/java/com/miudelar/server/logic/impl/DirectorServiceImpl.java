@@ -9,10 +9,13 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.miudelar.server.logic.sessionbeans.AsignaturaFacade;
-import com.miudelar.server.logic.sessionbeans.Asignatura_CarreraFacade;
-import com.miudelar.server.logic.sessionbeans.Asignatura_CarreraFacade;
-import com.miudelar.server.logic.sessionbeans.CarreraFacade;
+import com.miudelar.server.ejb.AsignaturaFacade;
+import com.miudelar.server.ejb.AsignaturaFacadeLocal;
+import com.miudelar.server.ejb.Asignatura_CarreraFacade;
+import com.miudelar.server.ejb.Asignatura_CarreraFacade;
+import com.miudelar.server.ejb.Asignatura_CarreraFacadeLocal;
+import com.miudelar.server.ejb.CarreraFacade;
+import com.miudelar.server.ejb.CarreraFacadeLocal;
 import com.miudelar.server.logic.datatypes.DtAsignatura;
 import com.miudelar.server.logic.datatypes.DtAsignatura_Carrera;
 import com.miudelar.server.logic.datatypes.DtCarrera;
@@ -25,6 +28,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.ws.rs.PathParam;
 
 /**
@@ -32,13 +38,46 @@ import javax.ws.rs.PathParam;
  * @author rmoreno
  */
 public class DirectorServiceImpl implements DirectorService{
+
+    Asignatura_CarreraFacadeLocal asignatura_CarreraFacade = lookupAsignatura_CarreraFacadeBean();
+
+    AsignaturaFacadeLocal asignaturaFacade = lookupAsignaturaFacadeBean();
+
+    CarreraFacadeLocal carreraFacade = lookupCarreraFacadeBean();
     
 //    Gson gson = new Gson();
     JsonParser parser = new JsonParser();
     
-    CarreraFacade carreraFacade = new CarreraFacade();
-    AsignaturaFacade asignaturaFacade = new AsignaturaFacade();
-    Asignatura_CarreraFacade asig_carFacade = new Asignatura_CarreraFacade();
+       private CarreraFacadeLocal lookupCarreraFacadeBean() {
+        try {
+            Context c = new InitialContext();
+            return (CarreraFacadeLocal) c.lookup("java:app/miudelar-server/CarreraFacade");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+
+    private AsignaturaFacadeLocal lookupAsignaturaFacadeBean() {
+        try {
+            Context c = new InitialContext();
+            return (AsignaturaFacadeLocal) c.lookup("java:app/miudelar-server/AsignaturaFacade");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+
+    private Asignatura_CarreraFacadeLocal lookupAsignatura_CarreraFacadeBean() {
+        try {
+            Context c = new InitialContext();
+            return (Asignatura_CarreraFacadeLocal) c.lookup("java:app/miudelar-server/Asignatura_CarreraFacade");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+    
     
     @Override
     public List<DtCarrera> getAllCarrera() throws NoSuchAlgorithmException{
@@ -63,21 +102,7 @@ public class DirectorServiceImpl implements DirectorService{
         Carrera carrera = carreraFacade.find(codigo);
         return carrera;
     }
-    
-//    @Override
-//    public String saveCarrera(String dtCarr){
-//        DtCarrera carrera = gson.fromJson(dtCarr, DtCarrera.class);
-//        Carrera carreraEntity = new Carrera(carrera.getCodigo(),carrera.getNombre());
-//        String message = "OK";
-//        try {
-//            carreraFacade.create(carreraEntity);
-//        } catch (Exception ex) {
-//            System.out.println("Class:DirectorServiceImpl: "+ ex.getMessage());
-//            message = ex.getMessage();
-//        }
-//        return message;
-//    }
-    
+        
     @Override
     public String editCarrera(Carrera carrera){
 //        Carrera carrera = gson.fromJson(Carr, Carrera.class);
@@ -90,20 +115,7 @@ public class DirectorServiceImpl implements DirectorService{
         }
         return message;
     }
-    
-//    @Override
-//    public String saveAsignatura(String dtAsig){
-//        DtAsignatura asignatura = gson.fromJson(dtAsig, DtAsignatura.class);
-//        Asignatura asignaturaEntity = new Asignatura(asignatura.getCodigo(),asignatura.getNombre());
-//        String message = "OK";
-//        try {
-//            asignaturaFacade.create(asignaturaEntity);
-//        } catch (Exception ex) {
-//            System.out.println("Class:DirectorServiceImpl: "+ ex.getMessage());
-//            message = ex.getMessage();
-//        }
-//        return message;
-//    }
+   
     
     @Override
     public String editAsignatura(Asignatura asignatura){
@@ -141,7 +153,7 @@ public class DirectorServiceImpl implements DirectorService{
 
                     ////        Creo entidad relación
                     Asignatura_Carrera asignatura_carreraEntity = new Asignatura_Carrera(asignatura, carrera);
-                    asig_carFacade.create(asignatura_carreraEntity);
+                    asignatura_CarreraFacade.create(asignatura_carreraEntity);
 
                     ////        Asocio entidad relación
                     asignatura.addAsignatura_Carrera(asignatura_carreraEntity);
@@ -194,11 +206,11 @@ public class DirectorServiceImpl implements DirectorService{
                 JsonObject jsonObject = jsonTree.getAsJsonObject();
                     Long idMadre = jsonObject.get("idMadre").getAsLong();
                     Long idPrevia = jsonObject.get("idPrevia").getAsLong();
-                    Asignatura_Carrera madre = asig_carFacade.find(idMadre);
-                    Asignatura_Carrera previa = asig_carFacade.find(idPrevia);
+                    Asignatura_Carrera madre = asignatura_CarreraFacade.find(idMadre);
+                    Asignatura_Carrera previa = asignatura_CarreraFacade.find(idPrevia);
                     madre.addPrevia(previa);
 
-                    asig_carFacade.edit(madre);
+                    asignatura_CarreraFacade.edit(madre);
             } else {
                 message = "Esto no es un json o no lo entiendo: " + json;
             }
@@ -219,10 +231,10 @@ public class DirectorServiceImpl implements DirectorService{
                 JsonObject jsonObject = jsonTree.getAsJsonObject();
                     Long idMadre = jsonObject.get("idMadre").getAsLong();
                     Long idPrevia = jsonObject.get("idPrevia").getAsLong();
-                    Asignatura_Carrera madre = asig_carFacade.find(idMadre);
-                    Asignatura_Carrera previa = asig_carFacade.find(idPrevia);
+                    Asignatura_Carrera madre = asignatura_CarreraFacade.find(idMadre);
+                    Asignatura_Carrera previa = asignatura_CarreraFacade.find(idPrevia);
                     madre.removePrevia(previa);
-                    asig_carFacade.edit(madre);
+                    asignatura_CarreraFacade.edit(madre);
             } else {
                 message = "Esto no es un json o no lo entiendo: " + json;
             }
@@ -236,7 +248,7 @@ public class DirectorServiceImpl implements DirectorService{
     @Override
     public List<DtAsignatura_Carrera> getPrevias(Long idMadre){
         List<DtAsignatura_Carrera> asigCar = new ArrayList<>();
-        asig_carFacade.find(idMadre).getPrevias().forEach(previa -> {
+        asignatura_CarreraFacade.find(idMadre).getPrevias().forEach(previa -> {
             asigCar.add(new DtAsignatura_Carrera(previa.getId(), 
                     new DtCarrera(previa.getCarrera().getCodigo(), previa.getCarrera().getNombre()),
                     new DtAsignatura(previa.getAsignatura().getCodigo(), previa.getAsignatura().getNombre())));
@@ -247,7 +259,7 @@ public class DirectorServiceImpl implements DirectorService{
     @Override
     public List<DtAsignatura_Carrera> getAllAsignaturaCarrera(){
         List<DtAsignatura_Carrera> asigCar = new ArrayList<>();
-        asig_carFacade.findAll().forEach(previa -> {
+        asignatura_CarreraFacade.findAll().forEach(previa -> {
             asigCar.add(new DtAsignatura_Carrera(previa.getId(), 
                     new DtCarrera(previa.getCarrera().getCodigo(), previa.getCarrera().getNombre()),
                     new DtAsignatura(previa.getAsignatura().getCodigo(), previa.getAsignatura().getNombre())));

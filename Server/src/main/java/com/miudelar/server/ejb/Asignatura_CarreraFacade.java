@@ -3,27 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.miudelar.server.logic.sessionbeans;
+package com.miudelar.server.ejb;
 
-import com.miudelar.server.logic.entities.Asignatura;
 import com.miudelar.server.logic.entities.Asignatura_Carrera;
-import com.miudelar.server.logic.entities.Carrera;
-import java.util.ArrayList;
-import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 
 /**
  *
  * @author rmoreno
  */
 @Stateless
-public class AsignaturaFacade extends AbstractFacade<Asignatura> {
+public class Asignatura_CarreraFacade extends AbstractFacade<Asignatura_Carrera> implements Asignatura_CarreraFacadeLocal {
 
     @PersistenceContext(unitName = "miudelar")
     private EntityManager em;
@@ -33,8 +25,8 @@ public class AsignaturaFacade extends AbstractFacade<Asignatura> {
         return em;
     }
 
-    public AsignaturaFacade() {
-        super(Asignatura.class);
+    public Asignatura_CarreraFacade() {
+        super(Asignatura_Carrera.class);
     }
-
+    
 }

@@ -1,35 +1,56 @@
 package com.miudelar.server.logic.impl;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.miudelar.server.exceptions.NonexistentEntityException;
-import com.miudelar.server.exceptions.UsuarioWithInvalidDataException;
+import com.miudelar.server.ejb.RolFacade;
+import com.miudelar.server.ejb.RolFacadeLocal;
+import com.miudelar.server.ejb.UsuarioFacade;
+import com.miudelar.server.ejb.UsuarioFacadeLocal;
 import com.miudelar.server.exceptions.RolWithInvalidDataException;
-import com.miudelar.server.logic.sessionbeans.RolFacade;
-import com.miudelar.server.logic.sessionbeans.UsuarioFacade;
 import com.miudelar.server.logic.datatypes.DtRol;
 import com.miudelar.server.logic.datatypes.DtUsuario;
-import com.miudelar.server.logic.factories.EntityManagerFactoryRepository;
 import com.miudelar.server.logic.entities.Rol;
 import com.miudelar.server.logic.entities.Usuario;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import com.miudelar.server.logic.interfaces.AdministradorService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.persistence.EntityManagerFactory;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 
 public class AdministradorServiceImpl implements AdministradorService {
 
     JsonParser parser = new JsonParser();
 
-    RolFacade rolFacade = new RolFacade();
-    UsuarioFacade usuarioFacade = new UsuarioFacade();
+    private RolFacadeLocal rolFacade = lookupRolFacadeBean();
+    
+    private UsuarioFacadeLocal usuarioFacade = lookupUsuarioFacadeBean();
+    
     SecurityMgr security = new SecurityMgr();
+    
+    private RolFacadeLocal lookupRolFacadeBean() {
+        try {
+            Context c = new InitialContext();
+            return (RolFacadeLocal) c.lookup("java:app/miudelar-server/RolFacade");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+    
+    private UsuarioFacadeLocal lookupUsuarioFacadeBean() {
+        try {
+            Context c = new InitialContext();
+            return (UsuarioFacadeLocal) c.lookup("java:app/miudelar-server/UsuarioFacade");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
 
     @Override
     public void rolSave(String tipo) throws RolWithInvalidDataException {
@@ -55,29 +76,33 @@ public class AdministradorServiceImpl implements AdministradorService {
     @Override
     public String login(String json) {
         String message;
-        try {
+        
             JsonElement jsonTree = parser.parse(json);
             if (jsonTree.isJsonObject()) {
                 JsonObject jsonObject = jsonTree.getAsJsonObject();
-                System.out.println("jsonObject: " + jsonObject);
                 String username = jsonObject.get("username").getAsString();
                 String password = jsonObject.get("password").getAsString();
-
+                System.out.println("jsonObject: " + username + password );
+                try {
                 Usuario usuario = usuarioFacade.find(username);
+                
                 System.out.println("usuario: " + usuario.toString());
                 if (usuario.getPassword().equals(password)) {
                     message = security.createAndSignToken(username,password);
                 } else {
                     message = "Error: Usuario o contraseña incorrecta";
                 }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+            System.out.println("Class:AdministradorServiceImpl: " + ex.getMessage()+ " " +json);
+            message = ex.getMessage()+ " " +json;
+        }
+                
 
             } else {
                 message = "Esto no es un json o no lo entiendo: " + json;
             }
-        } catch (Exception ex) {
-            System.out.println("Class:AdministradorServiceImpl: " + ex.getMessage()+ " " +json);
-            message = ex.getMessage()+ " " +json;
-        }
+        
         return message;
     }
 

@@ -3,9 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.miudelar.server.logic.sessionbeans;
+package com.miudelar.server.ejb;
 
-import com.miudelar.server.exceptions.NonexistentEntityException;
 import java.util.List;
 import javax.persistence.EntityManager;
 
@@ -27,7 +26,7 @@ public abstract class AbstractFacade<T> {
         getEntityManager().persist(entity);
     }
 
-    public void edit(T entity) throws NonexistentEntityException, Exception {
+    public void edit(T entity) {
         getEntityManager().merge(entity);
     }
 

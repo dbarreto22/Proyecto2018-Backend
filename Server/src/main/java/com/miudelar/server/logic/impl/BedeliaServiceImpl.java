@@ -9,13 +9,20 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.miudelar.server.logic.sessionbeans.CursoFacade;
-import com.miudelar.server.logic.sessionbeans.Estudiante_CursoFacade;
-import com.miudelar.server.logic.sessionbeans.Estudiante_ExamenFacade;
-import com.miudelar.server.logic.sessionbeans.ExamenFacade;
-import com.miudelar.server.logic.sessionbeans.HorarioFacade;
-import com.miudelar.server.logic.sessionbeans.Periodo_ExamenFacade;
-import com.miudelar.server.logic.sessionbeans.UsuarioFacade;
+import com.miudelar.server.ejb.CursoFacade;
+import com.miudelar.server.ejb.CursoFacadeLocal;
+import com.miudelar.server.ejb.Estudiante_CursoFacade;
+import com.miudelar.server.ejb.Estudiante_CursoFacadeLocal;
+import com.miudelar.server.ejb.Estudiante_ExamenFacade;
+import com.miudelar.server.ejb.Estudiante_ExamenFacadeLocal;
+import com.miudelar.server.ejb.ExamenFacade;
+import com.miudelar.server.ejb.ExamenFacadeLocal;
+import com.miudelar.server.ejb.HorarioFacade;
+import com.miudelar.server.ejb.HorarioFacadeLocal;
+import com.miudelar.server.ejb.Periodo_ExamenFacade;
+import com.miudelar.server.ejb.Periodo_ExamenFacadeLocal;
+import com.miudelar.server.ejb.UsuarioFacade;
+import com.miudelar.server.ejb.UsuarioFacadeLocal;
 import com.miudelar.server.logic.datatypes.DtCurso;
 import com.miudelar.server.logic.datatypes.DtHorario;
 import com.miudelar.server.logic.datatypes.DtPeriodo_Examen;
@@ -33,6 +40,11 @@ import java.util.List;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 
 /**
  *
@@ -43,13 +55,83 @@ public class BedeliaServiceImpl implements BedeliaService {
     JsonParser parser = new JsonParser();
     Gson gson = new Gson();
     
-    HorarioFacade horarioFacade = new HorarioFacade();
-    CursoFacade cursoFacade = new CursoFacade();
-    Periodo_ExamenFacade periodoFacade = new Periodo_ExamenFacade();
-    Estudiante_CursoFacade e_cJFacade = new Estudiante_CursoFacade();
-    Estudiante_ExamenFacade e_eJFacade = new Estudiante_ExamenFacade();
-    UsuarioFacade usaurioJpaController = new UsuarioFacade();
-    ExamenFacade examenFacade = new ExamenFacade();
+    private HorarioFacadeLocal horarioFacade = lookupHorarioFacadeBean();
+    private CursoFacadeLocal cursoFacade = lookupCursoFacadeBean();
+    private Periodo_ExamenFacadeLocal periodoFacade = lookupPeriodo_ExamenFacadeBean();
+    private Estudiante_CursoFacadeLocal e_cJFacade = lookupEstudiante_CursoFacadeBean();
+    private Estudiante_ExamenFacadeLocal e_eJFacade = lookupEstudiante_ExamenFacadeBean();
+    private UsuarioFacadeLocal usaurioJpaController = lookupUsuarioFacadeBean();
+    private ExamenFacadeLocal examenFacade = lookupExamenFacadeBean();
+    
+    private UsuarioFacadeLocal lookupUsuarioFacadeBean() {
+        try {
+            Context c = new InitialContext();
+            return (UsuarioFacadeLocal) c.lookup("java:app/miudelar-server/UsuarioFacade");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+
+    private HorarioFacadeLocal lookupHorarioFacadeBean() {
+        try {
+            Context c = new InitialContext();
+            return (HorarioFacadeLocal) c.lookup("java:app/miudelar-server/HorarioFacade");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+
+    private CursoFacadeLocal lookupCursoFacadeBean() {
+        try {
+            Context c = new InitialContext();
+            return (CursoFacadeLocal) c.lookup("java:app/miudelar-server/CursoFacade");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+
+    private Periodo_ExamenFacadeLocal lookupPeriodo_ExamenFacadeBean() {
+        try {
+            Context c = new InitialContext();
+            return (Periodo_ExamenFacadeLocal) c.lookup("java:app/miudelar-server/Periodo_ExamenFacade");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+
+    private Estudiante_CursoFacadeLocal lookupEstudiante_CursoFacadeBean() {
+        try {
+            Context c = new InitialContext();
+            return (Estudiante_CursoFacadeLocal) c.lookup("java:app/miudelar-server/Estudiante_CursoFacade");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+
+    private Estudiante_ExamenFacadeLocal lookupEstudiante_ExamenFacadeBean() {
+        try {
+            Context c = new InitialContext();
+            return (Estudiante_ExamenFacadeLocal) c.lookup("java:app/miudelar-server/Estudiante_ExamenFacade");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+
+    private ExamenFacadeLocal lookupExamenFacadeBean() {
+        try {
+            Context c = new InitialContext();
+            return (ExamenFacadeLocal) c.lookup("java:app/miudelar-server/ExamenFacade");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
     
     @Override
     public List<DtUsuario> getEstudiantesInscriptosExamen(Long idExamen){
@@ -204,4 +286,5 @@ public class BedeliaServiceImpl implements BedeliaService {
         }
         return message;
     }
+
 } 

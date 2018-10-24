@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.miudelar.server.logic.sessionbeans;
+package com.miudelar.server.ejb;
 
-import com.miudelar.server.logic.entities.Horario;
+import com.miudelar.server.logic.entities.Rol;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -15,7 +15,7 @@ import javax.persistence.PersistenceContext;
  * @author rmoreno
  */
 @Stateless
-public class HorarioFacade extends AbstractFacade<Horario> {
+public class RolFacade extends AbstractFacade<Rol> implements RolFacadeLocal {
 
     @PersistenceContext(unitName = "miudelar")
     private EntityManager em;
@@ -25,8 +25,8 @@ public class HorarioFacade extends AbstractFacade<Horario> {
         return em;
     }
 
-    public HorarioFacade() {
-        super(Horario.class);
+    public RolFacade() {
+        super(Rol.class);
     }
     
 }

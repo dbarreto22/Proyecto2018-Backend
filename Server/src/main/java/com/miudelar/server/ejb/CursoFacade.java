@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.miudelar.server.logic.sessionbeans;
+package com.miudelar.server.ejb;
 
 import com.miudelar.server.logic.entities.Curso;
 import javax.ejb.Stateless;
@@ -15,7 +15,7 @@ import javax.persistence.PersistenceContext;
  * @author rmoreno
  */
 @Stateless
-public class CursoFacade extends AbstractFacade<Curso> {
+public class CursoFacade extends AbstractFacade<Curso> implements CursoFacadeLocal {
 
     @PersistenceContext(unitName = "miudelar")
     private EntityManager em;

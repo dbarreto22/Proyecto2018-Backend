@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.miudelar.server.logic.sessionbeans;
+package com.miudelar.server.ejb;
 
 import com.miudelar.server.logic.entities.Estudiante_Curso;
 import java.util.List;
@@ -17,7 +17,7 @@ import javax.persistence.Query;
  * @author rmoreno
  */
 @Stateless
-public class Estudiante_CursoFacade extends AbstractFacade<Estudiante_Curso> {
+public class Estudiante_CursoFacade extends AbstractFacade<Estudiante_Curso> implements Estudiante_CursoFacadeLocal {
 
     @PersistenceContext(unitName = "miudelar")
     private EntityManager em;
@@ -30,9 +30,9 @@ public class Estudiante_CursoFacade extends AbstractFacade<Estudiante_Curso> {
     public Estudiante_CursoFacade() {
         super(Estudiante_Curso.class);
     }
-    
+   
+    @Override
     public List<Estudiante_Curso> findEstudiante_CursoByUsuario_Asignatura(String cedula, Long asignatura_carrera) {
-        EntityManager em = getEntityManager();
         try {
             Query q = em.createNamedQuery(Estudiante_Curso.FINDBY_USUARIO_ASIGNATURA).setParameter("cedula", cedula).setParameter("asignatura_carrera", asignatura_carrera);
             return q.getResultList();

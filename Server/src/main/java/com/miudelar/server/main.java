@@ -19,10 +19,10 @@ public class main implements ServletContextListener {
         public void contextInitialized(ServletContextEvent servletContextEvent)
         {
             //Context initialized code here
-            System.out.println("DFAJDSKFLADJSFKL");
+//            System.out.println("DFAJDSKFLADJSFKL");
 
             try {
-                init.initBaseData();
+//                init.initBaseData();
             } catch (Exception e) {
                   e.printStackTrace();
             }

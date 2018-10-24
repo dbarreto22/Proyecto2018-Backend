@@ -8,17 +8,17 @@ package com.miudelar.server;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.miudelar.server.logic.entities.Rol;
 import com.miudelar.server.logic.entities.Usuario;
 import com.miudelar.server.logic.factories.ManagersFactory;
 import com.miudelar.server.logic.interfaces.SecurityMgt;
-import com.miudelar.server.logic.sessionbeans.RolFacade;
-import com.miudelar.server.logic.sessionbeans.UsuarioFacade;
-import java.io.IOException;
+import com.miudelar.server.ejb.RolFacade;
+import com.miudelar.server.ejb.RolFacadeLocal;
+import com.miudelar.server.ejb.UsuarioFacade;
+import com.miudelar.server.ejb.UsuarioFacadeLocal;
+import com.miudelar.server.logic.impl.SecurityMgr;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -30,6 +30,7 @@ import javax.annotation.Priority;
 import javax.annotation.security.DenyAll;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
+import javax.ejb.EJB;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -52,8 +53,32 @@ import org.jboss.resteasy.util.Base64;
 @Priority(Priorities.AUTHENTICATION)
 public class SecurityFilter implements javax.ws.rs.container.ContainerRequestFilter {
 
-    RolFacade rolFacade = new RolFacade();
-    UsuarioFacade usuarioFacade = new UsuarioFacade();
+    private RolFacadeLocal rolFacade = lookupRolFacadeBean();
+    
+    private UsuarioFacadeLocal usuarioFacade = lookupUsuarioFacadeBean();
+    
+    SecurityMgr security = new SecurityMgr();
+    
+    private RolFacadeLocal lookupRolFacadeBean() {
+        try {
+            Context c = new InitialContext();
+            return (RolFacadeLocal) c.lookup("java:app/miudelar-server/RolFacade");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+    
+    private UsuarioFacadeLocal lookupUsuarioFacadeBean() {
+        try {
+            Context c = new InitialContext();
+            return (UsuarioFacadeLocal) c.lookup("java:app/miudelar-server/UsuarioFacade");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+    
     SecurityMgt securityMgt = ManagersFactory.getInstance().getSecurityMgt();
 
     private static final String AUTHORIZATION_PROPERTY = "Authorization";
