@@ -36,7 +36,7 @@ public interface EstudianteService {
     @GET
     @Path("consultarCalificaciones/{cedula}/{idAsig_Carrera}")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Estudiante_Curso> getCalificaciones(@PathParam("cedula")
+    public DtCalificaciones getCalificaciones(@PathParam("cedula")
         final String cedula, @PathParam("idAsig_Carrera")
         final Long idAsig_Carrera);
     

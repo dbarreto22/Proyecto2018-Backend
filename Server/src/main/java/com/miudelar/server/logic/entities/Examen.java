@@ -3,6 +3,7 @@
  */
 package com.miudelar.server.logic.entities;
 
+import com.miudelar.server.logic.datatypes.DtExamen;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.List;
@@ -85,6 +86,10 @@ public class Examen implements Serializable {
 
     public void setCalificacionesExamenes(List<Estudiante_Examen> calificacionesExamenes) {
         this.calificacionesExamenes = calificacionesExamenes;
+    }
+    
+    public DtExamen toDataType(){
+        return new DtExamen(this.id, this.fecha);
     }
 
     @Override

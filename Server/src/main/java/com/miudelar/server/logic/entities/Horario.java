@@ -3,6 +3,7 @@
  */
 package com.miudelar.server.logic.entities;
 
+import com.miudelar.server.logic.datatypes.DiaSemana;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Basic;
@@ -28,6 +29,9 @@ public class Horario implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    
+    @Basic
+    private DiaSemana dia;
 
     @Basic
     private int horaInicio;
@@ -35,9 +39,10 @@ public class Horario implements Serializable {
     @Basic
     private int horaFin;
 
-    public Horario(int horaInicio, int horaFin) {
+    public Horario(DiaSemana dia, int horaInicio, int horaFin) {
         this.horaInicio = horaInicio;
         this.horaFin = horaFin;
+        this.dia = dia;
     }
 
     public Horario() {
@@ -51,6 +56,14 @@ public class Horario implements Serializable {
         this.id = id;
     }
 
+    public DiaSemana getDia() {
+        return dia;
+    }
+
+    public void setDia(DiaSemana dia) {
+        this.dia = dia;
+    }
+    
     public int getHoraInicio() {
         return this.horaInicio;
     }
@@ -91,7 +104,5 @@ public class Horario implements Serializable {
         }
         return true;
     }
-    
-    
 
 }

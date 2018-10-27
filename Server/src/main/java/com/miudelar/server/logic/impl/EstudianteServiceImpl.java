@@ -8,6 +8,8 @@ package com.miudelar.server.logic.impl;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.miudelar.server.ejb.Asignatura_CarreraFacade;
+import com.miudelar.server.ejb.Asignatura_CarreraFacadeLocal;
 import com.miudelar.server.ejb.CarreraFacade;
 import com.miudelar.server.ejb.CarreraFacadeLocal;
 import com.miudelar.server.ejb.CursoFacade;
@@ -22,12 +24,17 @@ import com.miudelar.server.ejb.RolFacade;
 import com.miudelar.server.ejb.RolFacadeLocal;
 import com.miudelar.server.ejb.UsuarioFacade;
 import com.miudelar.server.ejb.UsuarioFacadeLocal;
+import com.miudelar.server.logic.datatypes.DtAsignatura_Carrera;
 import com.miudelar.server.logic.datatypes.DtCalificaciones;
 import com.miudelar.server.logic.datatypes.DtCarrera;
 import com.miudelar.server.logic.datatypes.DtCurso;
+import com.miudelar.server.logic.datatypes.DtEstudiante_Curso;
+import com.miudelar.server.logic.datatypes.DtEstudiante_Examen;
+import com.miudelar.server.logic.entities.Asignatura_Carrera;
 import com.miudelar.server.logic.entities.Carrera;
 import com.miudelar.server.logic.entities.Curso;
 import com.miudelar.server.logic.entities.Estudiante_Curso;
+import com.miudelar.server.logic.entities.Estudiante_Examen;
 import com.miudelar.server.logic.entities.Examen;
 import com.miudelar.server.logic.entities.Rol;
 import com.miudelar.server.logic.entities.Usuario;
@@ -48,13 +55,14 @@ import javax.ws.rs.PathParam;
  */
 public class EstudianteServiceImpl implements EstudianteService {
    
-    private UsuarioFacadeLocal usuarioFacade = new UsuarioFacade();
-    private RolFacadeLocal rolFacade = new RolFacade();
-    private CursoFacadeLocal cursoFacade = new CursoFacade();
-    private ExamenFacadeLocal examenFacade = new ExamenFacade();
-    private CarreraFacadeLocal carreraFacade = new CarreraFacade();
-    private Estudiante_CursoFacadeLocal estudiante_cursoFacade = new Estudiante_CursoFacade();
-    private Estudiante_ExamenFacadeLocal estudiante_ExamenFacade = new Estudiante_ExamenFacade();
+    private UsuarioFacadeLocal usuarioFacade = lookupUsuarioFacadeBean();
+    private RolFacadeLocal rolFacade = lookupRolFacadeBean();
+    private CursoFacadeLocal cursoFacade = lookupCursoFacadeBean();
+    private ExamenFacadeLocal examenFacade = lookupExamenFacadeBean();
+    private CarreraFacadeLocal carreraFacade = lookupCarreraFacadeBean();
+    private Estudiante_CursoFacadeLocal estudiante_cursoFacade = lookupEstudiante_CursoFacadeBean();
+    private Estudiante_ExamenFacadeLocal estudiante_ExamenFacade = lookupEstudiante_ExamenFacadeBean();
+    private Asignatura_CarreraFacadeLocal asignatura_CarreraFacade = lookupAsignatura_CarreraFacadeBean();
     
     private RolFacadeLocal lookupRolFacadeBean() {
         try {
@@ -126,6 +134,16 @@ public class EstudianteServiceImpl implements EstudianteService {
         }
     }
     
+    private Asignatura_CarreraFacadeLocal lookupAsignatura_CarreraFacadeBean() {
+        try {
+            Context c = new InitialContext();
+            return (Asignatura_CarreraFacadeLocal) c.lookup("java:app/miudelar-server/Asignatura_CarreraFacade");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+    
     JsonParser parser = new JsonParser();
     
     @Override
@@ -138,12 +156,18 @@ public class EstudianteServiceImpl implements EstudianteService {
      }
     
     @Override
-    public List<Estudiante_Curso> getCalificaciones(String cedula, Long idAsig_Carrera){
+    public DtCalificaciones getCalificaciones(String cedula, Long idAsig_Carrera){
         //TODO
-        List<Estudiante_Curso> cursos = new ArrayList<>();
-        cursos = estudiante_cursoFacade.findEstudiante_CursoByUsuario_Asignatura(cedula, idAsig_Carrera);
-        List<DtCalificaciones> calificaciones = new ArrayList<>();
-        return cursos;
+        List<DtEstudiante_Curso> cursos = new ArrayList<>();
+        List<DtEstudiante_Examen> examenes = new ArrayList<>();
+        Asignatura_Carrera asig_car = asignatura_CarreraFacade.find(idAsig_Carrera);
+        estudiante_cursoFacade.findEstudiante_CursoByUsuario_Asignatura(cedula, idAsig_Carrera).forEach(curso -> {
+            cursos.add(curso.toDataType());
+        });
+        estudiante_ExamenFacade.findEstudiante_ExamenByUsuario_Asignatura(cedula, idAsig_Carrera).forEach(examen -> {
+            examenes.add(examen.toDataType());
+        });
+        return new DtCalificaciones(cursos, examenes);
     }
     
     @Override

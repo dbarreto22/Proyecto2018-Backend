@@ -39,11 +39,11 @@ import javax.ws.rs.PathParam;
  */
 public class DirectorServiceImpl implements DirectorService{
 
-    Asignatura_CarreraFacadeLocal asignatura_CarreraFacade = lookupAsignatura_CarreraFacadeBean();
+    private Asignatura_CarreraFacadeLocal asignatura_CarreraFacade = lookupAsignatura_CarreraFacadeBean();
 
-    AsignaturaFacadeLocal asignaturaFacade = lookupAsignaturaFacadeBean();
+    private AsignaturaFacadeLocal asignaturaFacade = lookupAsignaturaFacadeBean();
 
-    CarreraFacadeLocal carreraFacade = lookupCarreraFacadeBean();
+    private CarreraFacadeLocal carreraFacade = lookupCarreraFacadeBean();
     
 //    Gson gson = new Gson();
     JsonParser parser = new JsonParser();

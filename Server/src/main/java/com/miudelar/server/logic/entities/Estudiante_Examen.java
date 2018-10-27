@@ -3,6 +3,7 @@
  */
 package com.miudelar.server.logic.entities;
 
+import com.miudelar.server.logic.datatypes.DtEstudiante_Examen;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Basic;
@@ -20,11 +21,16 @@ import javax.xml.bind.annotation.*;
  */
 //@XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-//@NamedQueries({
+@NamedQueries({
 //    @NamedQuery(name = "Estudiante_Examen.findAll", query = "Select e from Estudiante_Examen e"),
 //    @NamedQuery(name = "Estudiante_Examen.findByCalificacion", query = "Select e from Estudiante_Examen e where e.calificacion=:calificacion")})
+    @NamedQuery(name = Estudiante_Examen.FINDBY_ESTUDIANTE_EXAMEN_ASIGNATURA, 
+                query = "SELECT C FROM Estudiante_Examen C, Usuario U, Asignatura_Carrera A \n"
+                + "WHERE U.cedula = :cedula AND C.usuario = U \n"
+                + "AND A.id = :asignatura_carrera AND C.examen member of A.examenes")})
 public class Estudiante_Examen implements Serializable {
-
+    
+    public final static String FINDBY_ESTUDIANTE_EXAMEN_ASIGNATURA = "Estudiante_Examen.FINDBY_ESTUDIANTE_EXAMEN_ASIGNATURA";
     @Basic
     private Long calificacion;
 
@@ -71,6 +77,10 @@ public class Estudiante_Examen implements Serializable {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+    
+    public DtEstudiante_Examen toDataType(){
+        return new DtEstudiante_Examen(this.calificacion, this.examen.toDataType(), this.usuario.toDataType());
     }
 
     @Override

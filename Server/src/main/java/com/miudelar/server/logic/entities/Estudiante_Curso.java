@@ -3,6 +3,7 @@
  */
 package com.miudelar.server.logic.entities;
 
+import com.miudelar.server.logic.datatypes.DtEstudiante_Curso;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Basic;
@@ -23,12 +24,12 @@ import javax.xml.bind.annotation.*;
 @NamedQueries({
 //    @NamedQuery(name = "Estudiante_Curso.findAll", query = "Select e from Estudiante_Curso e"),
 //    @NamedQuery(name = "Estudiante_Curso.findByCalificacion", query = "Select e from Estudiante_Curso e where e.calificacion=:calificacion")
-        @NamedQuery(name = Estudiante_Curso.FINDBY_USUARIO_ASIGNATURA, 
+        @NamedQuery(name = Estudiante_Curso.FINDBY_ESTUDIANTE_CURSO_ASIGNATURA, 
                 query = "SELECT C FROM Estudiante_Curso C, Usuario U, Asignatura_Carrera A \n"
                 + "WHERE U.cedula = :cedula AND C.usuario = U \n"
                 + "AND A.id = :asignatura_carrera AND C.curso member of A.cursos")})
 public class Estudiante_Curso implements Serializable {
-    public final static String FINDBY_USUARIO_ASIGNATURA = "Estudiante_Curso.FINDBY_USUARIO_ASIGNATURA";
+    public final static String FINDBY_ESTUDIANTE_CURSO_ASIGNATURA = "Estudiante_Curso.FINDBY_ESTUDIANTE_CURSO_ASIGNATURA";
     @Basic
     private Long calificacion;
     
@@ -72,7 +73,10 @@ public class Estudiante_Curso implements Serializable {
     public void setCurso(Curso curso) {
         this.curso = curso;
     }
-
+    
+    public DtEstudiante_Curso toDataType(){
+        return new DtEstudiante_Curso(this.calificacion, this.usuario.toDataType(), this.curso.toDataType());
+    }
     @Override
     public int hashCode() {
         int hash = 7;

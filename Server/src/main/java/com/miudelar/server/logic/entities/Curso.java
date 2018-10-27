@@ -102,7 +102,7 @@ public class Curso implements Serializable {
         DtAsignatura_Carrera asignatura_Carrera = new DtAsignatura_Carrera(this.asignatura_Carrera.getId());
         List <DtHorario> dthorarios = new ArrayList<DtHorario>();
         this.horarios.forEach(horario -> {
-            dthorarios.add(new DtHorario(horario.getId(), horario.getHoraInicio(), horario.getHoraFin()));
+            dthorarios.add(new DtHorario(horario.getDia(), horario.getHoraInicio(), horario.getHoraFin()));
         });
         DtCurso dtcurso = new DtCurso(id, fecha, asignatura_Carrera, dthorarios);
         return dtcurso;

@@ -172,7 +172,7 @@ public class BedeliaServiceImpl implements BedeliaService {
                     DtHorario dtHorario = gson.fromJson(jsonHora, DtHorario.class);
 
                     //        Creo Horario
-                    Horario horario = new Horario(dtHorario.getHoraInicio(), dtHorario.getHoraFin());
+                    Horario horario = new Horario(dtHorario.getDia(), dtHorario.getHoraInicio(), dtHorario.getHoraFin());
                     horarioFacade.create(horario);
                     
                     ////        Creo realación

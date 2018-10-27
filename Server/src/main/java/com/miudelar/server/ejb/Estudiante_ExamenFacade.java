@@ -6,9 +6,11 @@
 package com.miudelar.server.ejb;
 
 import com.miudelar.server.logic.entities.Estudiante_Examen;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -27,6 +29,16 @@ public class Estudiante_ExamenFacade extends AbstractFacade<Estudiante_Examen> i
 
     public Estudiante_ExamenFacade() {
         super(Estudiante_Examen.class);
+    }
+    
+    @Override
+    public List<Estudiante_Examen> findEstudiante_ExamenByUsuario_Asignatura(String cedula, Long asignatura_carrera) {
+        try {
+            Query q = em.createNamedQuery(Estudiante_Examen.FINDBY_ESTUDIANTE_EXAMEN_ASIGNATURA).setParameter("cedula", cedula).setParameter("asignatura_carrera", asignatura_carrera);
+            return q.getResultList();
+        } finally {
+            em.close();
+        }
     }
     
 }

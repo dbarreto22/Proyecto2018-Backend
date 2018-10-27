@@ -30,4 +30,6 @@ public interface Estudiante_ExamenFacadeLocal {
 
     int count();
     
+    public List<Estudiante_Examen> findEstudiante_ExamenByUsuario_Asignatura(String cedula, Long asignatura_carrera);
+    
 }
