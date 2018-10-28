@@ -43,7 +43,6 @@ public class SecurityMgr implements SecurityMgt {
         }
         return message;
     }
-    
     @Override
     public String getSecret(){
         return secret;

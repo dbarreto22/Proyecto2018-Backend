@@ -170,16 +170,19 @@ public class BedeliaServiceImpl implements BedeliaService {
                     Long idCurso = jsonObject.get("idCurso").getAsLong();
                     JsonObject jsonHora = jsonObject.get("jsonHora").getAsJsonObject();
                     DtHorario dtHorario = gson.fromJson(jsonHora, DtHorario.class);
-
-                    //        Creo Horario
-                    Horario horario = new Horario(dtHorario.getDia(), dtHorario.getHoraInicio(), dtHorario.getHoraFin());
-                    horarioFacade.create(horario);
                     
-                    ////        Creo realación
                     Curso curso = cursoFacade.find(idCurso);
-                    curso.addHorario(horario);
-                    cursoFacade.edit(curso);
-                    
+                    if (curso == null){
+                        message = "El curso no existe";
+                    }else{
+                        //        Creo Horario
+                        Horario horario = new Horario(dtHorario.getDia(), dtHorario.getHoraInicio(), dtHorario.getHoraFin());
+                        horarioFacade.create(horario);
+
+                        ////        Creo realación
+                        curso.addHorario(horario);
+                        cursoFacade.edit(curso);
+                    }
             } else {
                 message = "Esto no es un json o no lo entiendo: " + json;
             }
@@ -215,7 +218,7 @@ public class BedeliaServiceImpl implements BedeliaService {
         return message;
     }
     
-    @Override
+    @Override 
     public String editPeriodoExamen(Periodo_Examen periodo){
         String message = "OK";
         try {
@@ -240,8 +243,17 @@ public class BedeliaServiceImpl implements BedeliaService {
                     
                     if (calificacion < 13 && calificacion >= 0) {
                         Usuario usuario = usaurioJpaController.find(cedula);
-                        Curso curso = cursoFacade.find(idCurso);
-                        e_cJFacade.create(new Estudiante_Curso(calificacion, usuario, curso));
+                        if (usuario == null){
+                            message = "No existe el usuario";
+                        }else{
+                            Curso curso = cursoFacade.find(idCurso);
+                            if (curso == null){
+                                message = "No existe el curso";
+                            }else{
+                                e_cJFacade.create(new Estudiante_Curso(calificacion, usuario, curso));
+                            }
+                        }
+                        
                     }else{
                         message = "Calificacion: " + calificacion.toString() + " no es un valor válido";
                     }
@@ -269,8 +281,16 @@ public class BedeliaServiceImpl implements BedeliaService {
                     
                     if (calificacion < 13 && calificacion >= 0) {
                         Usuario usuario = usaurioJpaController.find(cedula);
-                        Examen examen = examenFacade.find(idExamen);
-                        e_eJFacade.create(new Estudiante_Examen(usuario, examen, calificacion));
+                        if (usuario == null){
+                            message = "No existe el usuario";
+                        }else{
+                            Examen examen = examenFacade.find(idExamen);
+                            if (examen == null){
+                               message = "No existe el examen";
+                            }else{
+                                e_eJFacade.create(new Estudiante_Examen(usuario, examen, calificacion));
+                            }
+                        }
                     }else{
                         message = "Calificacion: " + calificacion.toString() + " no es un valor válido";
                     }

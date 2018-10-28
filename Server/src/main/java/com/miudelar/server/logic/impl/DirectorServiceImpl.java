@@ -80,7 +80,7 @@ public class DirectorServiceImpl implements DirectorService{
     
     
     @Override
-    public List<DtCarrera> getAllCarrera() throws NoSuchAlgorithmException{
+    public List<DtCarrera> getAllCarrera(){
         List<DtCarrera> carreras = new ArrayList<>();
         carreraFacade.findAll().forEach(carrera -> {
             carreras.add(new DtCarrera(carrera.getCodigo(), carrera.getNombre()));
@@ -131,7 +131,7 @@ public class DirectorServiceImpl implements DirectorService{
     }
     
     @Override
-    public Asignatura getAsignatura(Long codigo) throws NoSuchAlgorithmException{
+    public Asignatura getAsignatura(Long codigo) {
         Asignatura asignatura = asignaturaFacade.find(codigo);
         return asignatura;
     }
@@ -148,19 +148,27 @@ public class DirectorServiceImpl implements DirectorService{
 
                     //        Creo asociacion
                     Asignatura asignatura = asignaturaFacade.find(codigoAsignatura);
-                    Carrera carrera = carreraFacade.find(codigoCarrera);
-                    carrera.addAsignatura(asignatura);
+                    if (asignatura == null){
+                        message = "No existe asignatura";
+                    }else{
+                        Carrera carrera = carreraFacade.find(codigoCarrera);
+                        if (carrera == null){
+                            message = "No existe carrera";
+                        }else{
+                            carrera.addAsignatura(asignatura);
 
-                    ////        Creo entidad relación
-                    Asignatura_Carrera asignatura_carreraEntity = new Asignatura_Carrera(asignatura, carrera);
-                    asignatura_CarreraFacade.create(asignatura_carreraEntity);
+                            ////        Creo entidad relación
+                            Asignatura_Carrera asignatura_carreraEntity = new Asignatura_Carrera(asignatura, carrera);
+                            asignatura_CarreraFacade.create(asignatura_carreraEntity);
 
-                    ////        Asocio entidad relación
-                    asignatura.addAsignatura_Carrera(asignatura_carreraEntity);
-                    asignaturaFacade.edit(asignatura);
+                            ////        Asocio entidad relación
+                            asignatura.addAsignatura_Carrera(asignatura_carreraEntity);
+                            asignaturaFacade.edit(asignatura);
 
-                    carrera.addAsignatura_Carrera(asignatura_carreraEntity);
-                    carreraFacade.edit(carrera);
+                            carrera.addAsignatura_Carrera(asignatura_carreraEntity);
+                            carreraFacade.edit(carrera);
+                        }
+                    }
             } else {
                 message = "Esto no es un json o no lo entiendo: " + json;
             }
@@ -207,10 +215,17 @@ public class DirectorServiceImpl implements DirectorService{
                     Long idMadre = jsonObject.get("idMadre").getAsLong();
                     Long idPrevia = jsonObject.get("idPrevia").getAsLong();
                     Asignatura_Carrera madre = asignatura_CarreraFacade.find(idMadre);
-                    Asignatura_Carrera previa = asignatura_CarreraFacade.find(idPrevia);
-                    madre.addPrevia(previa);
-
-                    asignatura_CarreraFacade.edit(madre);
+                    if (madre == null){
+                        message = "No existe asignatura: " + idMadre.toString();
+                    }else{
+                        Asignatura_Carrera previa = asignatura_CarreraFacade.find(idPrevia);
+                        if (previa == null){
+                            message = "No existe asignatura: " + idPrevia.toString();
+                        }else{
+                            madre.addPrevia(previa);
+                            asignatura_CarreraFacade.edit(madre);
+                        }
+                    }
             } else {
                 message = "Esto no es un json o no lo entiendo: " + json;
             }
@@ -232,9 +247,17 @@ public class DirectorServiceImpl implements DirectorService{
                     Long idMadre = jsonObject.get("idMadre").getAsLong();
                     Long idPrevia = jsonObject.get("idPrevia").getAsLong();
                     Asignatura_Carrera madre = asignatura_CarreraFacade.find(idMadre);
-                    Asignatura_Carrera previa = asignatura_CarreraFacade.find(idPrevia);
-                    madre.removePrevia(previa);
-                    asignatura_CarreraFacade.edit(madre);
+                    if (madre == null){
+                        message = "No existe asignatura: " + idMadre.toString();
+                    }else{
+                        Asignatura_Carrera previa = asignatura_CarreraFacade.find(idPrevia);
+                        if (previa == null){
+                            message = "No existe asignatura: " + idPrevia.toString();
+                        }else{
+                            madre.removePrevia(previa);
+                            asignatura_CarreraFacade.edit(madre);
+                        }
+                    }
             } else {
                 message = "Esto no es un json o no lo entiendo: " + json;
             }

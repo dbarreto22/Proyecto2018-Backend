@@ -34,13 +34,13 @@ public interface DirectorService {
     @Path("carrera")
     @RolesAllowed({"ESTUDIANTE"})
     @Produces(MediaType.APPLICATION_JSON)
-    public List<DtCarrera> getAllCarrera() throws NoSuchAlgorithmException;
+    public List<DtCarrera> getAllCarrera();
     
     @GET
     @Path("carrera/{codigo}")
     @Produces(MediaType.APPLICATION_JSON)
     public Carrera getCarrera(@PathParam("codigo")
-        final Long codigo) throws NoSuchAlgorithmException;
+        final Long codigo);
     
     @POST
     @Path("carrera")

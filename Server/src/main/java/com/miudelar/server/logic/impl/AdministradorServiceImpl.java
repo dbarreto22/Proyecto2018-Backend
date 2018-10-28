@@ -76,33 +76,34 @@ public class AdministradorServiceImpl implements AdministradorService {
     @Override
     public String login(String json) {
         String message;
-        
-            JsonElement jsonTree = parser.parse(json);
-            if (jsonTree.isJsonObject()) {
-                JsonObject jsonObject = jsonTree.getAsJsonObject();
-                String username = jsonObject.get("username").getAsString();
-                String password = jsonObject.get("password").getAsString();
-                System.out.println("jsonObject: " + username + password );
-                try {
-                Usuario usuario = usuarioFacade.find(username);
-                
-                System.out.println("usuario: " + usuario.toString());
-                if (usuario.getPassword().equals(password)) {
-                    message = security.createAndSignToken(username,password);
-                } else {
-                    message = "Error: Usuario o contraseña incorrecta";
-                }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-            System.out.println("Class:AdministradorServiceImpl: " + ex.getMessage()+ " " +json);
-            message = ex.getMessage()+ " " +json;
-        }
-                
 
-            } else {
-                message = "Esto no es un json o no lo entiendo: " + json;
+        JsonElement jsonTree = parser.parse(json);
+        if (jsonTree.isJsonObject()) {
+            JsonObject jsonObject = jsonTree.getAsJsonObject();
+            String username = jsonObject.get("username").getAsString();
+            String password = jsonObject.get("password").getAsString();
+            System.out.println("jsonObject: " + username + password);
+            try {
+                Usuario usuario = usuarioFacade.find(username);
+                if (usuario == null) {
+                    message = "Error: Usuario o contraseña incorrecta";
+                } else {
+                    if (usuario.getPassword().equals(password)) {
+                        message = security.createAndSignToken(username, password);
+                    } else {
+                        message = "Error: Usuario o contraseña incorrecta";
+                    }
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                System.out.println("Class:AdministradorServiceImpl: " + ex.getMessage() + " " + json);
+                message = ex.getMessage() + " " + json;
             }
-        
+
+        } else {
+            message = "Esto no es un json o no lo entiendo: " + json;
+        }
+
         return message;
     }
 
@@ -158,16 +159,24 @@ public class AdministradorServiceImpl implements AdministradorService {
                 Long idRol = jsonObject.get("idRol").getAsLong();
 
                 Usuario usuario = usuarioFacade.find(cedula);
-                Rol rol = rolFacade.find(idRol);
-                usuario.addRol(rol);
+                if (usuario == null) {
+                    message = "El usuario no existe";
+                } else {
+                    Rol rol = rolFacade.find(idRol);
+                    if (rol == null) {
+                        message = "El rol no existe";
+                    } else {
+                        usuario.addRol(rol);
+                        usuarioFacade.edit(usuario);
+                    }
+                }
 
-                usuarioFacade.edit(usuario);
             } else {
                 message = "Esto no es un json o no lo entiendo: " + json;
             }
         } catch (Exception ex) {
-            System.out.println("Class:AdministradorServiceImpl: " + ex.getMessage()+ " " +json);
-            message = ex.getMessage()+ " " +json;
+            System.out.println("Class:AdministradorServiceImpl: " + ex.getMessage() + " " + json);
+            message = ex.getMessage() + " " + json;
         }
         return message;
     }
@@ -184,10 +193,17 @@ public class AdministradorServiceImpl implements AdministradorService {
                 Long idRol = jsonObject.get("idRol").getAsLong();
 
                 Usuario usuario = usuarioFacade.find(cedula);
-                Rol rol = rolFacade.find(idRol);
-                usuario.removeRol(rol);
-
-                usuarioFacade.edit(usuario);
+                if (usuario == null) {
+                    message = "El usuario no existe";
+                } else {
+                    Rol rol = rolFacade.find(idRol);
+                    if (rol == null) {
+                        message = "El rol no existe";
+                    } else {
+                        usuario.removeRol(rol);
+                        usuarioFacade.edit(usuario);
+                    }
+                }
             } else {
                 message = "Esto no es un json o no lo entiendo: " + json;
             }

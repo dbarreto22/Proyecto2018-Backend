@@ -161,13 +161,18 @@ public class EstudianteServiceImpl implements EstudianteService {
         List<DtEstudiante_Curso> cursos = new ArrayList<>();
         List<DtEstudiante_Examen> examenes = new ArrayList<>();
         Asignatura_Carrera asig_car = asignatura_CarreraFacade.find(idAsig_Carrera);
-        estudiante_cursoFacade.findEstudiante_CursoByUsuario_Asignatura(cedula, idAsig_Carrera).forEach(curso -> {
+        if (asig_car == null){
+            System.out.println("getCalificaciones: asig_car is null");
+            return new DtCalificaciones();
+        }else{
+            estudiante_cursoFacade.findEstudiante_CursoByUsuario_Asignatura(cedula, idAsig_Carrera).forEach(curso -> {
             cursos.add(curso.toDataType());
-        });
-        estudiante_ExamenFacade.findEstudiante_ExamenByUsuario_Asignatura(cedula, idAsig_Carrera).forEach(examen -> {
-            examenes.add(examen.toDataType());
-        });
-        return new DtCalificaciones(cursos, examenes);
+            });
+            estudiante_ExamenFacade.findEstudiante_ExamenByUsuario_Asignatura(cedula, idAsig_Carrera).forEach(examen -> {
+                examenes.add(examen.toDataType());
+            });
+            return new DtCalificaciones(cursos, examenes);
+        }
     }
     
     @Override
@@ -182,15 +187,16 @@ public class EstudianteServiceImpl implements EstudianteService {
                     Long idCurso = jsonObject.get("idCurso").getAsLong();
 
                     Usuario usuario = usuarioFacade.find(cedula);
-                    Rol rol = rolFacade.find(4L);
-                    if (usuario.getRoles().contains(rol)) {
+                    if (usuario == null){
+                        message = "No existe el usuario";
+                    }else{
                         Curso curso = cursoFacade.find(idCurso);
-                        usuario.addCurso(curso);
-
-                        usuarioFacade.edit(usuario);
-
-                    } else {
-                        message = "El usuario no tiene rol estudiante";
+                        if (curso == null){
+                            message = "No existe el curso";
+                        }else{
+                            usuario.addCurso(curso);
+                            usuarioFacade.edit(usuario);
+                        }
                     }
             } else {
                 message = "Esto no es un json o no lo entiendo: " + json;
@@ -214,18 +220,16 @@ public class EstudianteServiceImpl implements EstudianteService {
                     Long codigo = jsonObject.get("codigo").getAsLong();
 
                     Usuario usuario = usuarioFacade.find(cedula);
-                    Rol rol = rolFacade.find(4L);
-                    if (usuario != null) {
-                        if (usuario.getRoles().contains(rol)) {
-                            Carrera carrera = carreraFacade.find(codigo);
-                            usuario.addCarrera(carrera);
-
-                            usuarioFacade.edit(usuario);
-                        } else {
-                            message = "El usuario no tiene rol estudiante";
-                        }
-                    } else {
+                    if (usuario == null) {
                         message = "No existe el usuario";
+                    } else {
+                        Carrera carrera = carreraFacade.find(codigo);
+                        if (carrera == null){
+                            message = "No existe el carrera";
+                        }else{
+                            usuario.addCarrera(carrera);
+                            usuarioFacade.edit(usuario);
+                        }
                     }
             } else {
                 message = "Esto no es un json o no lo entiendo: " + json;
@@ -248,17 +252,17 @@ public class EstudianteServiceImpl implements EstudianteService {
                     Long idExamen = jsonObject.get("idExamen").getAsLong();
 
                     Usuario usuario = usuarioFacade.find(cedula);
-                    Rol rol = rolFacade.find(4L);
-                    if (usuario.getRoles().contains(rol)) {
+                    if (usuario == null){
+                        message = "No existe el usuario";
+                    }else{
                         Examen examen = examenFacade.find(idExamen);
-                        usuario.addInscripcionesExamenes(examen);
-
-                        usuarioFacade.edit(usuario);
-
-                    } else {
-                        message = "El usuario no tiene rol estudiante";
+                        if (examen == null){
+                            message = "No existe el examen";
+                        }else{
+                            usuario.addInscripcionesExamenes(examen);
+                            usuarioFacade.edit(usuario);
+                        }
                     }
-              
                 }else {
                 message = "Esto no es un json o no lo entiendo: " + json;
             }
