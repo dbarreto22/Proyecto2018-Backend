@@ -97,5 +97,5 @@ public interface BedeliaService {
     @Produces(MediaType.TEXT_PLAIN)
     public String getEscolaridad(@PathParam("cedula")
         final String cedula, @PathParam("codigoCarrera")
-        final String codigoCarrera);
+        final Long codigoCarrera);
 }

@@ -394,8 +394,41 @@ public class BedeliaServiceImpl implements BedeliaService {
     }
     
     @Override
-    public String getEscolaridad(String cedula, String codigoCarrera){
-        return "";
+    public String getEscolaridad(String cedula, Long codigoCarrera){
+        String output = "";
+        InputStream inputStream = null;
+        try {
+            System.out.println("codigoCarrera: " + codigoCarrera);
+            System.out.println("cedula: " + cedula);
+            InitialContext initialContext = new InitialContext();
+            DataSource dataSource = (DataSource)initialContext.lookup("java:jboss/datasources/PostgresqlDS");
+            Connection conn = dataSource.getConnection();
+            System.out.println(conn.toString());
+            
+            URL url1 = BedeliaServiceImpl.class.getResource("Escolaridad.jasper");
+            System.out.println("url1: " + url1);
+            URL url2 = BedeliaServiceImpl.class.getResource("Escolaridad_body.jasper");
+            System.out.println("url2: " + url2);
+            inputStream = BedeliaServiceImpl.class.getResourceAsStream("Logo_MiUdelar.png");
+            System.out.println("url3: " + inputStream);
+            
+            Map parameters = new HashMap();
+            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(url1);
+            JasperReport body = (JasperReport) JRLoader.loadObject(url2);
+            
+            parameters.put("codCarrera", codigoCarrera);
+            parameters.put("cedula", cedula);
+            parameters.put("subReport", body);
+            parameters.put("logo", inputStream);
+            
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, conn);
+            output = Base64.encodeBytes(JasperExportManager.exportReportToPdf(jasperPrint));
+
+        } catch (JRException | SQLException | NamingException ex) {
+            output = "Error ";
+            Logger.getLogger(BedeliaServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return output;
     }
 
 } 
