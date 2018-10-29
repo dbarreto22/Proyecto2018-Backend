@@ -30,6 +30,7 @@ import com.miudelar.server.logic.datatypes.DtCarrera;
 import com.miudelar.server.logic.datatypes.DtCurso;
 import com.miudelar.server.logic.datatypes.DtEstudiante_Curso;
 import com.miudelar.server.logic.datatypes.DtEstudiante_Examen;
+import com.miudelar.server.logic.datatypes.DtExamen;
 import com.miudelar.server.logic.entities.Asignatura_Carrera;
 import com.miudelar.server.logic.entities.Carrera;
 import com.miudelar.server.logic.entities.Curso;
@@ -147,13 +148,51 @@ public class EstudianteServiceImpl implements EstudianteService {
     JsonParser parser = new JsonParser();
     
     @Override
-    public List<DtCurso> getAllCurso() throws NoSuchAlgorithmException{
+    public List<DtCurso> getAllCurso(){
         List<DtCurso> cursos = new ArrayList<>();
         cursoFacade.findAll().forEach(curso -> {
             cursos.add(curso.toDataType());
         });
          return cursos;
      }
+    
+    @Override
+    public List<DtCurso> getCursoByCedula(String cedula) {
+        List<DtCurso> cursos = new ArrayList<>();
+        Usuario usuario = usuarioFacade.find(cedula);
+        if (usuario == null) {
+            System.out.println("No existe usuario");
+            return cursos;
+        } else {
+            usuario.getCarreras().forEach(carrera -> {
+                carrera.getAsignatura_Carreras().forEach(asig_car -> {
+                    asig_car.getCursos().forEach(curso -> {
+                        cursos.add(curso.toDataType());
+                    });
+                });
+            });
+        }
+        return cursos;
+    }
+    
+    @Override
+    public List<DtExamen> getExamenByCedula(String cedula){
+        List<DtExamen> examenes = new ArrayList<>();
+        Usuario usuario = usuarioFacade.find(cedula);
+        if (usuario == null) {
+            System.out.println("No existe usuario");
+            return examenes;
+        } else {
+            usuario.getCarreras().forEach(carrera -> {
+                carrera.getAsignatura_Carreras().forEach(asig_car -> {
+                    asig_car.getExamenes().forEach(examen -> {
+                        examenes.add(examen.toDataType());
+                    });
+                });
+            });
+        }
+        return examenes;
+    }
     
     @Override
     public DtCalificaciones getCalificaciones(String cedula, Long idAsig_Carrera){

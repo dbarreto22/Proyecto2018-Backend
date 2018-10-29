@@ -9,19 +9,12 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.miudelar.server.ejb.CursoFacade;
 import com.miudelar.server.ejb.CursoFacadeLocal;
-import com.miudelar.server.ejb.Estudiante_CursoFacade;
 import com.miudelar.server.ejb.Estudiante_CursoFacadeLocal;
-import com.miudelar.server.ejb.Estudiante_ExamenFacade;
 import com.miudelar.server.ejb.Estudiante_ExamenFacadeLocal;
-import com.miudelar.server.ejb.ExamenFacade;
 import com.miudelar.server.ejb.ExamenFacadeLocal;
-import com.miudelar.server.ejb.HorarioFacade;
 import com.miudelar.server.ejb.HorarioFacadeLocal;
-import com.miudelar.server.ejb.Periodo_ExamenFacade;
 import com.miudelar.server.ejb.Periodo_ExamenFacadeLocal;
-import com.miudelar.server.ejb.UsuarioFacade;
 import com.miudelar.server.ejb.UsuarioFacadeLocal;
 import com.miudelar.server.logic.datatypes.DtCurso;
 import com.miudelar.server.logic.datatypes.DtHorario;
@@ -35,17 +28,31 @@ import com.miudelar.server.logic.entities.Horario;
 import com.miudelar.server.logic.entities.Periodo_Examen;
 import com.miudelar.server.logic.entities.Usuario;
 import com.miudelar.server.logic.interfaces.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-
+import static javax.servlet.SessionTrackingMode.URL;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import org.jboss.resteasy.util.Base64;
 /**
  *
  * @author rmoreno
@@ -305,6 +312,41 @@ public class BedeliaServiceImpl implements BedeliaService {
             message = ex.getMessage()+ " " +json;
         }
         return message;
+    }
+    
+  
+    @Override
+    public String getActaFinCurso(Long idCurso) {
+        String output = "";
+        InputStream inputStream = null;
+        try {
+//            inputStream = getClass().getResourceAsStream("ActaCurso.jasper");
+            URL url = getClass().getResource("ActaCurso.jasper");
+            System.out.println("url: " + url);
+            Map parameters = new HashMap();
+            parameters.put("cursoId", idCurso);
+//            JasperDesign jasperDesign = JRXmlLoader.load(inputStream);
+//            JasperCompileManager.compileReport(jasperDesign);
+//            JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
+        JasperReport jasperReport = (JasperReport) JRLoader.loadObject(url);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters);
+            output = Base64.encodeBytes(JasperExportManager.exportReportToPdf(jasperPrint));
+
+        } catch (JRException ex) {
+            output = "Error ";
+            Logger.getLogger(BedeliaServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return output;
+    }
+
+    @Override
+    public String getActaExamen(Long idExamen){
+        return "";
+    }
+    
+    @Override
+    public String getEscolaridad(String cedula){
+        return "";
     }
 
 } 

@@ -80,5 +80,21 @@ public interface BedeliaService {
     @Produces(MediaType.TEXT_PLAIN)
     public String cargarNotasExamen(String json);
     
+    @GET
+    @Path("actaCurso/{idCurso}")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getActaFinCurso(@PathParam("idCurso")
+        final Long idCurso);
     
+    @GET
+    @Path("actaExamen/{idExamen}")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getActaExamen(@PathParam("idExamen")
+        final Long idExamen);
+    
+    @GET
+    @Path("escolaridad/{cedula}")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getEscolaridad(@PathParam("cedula")
+        final String cedula);
 }
