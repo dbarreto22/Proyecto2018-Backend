@@ -326,21 +326,21 @@ public class BedeliaServiceImpl implements BedeliaService {
             Connection conn;
             conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/miudelar", "postgres", "gxsalud");
             System.out.println(conn.toString());
-
-//            inputStream = BedeliaServiceImpl.class.getResourceAsStream("ActaCurso.jrxml");
+            
             URL url1 = BedeliaServiceImpl.class.getResource("ActaCurso.jasper");
             System.out.println("url: " + url1);
             URL url2 = BedeliaServiceImpl.class.getResource("ActaCurso_body.jasper");
             System.out.println("url: " + url2);
+            inputStream = BedeliaServiceImpl.class.getResourceAsStream("Logo_MiUdelar.png");
+            System.out.println("url: " + inputStream);
+            
             Map parameters = new HashMap();
-//            JasperDesign jasperDesign = JRXmlLoader.load(inputStream);
-//            JasperCompileManager.compileReport(jasperDesign);
-//            JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
             JasperReport jasperReport = (JasperReport) JRLoader.loadObject(url1);
             JasperReport body = (JasperReport) JRLoader.loadObject(url2);
             
             parameters.put("cursoId", idCurso);
             parameters.put("subReport", body);
+            parameters.put("logo", inputStream);
             
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, conn);
             output = Base64.encodeBytes(JasperExportManager.exportReportToPdf(jasperPrint));

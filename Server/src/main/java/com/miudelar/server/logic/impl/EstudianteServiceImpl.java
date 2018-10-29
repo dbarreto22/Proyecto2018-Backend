@@ -7,6 +7,7 @@ package com.miudelar.server.logic.impl;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.Gson;
 import com.google.gson.JsonParser;
 import com.miudelar.server.ejb.Asignatura_CarreraFacade;
 import com.miudelar.server.ejb.Asignatura_CarreraFacadeLocal;
@@ -195,24 +196,32 @@ public class EstudianteServiceImpl implements EstudianteService {
     }
     
     @Override
-    public DtCalificaciones getCalificaciones(String cedula, Long idAsig_Carrera){
+    public DtCalificaciones getCalificaciones(String cedula, Long idAsig_Carrera) {
         //TODO
         List<DtEstudiante_Curso> cursos = new ArrayList<>();
         List<DtEstudiante_Examen> examenes = new ArrayList<>();
-        Asignatura_Carrera asig_car = asignatura_CarreraFacade.find(idAsig_Carrera);
-        if (asig_car == null){
-            System.out.println("getCalificaciones: asig_car is null");
+
+        Usuario usuario = usuarioFacade.find(cedula);
+        if (usuario == null) {
+            System.out.println("getCalificaciones: usuario is null");
             return new DtCalificaciones();
-        }else{
-            estudiante_cursoFacade.findEstudiante_CursoByUsuario_Asignatura(cedula, idAsig_Carrera).forEach(curso -> {
-            cursos.add(curso.toDataType());
+        } else {
+            usuario.getCalificacionesCursos().forEach(curso -> {
+//                System.out.println("curso.getCurso().getAsignatura_Carrera().getId(): "+ curso.getCurso().getAsignatura_Carrera().getId());
+//                System.out.println("idAsig_Carrera: " + idAsig_Carrera);
+                if (curso.getCurso().getAsignatura_Carrera().getId().equals(idAsig_Carrera)) {
+//                    System.out.println("entra");
+                    cursos.add(curso.toDataType());
+                }
             });
-            estudiante_ExamenFacade.findEstudiante_ExamenByUsuario_Asignatura(cedula, idAsig_Carrera).forEach(examen -> {
-                examenes.add(examen.toDataType());
+            usuario.getCalificacionesExamenes().forEach(examen -> {
+                if (examen.getExamen().getAsignatura_Carrera().getId().equals(idAsig_Carrera)) {
+                    examenes.add(examen.toDataType());
+                }
             });
-            return new DtCalificaciones(cursos, examenes);
         }
-    }
+    return new DtCalificaciones(cursos, examenes);
+}
     
     @Override
     public String inscripcionCurso(String json) {

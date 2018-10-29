@@ -67,6 +67,7 @@ public class Estudiante_Curso implements Serializable {
     }
 
     public Curso getCurso() {
+        System.out.println("curso: " + this.curso.getId());
         return this.curso;
     }
 

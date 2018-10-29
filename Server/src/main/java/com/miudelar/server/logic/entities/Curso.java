@@ -82,13 +82,30 @@ public class Curso implements Serializable {
         this.horarios = horarios;
     }
 
-    public List<Estudiante_Curso> getCalificacionesCursos() {
-        return this.calificacionesCursos;
+    public Date getFecha() {
+        return fecha;
     }
 
-    public void setCalificacionesCursos(List<Estudiante_Curso> calificacionesCursos) {
-        this.calificacionesCursos = calificacionesCursos;
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
     }
+
+    public Asignatura_Carrera getAsignatura_Carrera() {
+        System.out.println("asignatura_Carrera: " + asignatura_Carrera.getId());
+        return asignatura_Carrera;
+    }
+
+    public void setAsignatura_Carrera(Asignatura_Carrera asignatura_Carrera) {
+        this.asignatura_Carrera = asignatura_Carrera;
+    }
+//
+//    public List<Estudiante_Curso> getCalificacionesCursos() {
+//        return this.calificacionesCursos;
+//    }
+//
+//    public void setCalificacionesCursos(List<Estudiante_Curso> calificacionesCursos) {
+//        this.calificacionesCursos = calificacionesCursos;
+//    }
 
     public void addHorario (Horario horario){
         this.horarios.add(horario);

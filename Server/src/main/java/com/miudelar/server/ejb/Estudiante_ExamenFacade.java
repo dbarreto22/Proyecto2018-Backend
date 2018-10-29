@@ -33,12 +33,8 @@ public class Estudiante_ExamenFacade extends AbstractFacade<Estudiante_Examen> i
     
     @Override
     public List<Estudiante_Examen> findEstudiante_ExamenByUsuario_Asignatura(String cedula, Long asignatura_carrera) {
-        try {
-            Query q = em.createNamedQuery(Estudiante_Examen.FINDBY_ESTUDIANTE_EXAMEN_ASIGNATURA).setParameter("cedula", cedula).setParameter("asignatura_carrera", asignatura_carrera);
+            Query q = getEntityManager().createNamedQuery(Estudiante_Examen.FINDBY_ESTUDIANTE_EXAMEN_ASIGNATURA).setParameter("cedula", cedula).setParameter("asignatura_carrera", asignatura_carrera);
             return q.getResultList();
-        } finally {
-            em.close();
-        }
     }
     
 }
