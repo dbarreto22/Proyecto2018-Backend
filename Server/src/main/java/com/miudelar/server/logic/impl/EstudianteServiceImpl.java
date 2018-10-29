@@ -266,8 +266,12 @@ public class EstudianteServiceImpl implements EstudianteService {
                         if (carrera == null){
                             message = "No existe el carrera";
                         }else{
-                            usuario.addCarrera(carrera);
-                            usuarioFacade.edit(usuario);
+                            if (usuario.getCarreras().contains(carrera)){
+                                message = "El usuario ya está inscripto en: " + carrera.getNombre();
+                            }else{
+                                usuario.addCarrera(carrera);
+                                usuarioFacade.edit(usuario);
+                            }
                         }
                     }
             } else {

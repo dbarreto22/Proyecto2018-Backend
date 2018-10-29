@@ -33,6 +33,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -320,19 +323,29 @@ public class BedeliaServiceImpl implements BedeliaService {
         String output = "";
         InputStream inputStream = null;
         try {
-//            inputStream = getClass().getResourceAsStream("ActaCurso.jasper");
-            URL url = getClass().getResource("ActaCurso.jasper");
-            System.out.println("url: " + url);
+            Connection conn;
+            conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/miudelar", "postgres", "gxsalud");
+            System.out.println(conn.toString());
+
+//            inputStream = BedeliaServiceImpl.class.getResourceAsStream("ActaCurso.jrxml");
+            URL url1 = BedeliaServiceImpl.class.getResource("ActaCurso.jasper");
+            System.out.println("url: " + url1);
+            URL url2 = BedeliaServiceImpl.class.getResource("ActaCurso_body.jasper");
+            System.out.println("url: " + url2);
             Map parameters = new HashMap();
-            parameters.put("cursoId", idCurso);
 //            JasperDesign jasperDesign = JRXmlLoader.load(inputStream);
 //            JasperCompileManager.compileReport(jasperDesign);
 //            JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
-        JasperReport jasperReport = (JasperReport) JRLoader.loadObject(url);
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters);
+            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(url1);
+            JasperReport body = (JasperReport) JRLoader.loadObject(url2);
+            
+            parameters.put("cursoId", idCurso);
+            parameters.put("subReport", body);
+            
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, conn);
             output = Base64.encodeBytes(JasperExportManager.exportReportToPdf(jasperPrint));
 
-        } catch (JRException ex) {
+        } catch (JRException | SQLException ex) {
             output = "Error ";
             Logger.getLogger(BedeliaServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
