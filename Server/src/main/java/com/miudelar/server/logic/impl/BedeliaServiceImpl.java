@@ -46,6 +46,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import static javax.servlet.SessionTrackingMode.URL;
+import javax.sql.DataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -56,6 +57,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import org.jboss.resteasy.util.Base64;
+import net.sf.jasperreports.engine.JREmptyDataSource;
 /**
  *
  * @author rmoreno
@@ -72,6 +74,7 @@ public class BedeliaServiceImpl implements BedeliaService {
     private Estudiante_ExamenFacadeLocal e_eJFacade = lookupEstudiante_ExamenFacadeBean();
     private UsuarioFacadeLocal usaurioJpaController = lookupUsuarioFacadeBean();
     private ExamenFacadeLocal examenFacade = lookupExamenFacadeBean();
+    
     
     private UsuarioFacadeLocal lookupUsuarioFacadeBean() {
         try {
@@ -323,8 +326,10 @@ public class BedeliaServiceImpl implements BedeliaService {
         String output = "";
         InputStream inputStream = null;
         try {
-            Connection conn;
-            conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/miudelar", "postgres", "gxsalud");
+            InitialContext initialContext = new InitialContext();
+            DataSource dataSource = (DataSource)initialContext.lookup("java:jboss/datasources/PostgresqlDS");
+            Connection conn = dataSource.getConnection();
+//            conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/miudelar", "postgres", "gxsalud");
             System.out.println(conn.toString());
             
             URL url1 = BedeliaServiceImpl.class.getResource("ActaCurso.jasper");
@@ -342,10 +347,10 @@ public class BedeliaServiceImpl implements BedeliaService {
             parameters.put("subReport", body);
             parameters.put("logo", inputStream);
             
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, conn);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
             output = Base64.encodeBytes(JasperExportManager.exportReportToPdf(jasperPrint));
 
-        } catch (JRException | SQLException ex) {
+        } catch (JRException | SQLException | NamingException ex) {
             output = "Error ";
             Logger.getLogger(BedeliaServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -354,11 +359,42 @@ public class BedeliaServiceImpl implements BedeliaService {
 
     @Override
     public String getActaExamen(Long idExamen){
-        return "";
+        String output = "";
+        InputStream inputStream = null;
+        try {
+            System.out.println("idExamen: " + idExamen);
+            InitialContext initialContext = new InitialContext();
+            DataSource dataSource = (DataSource)initialContext.lookup("java:jboss/datasources/PostgresqlDS");
+            Connection conn = dataSource.getConnection();
+            System.out.println(conn.toString());
+            
+            URL url1 = BedeliaServiceImpl.class.getResource("ActaExamen.jasper");
+            System.out.println("url1: " + url1);
+            URL url2 = BedeliaServiceImpl.class.getResource("ActaExamen_body.jasper");
+            System.out.println("url2: " + url2);
+            inputStream = BedeliaServiceImpl.class.getResourceAsStream("Logo_MiUdelar.png");
+            System.out.println("url3: " + inputStream);
+            
+            Map parameters = new HashMap();
+            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(url1);
+            JasperReport body = (JasperReport) JRLoader.loadObject(url2);
+            
+            parameters.put("examenId", idExamen);
+            parameters.put("subReport", body);
+            parameters.put("logo", inputStream);
+            
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, conn);
+            output = Base64.encodeBytes(JasperExportManager.exportReportToPdf(jasperPrint));
+
+        } catch (JRException | SQLException | NamingException ex) {
+            output = "Error ";
+            Logger.getLogger(BedeliaServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return output;
     }
     
     @Override
-    public String getEscolaridad(String cedula){
+    public String getEscolaridad(String cedula, String codigoCarrera){
         return "";
     }
 
