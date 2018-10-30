@@ -29,6 +29,8 @@ public interface Estudiante_CursoFacadeLocal {
     List<Estudiante_Curso> findRange(int[] range);
     
     public List<Estudiante_Curso> findEstudiante_CursoByUsuario_Asignatura(String cedula, Long asignatura_carrera);
+    
+    public Long getMaxCalificacionAsignatura(String cedula, Long asignatura_carrera);
 
     int count();
     

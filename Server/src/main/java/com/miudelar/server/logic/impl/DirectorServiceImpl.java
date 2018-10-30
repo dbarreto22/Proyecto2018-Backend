@@ -45,6 +45,8 @@ public class DirectorServiceImpl implements DirectorService{
 
     private CarreraFacadeLocal carreraFacade = lookupCarreraFacadeBean();
     
+    InitMgr initMgr = new InitMgr();
+    
 //    Gson gson = new Gson();
     JsonParser parser = new JsonParser();
     
@@ -222,8 +224,16 @@ public class DirectorServiceImpl implements DirectorService{
                         if (previa == null){
                             message = "No existe asignatura: " + idPrevia.toString();
                         }else{
-                            madre.addPrevia(previa);
-                            asignatura_CarreraFacade.edit(madre);
+                            if (initMgr.getAllPrevias(madre).contains(previa)){
+                                message = "Error: La asignatura es previa de esta u otra asignatura previa";
+                            }else{
+                                if (initMgr.getAllPrevias(previa).contains(madre)){
+                                    message = "Error: Asignatura no puede ser previa de si misma";
+                                }else{
+                                    madre.addPrevia(previa);
+                                    asignatura_CarreraFacade.edit(madre);
+                                }
+                            }
                         }
                     }
             } else {
@@ -289,5 +299,8 @@ public class DirectorServiceImpl implements DirectorService{
         });
         return asigCar;
     }
+    
+    
+        
             
 }

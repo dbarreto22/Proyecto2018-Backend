@@ -37,4 +37,14 @@ public class Estudiante_ExamenFacade extends AbstractFacade<Estudiante_Examen> i
             return q.getResultList();
     }
     
+    @Override
+    public Long getMaxCalificacionAsignatura(String cedula, Long asignatura_carrera){
+        Query q = getEntityManager().createNamedQuery(Estudiante_Examen.GET_MAX_CALIF_ASIG).setParameter("cedula", cedula).setParameter("asignatura_carrera", asignatura_carrera);
+        if(q.getSingleResult() instanceof Long){
+            return (Long)q.getSingleResult();
+        }else{
+            return 0L;
+        }
+    }
+    
 }

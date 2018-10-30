@@ -9,6 +9,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 import com.miudelar.server.ejb.Asignatura_CarreraFacade;
 import com.miudelar.server.ejb.Asignatura_CarreraFacadeLocal;
 import com.miudelar.server.ejb.CarreraFacade;
@@ -65,6 +66,7 @@ public class EstudianteServiceImpl implements EstudianteService {
     private Estudiante_CursoFacadeLocal estudiante_cursoFacade = lookupEstudiante_CursoFacadeBean();
     private Estudiante_ExamenFacadeLocal estudiante_ExamenFacade = lookupEstudiante_ExamenFacadeBean();
     private Asignatura_CarreraFacadeLocal asignatura_CarreraFacade = lookupAsignatura_CarreraFacadeBean();
+    InitMgr initMgr = new InitMgr();
     
     private RolFacadeLocal lookupRolFacadeBean() {
         try {
@@ -242,14 +244,36 @@ public class EstudianteServiceImpl implements EstudianteService {
                         if (curso == null){
                             message = "No existe el curso";
                         }else{
-                            usuario.addCurso(curso);
-                            usuarioFacade.edit(usuario);
+                            Asignatura_Carrera asig_car = curso.getAsignatura_Carrera();
+                            Long max = estudiante_cursoFacade.getMaxCalificacionAsignatura(cedula, asig_car.getId());
+                            if (max.compareTo(6L) > 0){
+                                return "Error, el estudiante ya tiene aprobada esta asignatura";
+                            }else{
+                                if (usuario.getCursos().contains(curso)){
+                                return "Error, el estudiante ya se encuentra inscripto a este curso";
+                            }else{
+                                //Valido previas
+                                List<Asignatura_Carrera> previas = initMgr.getAllPrevias(asig_car);
+                                for (Asignatura_Carrera previa : previas) {
+                                    max = estudiante_cursoFacade.getMaxCalificacionAsignatura(cedula, previa.getId());
+                                    System.out.println("max: " + max);
+                                    System.out.println("previa.getId(): " + previa.getId());
+                                    System.out.println("asig_car.getId(): " + asig_car.getId());
+                                    if (max.compareTo(6L) < 0 && !asig_car.getId().equals(previa.getId())){
+                                        return "Error, el estudiante no tiene aprobada la asignatura: " + previa.getAsignatura().getNombre();
+                                    }
+                                }
+                                usuario.addCurso(curso);
+                                usuarioFacade.edit(usuario);
+                                }
+                            }
+                            
                         }
                     }
             } else {
                 message = "Esto no es un json o no lo entiendo: " + json;
             }
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException ex) {
             System.out.println("Class:EstudianteServiceImpl: "+ ex.getMessage()+ " " +json);
             message = ex.getMessage()+ " " +json;
         }
@@ -298,6 +322,7 @@ public class EstudianteServiceImpl implements EstudianteService {
         String message = "OK";
         try {
             JsonElement jsonTree = parser.parse(json);
+
             if (jsonTree.isJsonObject()) {
                 JsonObject jsonObject = jsonTree.getAsJsonObject();
                     String cedula = jsonObject.get("cedula").getAsString();
@@ -311,17 +336,39 @@ public class EstudianteServiceImpl implements EstudianteService {
                         if (examen == null){
                             message = "No existe el examen";
                         }else{
-                            usuario.addInscripcionesExamenes(examen);
-                            usuarioFacade.edit(usuario);
+                            Asignatura_Carrera asig_car = examen.getAsignatura_Carrera();
+                            Long max = estudiante_ExamenFacade.getMaxCalificacionAsignatura(cedula, asig_car.getId());
+                            if (max.compareTo(3L) > 0){
+                                return "Error, el estudiante ya tiene aprobado este examen";
+                            }else{
+                                if (usuario.getInscripcionesExamenes().contains(examen)){
+                                return "Error, el estudiante ya se encuentra inscripto a este examen";
+                            }else{
+                                //Valido previas
+                                List<Asignatura_Carrera> previas = initMgr.getAllPrevias(asig_car);
+                                for (Asignatura_Carrera previa : previas) {
+                                    max = estudiante_cursoFacade.getMaxCalificacionAsignatura(cedula, previa.getId());
+                                    System.out.println("max: " + max);
+                                    System.out.println("previa.getId(): " + previa.getId());
+                                    System.out.println("asig_car.getId(): " + asig_car.getId());
+                                    if (max.compareTo(6L) < 0 && !asig_car.getId().equals(previa.getId())){
+                                        return "Error, el estudiante no tiene aprobada la asignatura: " + previa.getAsignatura().getNombre();
+                                    }
+                                }
+                                usuario.addInscripcionesExamenes(examen);
+                                usuarioFacade.edit(usuario);
+                                }
+                            }
+                            
                         }
                     }
-                }else {
+            } else {
                 message = "Esto no es un json o no lo entiendo: " + json;
             }
-            }catch (Exception ex) {
+        } catch (JsonSyntaxException ex) {
             System.out.println("Class:EstudianteServiceImpl: "+ ex.getMessage()+ " " +json);
             message = ex.getMessage()+ " " +json;
         }
-            return message;
-        }
+        return message;
+    }
 }
