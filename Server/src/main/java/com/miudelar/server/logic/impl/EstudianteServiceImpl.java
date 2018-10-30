@@ -199,7 +199,6 @@ public class EstudianteServiceImpl implements EstudianteService {
     
     @Override
     public DtCalificaciones getCalificaciones(String cedula, Long idAsig_Carrera) {
-        //TODO
         List<DtEstudiante_Curso> cursos = new ArrayList<>();
         List<DtEstudiante_Examen> examenes = new ArrayList<>();
 

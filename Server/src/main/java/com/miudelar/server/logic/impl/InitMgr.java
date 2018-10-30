@@ -13,14 +13,26 @@ import com.miudelar.server.logic.datatypes.DtCarrera;
 import com.miudelar.server.logic.datatypes.DtRol;
 import com.miudelar.server.logic.datatypes.DtUsuario;
 import com.miudelar.server.logic.entities.Asignatura_Carrera;
+import com.miudelar.server.logic.entities.Estudiante_Curso;
+import com.miudelar.server.logic.entities.Estudiante_Examen;
+import com.miudelar.server.logic.entities.Usuario;
 import com.miudelar.server.logic.factories.ManagersFactory;
 import com.miudelar.server.logic.interfaces.*;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 public class InitMgr implements InitMgt {
 
@@ -42,11 +54,71 @@ public class InitMgr implements InitMgt {
             }
         }
     }
+
+    public String sendMail(Object notaObj) {
+        System.out.println("sendMail");
+        try {
+            final String username = "grupo4.miudelar@gmail.com";
+            final String password = "tecnoinf.grupo4";
+            
+            Properties props = new Properties();
+            props.put("mail.smtp.auth", "true");
+            props.put("mail.smtp.starttls.enable", "true");
+            props.put("mail.smtp.host", "smtp.gmail.com");
+            props.put("mail.smtp.port", "587");
+            
+            Session session = Session.getInstance(props,
+                new javax.mail.Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(username, password);
+                    }
+                });
+            
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress("grupo4.miudelar@gmail.com"));
+            
+            if (notaObj instanceof Estudiante_Curso){
+                Estudiante_Curso curso = (Estudiante_Curso)notaObj;
+                System.out.println("curso: " + curso.getCalificacion());
+                armarMsg(message, curso.getUsuario(), "curso", curso.getCurso().getAsignatura_Carrera().getAsignatura().getNombre(), curso.getCalificacion());
+            }else{
+                if (notaObj instanceof Estudiante_Examen){
+                    Estudiante_Examen examen = (Estudiante_Examen)notaObj;
+                    System.out.println("examen: " + examen.getCalificacion());
+                    armarMsg(message, examen.getUsuario(), "examen", examen.getExamen().getAsignatura_Carrera().getAsignatura().getNombre(), examen.getCalificacion());
+                }
+            }
+
+            Transport.send(message);
+
+            System.out.println("Done");
+            
+        } catch (MessagingException ex) {
+            Logger.getLogger(InitMgr.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "ok";
+    }
+    
+    public static Message armarMsg(Message message, Usuario usuario, String tipo, String asignatura, Long calificacion) {
+        System.out.println("armarMsg");
+        try {
+            System.out.println("usuario.getEmail(): " + usuario.getEmail());
+            message.setRecipients(Message.RecipientType.TO,
+            InternetAddress.parse(usuario.getEmail()));
+            message.setSubject("Se ha cargado una calificación");
+            message.setText("Estimado/a " + usuario.getNombre() + ", "
+                + "\n\n Usted ha obtenido un " + calificacion + " en el " + tipo + " de " + asignatura +"."
+                + "\n\n\n\n MiUdelar");
+                } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
+        return message;
+    }
+
 //    AdministradorService administradorService = ManagersFactory.getInstance().getAdministradorService();
 //    BedeliaService bedeliaService = ManagersFactory.getInstance().getBedeliaService();
 //    DirectorService directorService = ManagersFactory.getInstance().getDirectorService();
 //    EstudianteService estudianteService = ManagersFactory.getInstance().getEstudianteService();
-
 //    private void rolGenerator() throws NoSuchAlgorithmException, RolWithInvalidDataException {
 //        List<DtRol> listDtRol = administradorService.getAllRol();
 //
@@ -82,5 +154,4 @@ public class InitMgr implements InitMgt {
 ////        createDefaultUser();
 ////        carrera_asginaturaGenerator();
 //    }
-
 }

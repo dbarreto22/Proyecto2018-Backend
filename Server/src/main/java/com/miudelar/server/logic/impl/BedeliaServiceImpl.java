@@ -74,6 +74,7 @@ public class BedeliaServiceImpl implements BedeliaService {
     private Estudiante_ExamenFacadeLocal e_eJFacade = lookupEstudiante_ExamenFacadeBean();
     private UsuarioFacadeLocal usaurioJpaController = lookupUsuarioFacadeBean();
     private ExamenFacadeLocal examenFacade = lookupExamenFacadeBean();
+    InitMgr initMgr = new InitMgr();
     
     
     private UsuarioFacadeLocal lookupUsuarioFacadeBean() {
@@ -263,7 +264,9 @@ public class BedeliaServiceImpl implements BedeliaService {
                             if (curso == null){
                                 message = "No existe el curso";
                             }else{
-                                e_cJFacade.create(new Estudiante_Curso(calificacion, usuario, curso));
+                                Estudiante_Curso e_c = new Estudiante_Curso(calificacion, usuario, curso);
+                                e_cJFacade.create(e_c);
+                                initMgr.sendMail(e_c);
                             }
                         }
                         
@@ -301,7 +304,9 @@ public class BedeliaServiceImpl implements BedeliaService {
                             if (examen == null){
                                message = "No existe el examen";
                             }else{
-                                e_eJFacade.create(new Estudiante_Examen(usuario, examen, calificacion));
+                                Estudiante_Examen e_e = new Estudiante_Examen(usuario, examen, calificacion);
+                                e_eJFacade.create(e_e);
+                                initMgr.sendMail(e_e);
                             }
                         }
                     }else{
