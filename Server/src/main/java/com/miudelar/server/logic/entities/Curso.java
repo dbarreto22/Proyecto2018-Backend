@@ -3,7 +3,9 @@
  */
 package com.miudelar.server.logic.entities;
 
+import com.miudelar.server.logic.datatypes.DtAsignatura;
 import com.miudelar.server.logic.datatypes.DtAsignatura_Carrera;
+import com.miudelar.server.logic.datatypes.DtCarrera;
 import com.miudelar.server.logic.datatypes.DtCurso;
 import com.miudelar.server.logic.datatypes.DtHorario;
 import java.io.Serializable;
@@ -116,7 +118,10 @@ public class Curso implements Serializable {
     }
     
     public DtCurso toDataType(){
-        DtAsignatura_Carrera asignatura_Carrera = new DtAsignatura_Carrera(this.asignatura_Carrera.getId());
+        DtAsignatura_Carrera asignatura_Carrera = new DtAsignatura_Carrera(this.asignatura_Carrera.getId(),
+                new DtCarrera(this.asignatura_Carrera.getCarrera().getCodigo(), this.asignatura_Carrera.getCarrera().getNombre()),
+                new DtAsignatura(this.asignatura_Carrera.getAsignatura().getCodigo(), this.asignatura_Carrera.getAsignatura().getNombre())
+        );
         List <DtHorario> dthorarios = new ArrayList<DtHorario>();
         this.horarios.forEach(horario -> {
             dthorarios.add(new DtHorario(horario.getDia(), horario.getHoraInicio(), horario.getHoraFin()));

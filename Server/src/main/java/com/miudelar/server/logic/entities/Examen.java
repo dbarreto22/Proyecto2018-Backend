@@ -3,6 +3,9 @@
  */
 package com.miudelar.server.logic.entities;
 
+import com.miudelar.server.logic.datatypes.DtAsignatura;
+import com.miudelar.server.logic.datatypes.DtAsignatura_Carrera;
+import com.miudelar.server.logic.datatypes.DtCarrera;
 import com.miudelar.server.logic.datatypes.DtExamen;
 import java.io.Serializable;
 import java.sql.Date;
@@ -89,7 +92,11 @@ public class Examen implements Serializable {
 //    }
     
     public DtExamen toDataType(){
-        return new DtExamen(this.id, this.fecha);
+        DtAsignatura_Carrera asignatura_Carrera = new DtAsignatura_Carrera(this.asignatura_Carrera.getId(),
+                new DtCarrera(this.asignatura_Carrera.getCarrera().getCodigo(), this.asignatura_Carrera.getCarrera().getNombre()),
+                new DtAsignatura(this.asignatura_Carrera.getAsignatura().getCodigo(), this.asignatura_Carrera.getAsignatura().getNombre())
+        );
+        return new DtExamen(this.id, this.fecha, asignatura_Carrera);
     }
 
     @Override

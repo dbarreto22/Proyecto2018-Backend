@@ -254,7 +254,6 @@ public class BedeliaServiceImpl implements BedeliaService {
                     Long idCurso = jsonObject.get("idCurso").getAsLong();
                     String cedula = jsonObject.get("cedula").getAsString();
                     Long calificacion = jsonObject.get("calificacion").getAsLong();
-                    
                     if (calificacion < 13 && calificacion >= 0) {
                         Usuario usuario = usaurioJpaController.find(cedula);
                         if (usuario == null){
@@ -264,9 +263,14 @@ public class BedeliaServiceImpl implements BedeliaService {
                             if (curso == null){
                                 message = "No existe el curso";
                             }else{
-                                Estudiante_Curso e_c = new Estudiante_Curso(calificacion, usuario, curso);
-                                e_cJFacade.create(e_c);
-                                initMgr.sendMail(e_c);
+                                if (usuario.getCursos().contains(curso)){
+                                    Estudiante_Curso e_c = new Estudiante_Curso(calificacion, usuario, curso);
+                                    e_cJFacade.create(e_c);
+                                    initMgr.sendMail(e_c); 
+                                }else{
+                                   message = "El esutdiante " + usuario.getCedula() +" no se encuentra inscripto al curso";
+                                }
+                                
                             }
                         }
                         
@@ -304,9 +308,14 @@ public class BedeliaServiceImpl implements BedeliaService {
                             if (examen == null){
                                message = "No existe el examen";
                             }else{
-                                Estudiante_Examen e_e = new Estudiante_Examen(usuario, examen, calificacion);
-                                e_eJFacade.create(e_e);
-                                initMgr.sendMail(e_e);
+                                if (usuario.getInscripcionesExamenes().contains(examen)){
+                                    Estudiante_Examen e_e = new Estudiante_Examen(usuario, examen, calificacion);
+                                    e_eJFacade.create(e_e);
+                                    initMgr.sendMail(e_e);
+                                }else{
+                                    message = "El esutdiante " + usuario.getCedula() +" no se encuentra inscripto al examen";
+                                }
+                                
                             }
                         }
                     }else{
