@@ -3,6 +3,7 @@
  */
 package com.miudelar.server.logic.entities;
 
+import com.miudelar.server.logic.datatypes.DtCarrera;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
@@ -104,6 +105,11 @@ public class Carrera implements Serializable {
     
     public void addAsignatura(Asignatura asignatura){
         this.asignaturas.add(asignatura);
+    }
+    
+    public DtCarrera toDataType(){
+        DtCarrera car = new DtCarrera(codigo, nombre);
+        return car;
     }
 
     @Override

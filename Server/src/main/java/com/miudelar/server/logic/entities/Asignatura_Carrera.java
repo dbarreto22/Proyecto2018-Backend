@@ -4,6 +4,7 @@
 package com.miudelar.server.logic.entities;
 
 import com.miudelar.server.logic.datatypes.DtAsignatura;
+import com.miudelar.server.logic.datatypes.DtAsignatura_Carrera;
 import com.miudelar.server.logic.datatypes.DtCarrera;
 import java.io.Serializable;
 import java.util.List;
@@ -135,6 +136,14 @@ public class Asignatura_Carrera implements Serializable {
 
     public void setEsPreviaDe(List<Asignatura_Carrera> esPreviaDe) {
         this.esPreviaDe = esPreviaDe;
+    }
+    
+    public DtAsignatura_Carrera toDataType() {
+        DtAsignatura_Carrera dtcar = new DtAsignatura_Carrera(id, carrera.toDataType(), asignatura.toDataType());
+        this.previas.forEach(previa -> {
+            dtcar.getPrevias().add(previa.toDataType());
+        });
+        return dtcar;
     }
 
     @Override

@@ -224,16 +224,21 @@ public class DirectorServiceImpl implements DirectorService{
                         if (previa == null){
                             message = "No existe asignatura: " + idPrevia.toString();
                         }else{
-                            if (initMgr.getAllPrevias(madre).contains(previa)){
-                                message = "Error: La asignatura es previa de esta u otra asignatura previa";
+                            if (!madre.getCarrera().getCodigo().equals(previa.getCarrera().getCodigo())){
+                                message = "Las asignaturas no pertenecen a las misma carrera";
                             }else{
-                                if (initMgr.getAllPrevias(previa).contains(madre)){
-                                    message = "Error: Asignatura no puede ser previa de si misma";
+                                 if (initMgr.getAllPrevias(madre).contains(previa)){
+                                    message = "Error: La asignatura es previa de esta u otra asignatura previa";
                                 }else{
-                                    madre.addPrevia(previa);
-                                    asignatura_CarreraFacade.edit(madre);
+                                    if (initMgr.getAllPrevias(previa).contains(madre)){
+                                        message = "Error: Asignatura no puede ser previa de si misma";
+                                    }else{
+                                        madre.addPrevia(previa);
+                                        asignatura_CarreraFacade.edit(madre);
+                                    }
                                 }
                             }
+                           
                         }
                     }
             } else {
@@ -279,13 +284,8 @@ public class DirectorServiceImpl implements DirectorService{
     }
     
     @Override
-    public List<DtAsignatura_Carrera> getPrevias(Long idMadre){
-        List<DtAsignatura_Carrera> asigCar = new ArrayList<>();
-        asignatura_CarreraFacade.find(idMadre).getPrevias().forEach(previa -> {
-            asigCar.add(new DtAsignatura_Carrera(previa.getId(), 
-                    new DtCarrera(previa.getCarrera().getCodigo(), previa.getCarrera().getNombre()),
-                    new DtAsignatura(previa.getAsignatura().getCodigo(), previa.getAsignatura().getNombre())));
-        });
+    public DtAsignatura_Carrera getPrevias(Long idMadre){
+        DtAsignatura_Carrera asigCar = asignatura_CarreraFacade.find(idMadre).toDataType();
         return asigCar;
     }
     

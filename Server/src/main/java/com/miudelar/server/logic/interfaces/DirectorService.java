@@ -99,10 +99,11 @@ public interface DirectorService {
     @GET
     @Path("previas/{idAignatura_Carrera_Madre}")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<DtAsignatura_Carrera> getPrevias(@PathParam("idAignatura_Carrera_Madre") final Long idMadre);
+    public DtAsignatura_Carrera getPrevias(@PathParam("idAignatura_Carrera_Madre") final Long idMadre);
     
     @GET
     @Path("asignaturacarrera")
+    @RolesAllowed({"BEDELIA"})
     @Produces(MediaType.APPLICATION_JSON)
     public List<DtAsignatura_Carrera> getAllAsignaturaCarrera();
     

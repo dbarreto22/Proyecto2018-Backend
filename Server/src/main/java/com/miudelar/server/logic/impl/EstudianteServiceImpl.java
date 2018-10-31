@@ -282,6 +282,7 @@ public class EstudianteServiceImpl implements EstudianteService {
     @Override
     public String inscripcionCarrera(String json) {
         String message = "OK";
+        System.out.println("Class:EstudianteServiceImpl: " + json);
         try {
             JsonElement jsonTree = parser.parse(json);
 
@@ -296,7 +297,7 @@ public class EstudianteServiceImpl implements EstudianteService {
                     } else {
                         Carrera carrera = carreraFacade.find(codigo);
                         if (carrera == null){
-                            message = "No existe el carrera";
+                            message = "No existe la carrera";
                         }else{
                             if (usuario.getCarreras().contains(carrera)){
                                 message = "El usuario ya está inscripto en: " + carrera.getNombre();

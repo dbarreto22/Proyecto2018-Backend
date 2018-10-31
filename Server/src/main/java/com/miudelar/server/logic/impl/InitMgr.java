@@ -9,6 +9,7 @@ import com.miudelar.server.exceptions.NonexistentEntityException;
 import com.miudelar.server.exceptions.RolWithInvalidDataException;
 import com.miudelar.server.exceptions.UsuarioWithInvalidDataException;
 import com.miudelar.server.logic.datatypes.DtAsignatura;
+import com.miudelar.server.logic.datatypes.DtAsignatura_Carrera;
 import com.miudelar.server.logic.datatypes.DtCarrera;
 import com.miudelar.server.logic.datatypes.DtRol;
 import com.miudelar.server.logic.datatypes.DtUsuario;
@@ -54,6 +55,12 @@ public class InitMgr implements InitMgt {
             }
         }
     }
+    
+//    public static void getPreviaMadre(Asignatura_Carrera asic_car) {
+//         while (asic_car != null){
+//            asic_car =  asic_car.getEsPreviaDe();
+//         }
+//    }
 
     public String sendMail(Object notaObj) {
         System.out.println("sendMail");

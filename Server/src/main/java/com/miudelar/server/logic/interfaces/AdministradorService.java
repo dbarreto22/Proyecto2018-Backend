@@ -55,13 +55,13 @@ public interface AdministradorService {
     @POST
     @Path("usuario.addRol")
     @Produces(MediaType.TEXT_PLAIN)
-    @Consumes(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
     public String addRol(String json);
     
     @POST
     @Path("usuario.removeRol")
     @Produces(MediaType.TEXT_PLAIN)
-    @Consumes(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
     public String removeRol(String json);
     
     @GET

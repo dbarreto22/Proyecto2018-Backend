@@ -3,6 +3,7 @@
  */
 package com.miudelar.server.logic.entities;
 
+import com.miudelar.server.logic.datatypes.DtAsignatura;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
@@ -78,6 +79,11 @@ public class Asignatura implements Serializable {
     
     public void removeAsignatura_Carrera (Asignatura_Carrera asig_carrera){
         this.asignatura_Carreras.remove(asig_carrera);
+    }
+    
+    public DtAsignatura toDataType(){
+        DtAsignatura car = new DtAsignatura(codigo, nombre);
+        return car;
     }
   
     @Override

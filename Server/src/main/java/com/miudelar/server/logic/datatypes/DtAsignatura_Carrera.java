@@ -3,6 +3,7 @@
  */
 package com.miudelar.server.logic.datatypes;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -31,6 +32,7 @@ public class DtAsignatura_Carrera implements Serializable {
         this.id = id;
         this.carrera = carrera;
         this.asignatura = asignatura;
+        this.previas = new ArrayList<>();
     }
 
     public DtAsignatura_Carrera() {
