@@ -31,6 +31,7 @@ public interface EstudianteService {
     
     @GET
     @Path("curso")
+    @RolesAllowed({"BEDELIA"})
     @Produces(MediaType.APPLICATION_JSON)
     public List<DtCurso> getAllCurso();
     

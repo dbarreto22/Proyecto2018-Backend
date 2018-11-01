@@ -8,7 +8,8 @@ import com.miudelar.server.logic.datatypes.DtAsignatura_Carrera;
 import com.miudelar.server.logic.datatypes.DtCarrera;
 import com.miudelar.server.logic.datatypes.DtExamen;
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.Basic;
@@ -56,6 +57,11 @@ public class Examen implements Serializable {
         this.fecha = fecha;
     }
 
+    public Examen(DtExamen examen) {
+        this.fecha = examen.getFecha();
+        this.asignatura_Carrera = new Asignatura_Carrera(examen.getAsignatura_Carrera().getAsignatura(), examen.getAsignatura_Carrera().getCarrera());
+    }
+    
     public Examen() {
     }
 

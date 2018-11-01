@@ -7,6 +7,7 @@ package com.miudelar.server.logic.interfaces;
 
 import com.miudelar.server.logic.datatypes.DtCarrera;
 import com.miudelar.server.logic.datatypes.DtCurso;
+import com.miudelar.server.logic.datatypes.DtExamen;
 import com.miudelar.server.logic.datatypes.DtPeriodo_Examen;
 import com.miudelar.server.logic.datatypes.DtUsuario;
 import com.miudelar.server.logic.entities.Horario;
@@ -46,6 +47,12 @@ public interface BedeliaService {
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_JSON)
     public String saveCurso(DtCurso curso);
+    
+    @POST
+    @Path("examen")
+    @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String saveExamen(DtExamen examen);
     
     @POST
     @Path("horario")

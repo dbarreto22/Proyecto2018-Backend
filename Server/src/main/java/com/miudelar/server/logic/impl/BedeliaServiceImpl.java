@@ -17,6 +17,7 @@ import com.miudelar.server.ejb.HorarioFacadeLocal;
 import com.miudelar.server.ejb.Periodo_ExamenFacadeLocal;
 import com.miudelar.server.ejb.UsuarioFacadeLocal;
 import com.miudelar.server.logic.datatypes.DtCurso;
+import com.miudelar.server.logic.datatypes.DtExamen;
 import com.miudelar.server.logic.datatypes.DtHorario;
 import com.miudelar.server.logic.datatypes.DtPeriodo_Examen;
 import com.miudelar.server.logic.datatypes.DtUsuario;
@@ -175,6 +176,19 @@ public class BedeliaServiceImpl implements BedeliaService {
     }
     
     @Override
+    public String saveExamen(DtExamen dtExamen){
+        String message = "OK";
+        try {
+            Examen examen = new Examen(dtExamen);
+            examenFacade.create(examen);
+        } catch (Exception ex) {
+            System.out.println("Class:BedeliaServiceImpl: "+ ex.getMessage());
+            message = ex.getMessage();
+        }
+        return message;
+    }
+    
+    @Override
     public String saveHorario(String json){
         String message = "OK";
         try {
@@ -270,7 +284,6 @@ public class BedeliaServiceImpl implements BedeliaService {
                                 }else{
                                    message = "El esutdiante " + usuario.getCedula() +" no se encuentra inscripto al curso";
                                 }
-                                
                             }
                         }
                         

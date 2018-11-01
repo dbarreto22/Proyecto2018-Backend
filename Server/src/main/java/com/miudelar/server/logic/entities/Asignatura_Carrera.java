@@ -171,6 +171,4 @@ public class Asignatura_Carrera implements Serializable {
         return true;
     }
     
-    
-
 }
