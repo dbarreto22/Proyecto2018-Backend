@@ -34,7 +34,9 @@ import javax.xml.bind.annotation.*;
 @Entity
 @NamedQueries({
 //    @NamedQuery(name = "Estudiante_Curso.findAll", query = "Select e from Estudiante_Curso e"),
-//    @NamedQuery(name = "Estudiante_Curso.findByCalificacion", query = "Select e from Estudiante_Curso e where e.calificacion=:calificacion")
+    @NamedQuery(name = Curso.FIND_BY_FECHA_ASIGCAR, query = "Select C from Curso C, Asignatura_Carrera A where C.fecha = :fecha AND \n"
+            + "C.asignatura_Carrera = A \n"
+            + "AND A.id = :idAsigCar"),
         @NamedQuery(name = Curso.GET_ESTUDIANTES_INSCRIPTOS_CURSO, 
                 query = "SELECT U FROM Curso C, Usuario U \n"
                 + "WHERE C.id = :idCurso \n"
@@ -43,6 +45,7 @@ import javax.xml.bind.annotation.*;
 public class Curso implements Serializable {
     
     public final static String GET_ESTUDIANTES_INSCRIPTOS_CURSO = "Curso.GET_ESTUDIANTES_INSCRIPTOS_CURSO";
+    public final static String FIND_BY_FECHA_ASIGCAR = "Curso.FIND_BY_FECHA_ASIGCAR";
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -51,14 +54,12 @@ public class Curso implements Serializable {
     @Basic
     private Date fecha;
 
-    @XmlTransient
-    @ManyToOne(targetEntity = Asignatura_Carrera.class)
+    @ManyToOne(targetEntity = Asignatura_Carrera.class, fetch = FetchType.EAGER)
     private Asignatura_Carrera asignatura_Carrera;
 
     @OneToMany(targetEntity = Horario.class, fetch = FetchType.EAGER)
     private List<Horario> horarios;
 
-    @XmlTransient
     @OneToMany(targetEntity = Estudiante_Curso.class, fetch = FetchType.EAGER)
     private List<Estudiante_Curso> calificacionesCursos;
 
@@ -66,15 +67,12 @@ public class Curso implements Serializable {
 //    @ManyToMany(targetEntity = Usuario.class, mappedBy = "cursos", fetch = FetchType.EAGER)
 //    private List<Usuario> inscriptos;
 
-    public Curso(Long id) {
-        this.id = id;
-    }
 
     public Curso(Date fecha, Asignatura_Carrera asignatura_Carrera) {
         this.fecha = fecha;
         this.asignatura_Carrera = asignatura_Carrera;
     }
-
+    
     public Curso(Long id, Date fecha, Asignatura_Carrera asignatura_Carrera) {
         this.id = id;
         this.fecha = fecha;

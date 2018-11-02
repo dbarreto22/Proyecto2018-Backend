@@ -7,6 +7,7 @@ package com.miudelar.server.ejb;
 
 import com.miudelar.server.logic.entities.Curso;
 import com.miudelar.server.logic.entities.Usuario;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -35,6 +36,12 @@ public class CursoFacade extends AbstractFacade<Curso> implements CursoFacadeLoc
     @Override
     public List<Usuario> getEstudiantesInscriptos(Long idCurso){
         Query q = getEntityManager().createNamedQuery(Curso.GET_ESTUDIANTES_INSCRIPTOS_CURSO).setParameter("idCurso", idCurso);
+        return q.getResultList();
+    }
+    
+    @Override
+    public List<Curso> getCursoByFechaAndIdAsigCar(Date fecha, Long idAsigCar){
+        Query q = getEntityManager().createNamedQuery(Curso.FIND_BY_FECHA_ASIGCAR).setParameter("fecha", fecha).setParameter("idAsigCar", idAsigCar);
         return q.getResultList();
     }
     

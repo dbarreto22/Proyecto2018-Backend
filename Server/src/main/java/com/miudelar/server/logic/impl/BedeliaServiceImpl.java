@@ -207,6 +207,16 @@ public class BedeliaServiceImpl implements BedeliaService {
     }
     
     @Override
+    public DtCurso getCurso(Long idCurso){
+        return cursoFacade.find(idCurso).toDataType();
+    }
+    
+    @Override
+    public DtExamen getExamen(Long idExamen){
+        return examenFacade.find(idExamen).toDataType();
+    }
+    
+    @Override
     public String saveCurso(String json){
         String message = "OK"; 
         try {
@@ -224,10 +234,15 @@ public class BedeliaServiceImpl implements BedeliaService {
                         Curso curso = new Curso(fecha, asigcar);
                         cursoFacade.create(curso);
                     }else{
-                        message = "El curso se ha editado correctamente";     
-                        Asignatura_Carrera asigcar = asignatura_CarreraFacade.find(idAsigCar);
-                        Curso curso = new Curso(idCurso, fecha, asigcar);
-                        cursoFacade.edit(curso);
+                        if(tieneEstudiantesInscriptosCurso(idCurso)){
+                             message = "Error: El curso tiene estudiantes inscriptos"; 
+                        }else{
+                            message = "El curso se ha editado correctamente";     
+                            Curso curso = cursoFacade.find(idCurso);
+                            curso.setFecha(fecha);
+                            cursoFacade.edit(curso);
+                        }
+                        
                     }
                    
             }        
@@ -257,10 +272,14 @@ public class BedeliaServiceImpl implements BedeliaService {
                         Examen examen = new Examen(fecha, asigcar);
                         examenFacade.create(examen);
                     }else{
-                        message = "El examen se ha editado correctamente";     
-                        Asignatura_Carrera asigcar = asignatura_CarreraFacade.find(idAsigCar);
-                        Examen examen = new Examen(idExamen, fecha, asigcar);
-                        examenFacade.edit(examen);
+                        if(tieneEstudiantesInscriptosExamen(idExamen)){
+                             message = "Error: El examen tiene estudiantes inscriptos"; 
+                        }else{
+                            message = "El examen se ha editado correctamente";     
+                            Examen examen = examenFacade.find(idExamen);
+                            examen.setFecha(fecha);
+                            examenFacade.edit(examen);
+                        }
                     }
             }        
             
@@ -585,6 +604,22 @@ public class BedeliaServiceImpl implements BedeliaService {
             Logger.getLogger(BedeliaServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
         return output;
+    }
+    
+    private boolean tieneEstudiantesInscriptosCurso(Long idCurso){
+        if (cursoFacade.getEstudiantesInscriptos(idCurso).size() > 0){
+            return true;
+        }else{
+             return false;
+        }
+    }
+    
+    private boolean tieneEstudiantesInscriptosExamen(Long idExamen){
+        if (examenFacade.getEstudiantesInscriptos(idExamen).size() > 0){
+            return true;
+        }else{
+             return false;
+        }
     }
 
 } 

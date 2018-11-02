@@ -225,6 +225,26 @@ public class EstudianteServiceImpl implements EstudianteService {
 }
     
     @Override
+    public DtCalificaciones getCalificacionesSAsig(String cedula) {
+        List<DtEstudiante_Curso> cursos = new ArrayList<>();
+        List<DtEstudiante_Examen> examenes = new ArrayList<>();
+
+        Usuario usuario = usuarioFacade.find(cedula);
+        if (usuario == null) {
+            System.out.println("getCalificaciones: usuario is null");
+            return new DtCalificaciones();
+        } else {
+            usuario.getCalificacionesCursos().forEach(curso -> {
+                cursos.add(curso.toDataType());
+            });
+            usuario.getCalificacionesExamenes().forEach(examen -> {
+                examenes.add(examen.toDataType());
+            });
+        }
+    return new DtCalificaciones(cursos, examenes);
+}
+    
+    @Override
     public String inscripcionCurso(String json) {
         String message = "OK";
         try {

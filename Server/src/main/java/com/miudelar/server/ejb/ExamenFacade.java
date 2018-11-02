@@ -7,6 +7,7 @@ package com.miudelar.server.ejb;
 
 import com.miudelar.server.logic.entities.Examen;
 import com.miudelar.server.logic.entities.Usuario;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -38,4 +39,9 @@ public class ExamenFacade extends AbstractFacade<Examen> implements ExamenFacade
         return q.getResultList();
     }
     
+    @Override
+    public List<Examen> getExamenByFechaAndIdAsigCar(Date fecha, Long idAsigCar){
+        Query q = getEntityManager().createNamedQuery(Examen.FIND_BY_FECHA_ASIGCAR).setParameter("fecha", fecha).setParameter("idAsigCar", idAsigCar);
+        return q.getResultList();
+    }
 }

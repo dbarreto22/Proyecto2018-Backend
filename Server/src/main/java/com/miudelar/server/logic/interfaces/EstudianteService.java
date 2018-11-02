@@ -54,6 +54,12 @@ public interface EstudianteService {
         final String cedula, @PathParam("idAsig_Carrera")
         final Long idAsig_Carrera);
     
+    @GET
+    @Path("consultarCalificaciones/{cedula}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public DtCalificaciones getCalificacionesSAsig(@PathParam("cedula")
+        final String cedula);
+    
     @POST
     @Path("inscripcionCurso")
     @Produces(MediaType.TEXT_PLAIN)

@@ -7,6 +7,7 @@ package com.miudelar.server.ejb;
 
 import com.miudelar.server.logic.entities.Curso;
 import com.miudelar.server.logic.entities.Usuario;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -32,5 +33,7 @@ public interface CursoFacadeLocal {
     int count();
     
     public List<Usuario> getEstudiantesInscriptos(Long idCurso);
+    
+    public List<Curso> getCursoByFechaAndIdAsigCar(Date fecha, Long idAsigCar);
     
 }

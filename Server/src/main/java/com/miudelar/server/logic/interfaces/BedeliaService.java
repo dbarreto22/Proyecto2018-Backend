@@ -11,6 +11,8 @@ import com.miudelar.server.logic.datatypes.DtCurso;
 import com.miudelar.server.logic.datatypes.DtExamen;
 import com.miudelar.server.logic.datatypes.DtPeriodo_Examen;
 import com.miudelar.server.logic.datatypes.DtUsuario;
+import com.miudelar.server.logic.entities.Curso;
+import com.miudelar.server.logic.entities.Examen;
 import com.miudelar.server.logic.entities.Horario;
 import com.miudelar.server.logic.entities.Periodo_Examen;
 import java.util.List;
@@ -48,6 +50,18 @@ public interface BedeliaService {
     @Produces(MediaType.APPLICATION_JSON)
     public List<DtAsignatura_Carrera> getAsignaturaCarreraByCarrera(@PathParam("idCarrera")
         final Long idCarrera);
+    
+    @GET
+    @Path("curso/{idCurso}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public DtCurso getCurso(@PathParam("idCurso")
+        final Long idCurso);
+    
+    @GET
+    @Path("examen/{idExamen}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public DtExamen getExamen(@PathParam("idExamen")
+        final Long idExamen);
     
     @POST
     @Path("curso")
