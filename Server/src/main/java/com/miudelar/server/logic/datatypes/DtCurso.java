@@ -34,10 +34,7 @@ public class DtCurso implements Serializable {
         this.fecha = fecha;
         this.asignatura_Carrera = asignatura_Carrera;
     }
-
-    public DtCurso() {
-    }
-    
+        
     public Long getId() {
         return this.id;
     }

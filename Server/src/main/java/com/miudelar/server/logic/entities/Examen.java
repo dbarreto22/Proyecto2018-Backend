@@ -31,11 +31,21 @@ import javax.xml.bind.annotation.*;
  */
 //@XmlAccessorType(XmlAccessType.FIELD)
 @Entity
+@NamedQueries({
+//    @NamedQuery(name = "Estudiante_Curso.findAll", query = "Select e from Estudiante_Curso e"),
+//    @NamedQuery(name = "Estudiante_Curso.findByCalificacion", query = "Select e from Estudiante_Curso e where e.calificacion=:calificacion")
+        @NamedQuery(name = Examen.GET_ESTUDIANTES_INSCRIPTOS_EXAMEN, 
+                query = "SELECT U FROM Examen E, Usuario U \n"
+                + "WHERE E.id = :idExamen \n"
+                + "AND E member of U.inscripcionesExamenes")
+})
 //@NamedQueries({
 //    @NamedQuery(name = "Examen.findAll", query = "Select e from Examen e"),
 //    @NamedQuery(name = "Examen.findByFecha", query = "Select e from Examen e where e.fecha=:fecha")})
 public class Examen implements Serializable {
-
+    
+    public final static String GET_ESTUDIANTES_INSCRIPTOS_EXAMEN = "Examen.GET_ESTUDIANTES_INSCRIPTOS_EXAMEN";
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -65,6 +75,17 @@ public class Examen implements Serializable {
     public Examen() {
     }
 
+    public Examen(Date fecha, Asignatura_Carrera asignatura_Carrera) {
+        this.fecha = fecha;
+        this.asignatura_Carrera = asignatura_Carrera;
+    }
+
+    public Examen(Long id, Date fecha, Asignatura_Carrera asignatura_Carrera) {
+        this.id = id;
+        this.fecha = fecha;
+        this.asignatura_Carrera = asignatura_Carrera;
+    }
+    
     public Long getId() {
         return this.id;
     }

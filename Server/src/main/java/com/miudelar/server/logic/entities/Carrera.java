@@ -5,6 +5,7 @@ package com.miudelar.server.logic.entities;
 
 import com.miudelar.server.logic.datatypes.DtCarrera;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.Basic;
@@ -76,7 +77,13 @@ public class Carrera implements Serializable {
     }
 
     public List<Asignatura_Carrera> getAsignatura_Carreras() {
-        return this.asignatura_Carreras;
+        List<Asignatura_Carrera> result = new ArrayList<>();
+        this.asignatura_Carreras.forEach(asig -> {
+            if (!result.contains(asig)){
+                result.add(asig);
+            }
+        });
+        return result;
     }
 
     public void setAsignatura_Carreras(List<Asignatura_Carrera> asignatura_Carreras) {

@@ -6,9 +6,12 @@
 package com.miudelar.server.ejb;
 
 import com.miudelar.server.logic.entities.Examen;
+import com.miudelar.server.logic.entities.Usuario;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -27,6 +30,12 @@ public class ExamenFacade extends AbstractFacade<Examen> implements ExamenFacade
 
     public ExamenFacade() {
         super(Examen.class);
+    }
+    
+    @Override
+    public List<Usuario> getEstudiantesInscriptos(Long idExamen){
+        Query q = getEntityManager().createNamedQuery(Examen.GET_ESTUDIANTES_INSCRIPTOS_EXAMEN).setParameter("idExamen", idExamen);
+        return q.getResultList();
     }
     
 }

@@ -5,6 +5,7 @@
  */
 package com.miudelar.server.logic.interfaces;
 
+import com.miudelar.server.logic.datatypes.DtAsignatura_Carrera;
 import com.miudelar.server.logic.datatypes.DtCarrera;
 import com.miudelar.server.logic.datatypes.DtCurso;
 import com.miudelar.server.logic.datatypes.DtExamen;
@@ -42,17 +43,35 @@ public interface BedeliaService {
     public List<DtUsuario> getEstudiantesInscriptosCurso(@PathParam("idCurso")
         final Long idCurso);
     
+    @GET
+    @Path("asignaturaCarrera/{idCarrera}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<DtAsignatura_Carrera> getAsignaturaCarreraByCarrera(@PathParam("idCarrera")
+        final Long idCarrera);
+    
     @POST
     @Path("curso")
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_JSON)
-    public String saveCurso(DtCurso curso);
+    public String saveCurso(String json);
     
     @POST
     @Path("examen")
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_JSON)
-    public String saveExamen(DtExamen examen);
+    public String saveExamen(String json);
+    
+    @POST
+    @Path("removecurso")
+    @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String removeCurso(String json);
+    
+    @POST
+    @Path("removeexamen")
+    @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String removeExamen(String json);
     
     @POST
     @Path("horario")

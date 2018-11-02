@@ -21,6 +21,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -31,8 +32,18 @@ import javax.xml.bind.annotation.*;
  */
 //@XmlAccessorType(XmlAccessType.FIELD)
 @Entity
+@NamedQueries({
+//    @NamedQuery(name = "Estudiante_Curso.findAll", query = "Select e from Estudiante_Curso e"),
+//    @NamedQuery(name = "Estudiante_Curso.findByCalificacion", query = "Select e from Estudiante_Curso e where e.calificacion=:calificacion")
+        @NamedQuery(name = Curso.GET_ESTUDIANTES_INSCRIPTOS_CURSO, 
+                query = "SELECT U FROM Curso C, Usuario U \n"
+                + "WHERE C.id = :idCurso \n"
+                + "AND C member of U.cursos")
+})
 public class Curso implements Serializable {
-
+    
+    public final static String GET_ESTUDIANTES_INSCRIPTOS_CURSO = "Curso.GET_ESTUDIANTES_INSCRIPTOS_CURSO";
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -57,6 +68,17 @@ public class Curso implements Serializable {
 
     public Curso(Long id) {
         this.id = id;
+    }
+
+    public Curso(Date fecha, Asignatura_Carrera asignatura_Carrera) {
+        this.fecha = fecha;
+        this.asignatura_Carrera = asignatura_Carrera;
+    }
+
+    public Curso(Long id, Date fecha, Asignatura_Carrera asignatura_Carrera) {
+        this.id = id;
+        this.fecha = fecha;
+        this.asignatura_Carrera = asignatura_Carrera;
     }
     
     public Curso(DtCurso curso) {
