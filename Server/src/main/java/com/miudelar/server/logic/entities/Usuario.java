@@ -50,7 +50,9 @@ public class Usuario implements Serializable {
 
     @Basic
     private String password;
-
+    
+    @Basic
+    private Boolean activo;
 
     @OneToMany(targetEntity = Estudiante_Examen.class, fetch = FetchType.EAGER)
     private List<Estudiante_Examen> calificacionesExamenes;
@@ -71,6 +73,7 @@ public class Usuario implements Serializable {
     private List<Curso> cursos;
 
     public Usuario(String cedula, String nombre, String apellido, String email, String password) {
+        this.activo = true;
         this.cedula = cedula;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -79,6 +82,7 @@ public class Usuario implements Serializable {
     }
     
     public Usuario(DtUsuario usuario) {
+        this.activo = true;
         this.cedula = usuario.getCedula();
         this.nombre = usuario.getNombre();
         this.apellido = usuario.getApellido();
@@ -89,6 +93,14 @@ public class Usuario implements Serializable {
     public Usuario() {
     }
 
+    public Boolean getActivo() {
+        return activo;
+    }
+
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
+    }
+    
     public String getCedula() {
         return this.cedula;
     }

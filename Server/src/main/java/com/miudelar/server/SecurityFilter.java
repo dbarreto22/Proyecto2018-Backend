@@ -172,7 +172,7 @@ public class SecurityFilter implements javax.ws.rs.container.ContainerRequestFil
         boolean isAllowed = false;
 
         Usuario usuario = usuarioFacade.find(username);
-        if (usuario != null && usuario.getPassword().equals(password)) {
+        if (usuario != null && usuario.getActivo()!= false && usuario.getPassword().equals(password)) {
             List<Rol> roles = usuario.getRoles();
             for (Rol rol : roles) {
                 if (rolesSet.contains(rol.getTipo())) {

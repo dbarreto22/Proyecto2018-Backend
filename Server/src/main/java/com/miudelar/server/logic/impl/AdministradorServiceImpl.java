@@ -85,7 +85,7 @@ public class AdministradorServiceImpl implements AdministradorService {
             System.out.println("jsonObject: " + username + password);
             try {
                 Usuario usuario = usuarioFacade.find(username);
-                if (usuario == null) {
+                if (usuario == null || usuario.getActivo() == false) {
                     message = "Error: Usuario o contraseña incorrecta";
                 } else {
                     if (usuario.getPassword().equals(password)) {
@@ -144,6 +144,14 @@ public class AdministradorServiceImpl implements AdministradorService {
             System.out.println("Class:AdministradorServiceImpl: " + ex.getMessage());
             message = ex.getMessage();
         }
+        return message;
+    }
+    
+    @Override
+    public String deleteUsuario(final Usuario usuario){
+        String message = "OK";
+        Usuario usr = usuarioFacade.find(usuario.getCedula());
+        usr.setActivo(Boolean.FALSE);
         return message;
     }
 

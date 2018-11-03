@@ -51,6 +51,12 @@ public interface AdministradorService {
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_JSON)
     public String editUsuario(final Usuario usuario);
+    
+    @POST
+    @Path("admin/usuario.delete")
+    @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String deleteUsuario(final Usuario usuario);
         
     @POST
     @Path("usuario.addRol")

@@ -28,6 +28,9 @@ import javax.xml.bind.annotation.*;
                 query = "SELECT C FROM Estudiante_Examen C, Usuario U, Asignatura_Carrera A \n"
                 + "WHERE U.cedula = :cedula AND C.usuario = U \n"
                 + "AND A.id = :asignatura_carrera AND C.examen member of A.examenes"),
+    @NamedQuery(name = Estudiante_Examen.FINDBY_EXAMEN, 
+                query = "SELECT E FROM Estudiante_Examen E, Examen C \n"
+                + "WHERE C.id = :idExamen AND E member of C.calificacionesExamenes \n"),
 @NamedQuery(name = Estudiante_Examen.GET_MAX_CALIF_ASIG, 
                 query = "SELECT max(C.calificacion) FROM Estudiante_Examen C, Usuario U, Asignatura_Carrera A \n"
                 + "WHERE U.cedula = :cedula AND C.usuario = U \n"
@@ -36,6 +39,7 @@ public class Estudiante_Examen implements Serializable {
     
     public final static String FINDBY_ESTUDIANTE_EXAMEN_ASIGNATURA = "Estudiante_Examen.FINDBY_ESTUDIANTE_EXAMEN_ASIGNATURA";
     public final static String GET_MAX_CALIF_ASIG = "Estudiante_Examen.GET_MAX_CALIF_ASIG";
+    public final static String FINDBY_EXAMEN = "Estudiante_Examen.FINDBY_EXAMEN";
     @Basic
     private Long calificacion;
 

@@ -47,4 +47,10 @@ public class Estudiante_ExamenFacade extends AbstractFacade<Estudiante_Examen> i
         }
     }
     
+    @Override
+    public List<Estudiante_Examen> findByExamen(Long idExamen){
+        Query q = getEntityManager().createNamedQuery(Estudiante_Examen.FINDBY_EXAMEN).setParameter("idExamen", idExamen);
+        return q.getResultList();
+    }
+    
 }

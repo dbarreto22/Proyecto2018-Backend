@@ -198,28 +198,16 @@ public class BedeliaServiceImpl implements BedeliaService {
     @Override
     public List<DtEstudiante_Curso> getEstudiantesCalificacionesCurso(Long idCurso){
         List<DtEstudiante_Curso> cursos = new ArrayList<>();
-        Curso curso = cursoFacade.find(idCurso);
-        if(curso == null){
-            System.out.println("curso is null");
-        }else{
-            curso.getCalificacionesCursos().forEach(calificacion -> {
-               cursos.add(calificacion.toDataType());
-            });
-        }
+        e_cJFacade.findByCurso(idCurso).forEach(curso -> {
+        cursos.add(curso.toDataType());});
         return cursos;
     }
     
     @Override
     public List<DtEstudiante_Examen> getEstudiantesCalificacionesExamen(Long idExamen){
         List<DtEstudiante_Examen> examenes = new ArrayList<>();
-        Examen examen = examenFacade.find(idExamen);
-        if(examen == null){
-            System.out.println("examen is null");
-        }else{
-            examen.getCalificacionesExamenes().forEach(calificacion -> {
-               examenes.add(calificacion.toDataType());
-            });
-        }
+        e_eJFacade.findByExamen(idExamen).forEach(examen -> {
+        examenes.add(examen.toDataType());});
         return examenes;
     }
     
