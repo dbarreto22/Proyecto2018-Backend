@@ -22,6 +22,8 @@ import com.miudelar.server.logic.datatypes.DtAsignatura;
 import com.miudelar.server.logic.datatypes.DtAsignatura_Carrera;
 import com.miudelar.server.logic.datatypes.DtCarrera;
 import com.miudelar.server.logic.datatypes.DtCurso;
+import com.miudelar.server.logic.datatypes.DtEstudiante_Curso;
+import com.miudelar.server.logic.datatypes.DtEstudiante_Examen;
 import com.miudelar.server.logic.datatypes.DtExamen;
 import com.miudelar.server.logic.datatypes.DtHorario;
 import com.miudelar.server.logic.datatypes.DtPeriodo_Examen;
@@ -191,6 +193,34 @@ public class BedeliaServiceImpl implements BedeliaService {
         cursoFacade.getEstudiantesInscriptos(idCurso).forEach(estudiante -> {
         usuarios.add(estudiante.toDataType());});
         return usuarios;
+    }
+    
+    @Override
+    public List<DtEstudiante_Curso> getEstudiantesCalificacionesCurso(Long idCurso){
+        List<DtEstudiante_Curso> cursos = new ArrayList<>();
+        Curso curso = cursoFacade.find(idCurso);
+        if(curso == null){
+            System.out.println("curso is null");
+        }else{
+            curso.getCalificacionesCursos().forEach(calificacion -> {
+               cursos.add(calificacion.toDataType());
+            });
+        }
+        return cursos;
+    }
+    
+    @Override
+    public List<DtEstudiante_Examen> getEstudiantesCalificacionesExamen(Long idExamen){
+        List<DtEstudiante_Examen> examenes = new ArrayList<>();
+        Examen examen = examenFacade.find(idExamen);
+        if(examen == null){
+            System.out.println("examen is null");
+        }else{
+            examen.getCalificacionesExamenes().forEach(calificacion -> {
+               examenes.add(calificacion.toDataType());
+            });
+        }
+        return examenes;
     }
     
     @Override
@@ -428,15 +458,19 @@ public class BedeliaServiceImpl implements BedeliaService {
                                 if (usuario.getCursos().contains(curso)){
                                     Estudiante_Curso e_c = new Estudiante_Curso(calificacion, usuario, curso);
                                     e_cJFacade.create(e_c);
+                                    usuario.addcalificacionesCursos(e_c);
+                                    usaurioJpaController.edit(usuario);
+                                    curso.addCalificacionesCursos(e_c);
+                                    cursoFacade.edit(curso);
                                     initMgr.sendMail(e_c); 
                                 }else{
-                                   message = "El esutdiante " + usuario.getCedula() +" no se encuentra inscripto al curso";
+                                   message = "Error, El estudiante " + usuario.getCedula() +" no se encuentra inscripto al curso";
                                 }
                             }
                         }
                         
                     }else{
-                        message = "Calificacion: " + calificacion.toString() + " no es un valor válido";
+                        message = "Error, Calificacion: " + calificacion.toString() + " no es un valor válido";
                     }
             } else {
                 message = "Esto no es un json o no lo entiendo: " + json;
@@ -472,11 +506,14 @@ public class BedeliaServiceImpl implements BedeliaService {
                                 if (usuario.getInscripcionesExamenes().contains(examen)){
                                     Estudiante_Examen e_e = new Estudiante_Examen(usuario, examen, calificacion);
                                     e_eJFacade.create(e_e);
+                                    usuario.addcalificacionesExamenes(e_e);
+                                    usaurioJpaController.edit(usuario);
+                                    examen.addCalificacionesExamens(e_e);
+                                    examenFacade.edit(examen);
                                     initMgr.sendMail(e_e);
                                 }else{
                                     message = "El esutdiante " + usuario.getCedula() +" no se encuentra inscripto al examen";
                                 }
-                                
                             }
                         }
                     }else{

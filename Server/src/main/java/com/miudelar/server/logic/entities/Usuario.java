@@ -184,7 +184,15 @@ public class Usuario implements Serializable {
     public void addInscripcionesExamenes(Examen examen) {
         this.inscripcionesExamenes.add(examen);
     }   
-
+    
+    public void addcalificacionesExamenes(Estudiante_Examen examen) {
+        this.calificacionesExamenes.add(examen);
+    }  
+    
+    public void addcalificacionesCursos(Estudiante_Curso curso) {
+        this.calificacionesCursos.add(curso);
+    } 
+    
     public List<Curso> getCursos() {
         return this.cursos;
     }

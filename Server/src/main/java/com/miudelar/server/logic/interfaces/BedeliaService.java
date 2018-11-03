@@ -8,6 +8,8 @@ package com.miudelar.server.logic.interfaces;
 import com.miudelar.server.logic.datatypes.DtAsignatura_Carrera;
 import com.miudelar.server.logic.datatypes.DtCarrera;
 import com.miudelar.server.logic.datatypes.DtCurso;
+import com.miudelar.server.logic.datatypes.DtEstudiante_Curso;
+import com.miudelar.server.logic.datatypes.DtEstudiante_Examen;
 import com.miudelar.server.logic.datatypes.DtExamen;
 import com.miudelar.server.logic.datatypes.DtPeriodo_Examen;
 import com.miudelar.server.logic.datatypes.DtUsuario;
@@ -44,6 +46,18 @@ public interface BedeliaService {
     @Produces(MediaType.APPLICATION_JSON)
     public List<DtUsuario> getEstudiantesInscriptosCurso(@PathParam("idCurso")
         final Long idCurso);
+    
+    @GET
+    @Path("calificacionCurso/{idCurso}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<DtEstudiante_Curso> getEstudiantesCalificacionesCurso(@PathParam("idCurso")
+        final Long idCurso);
+    
+    @GET
+    @Path("calificacionExamen/{idExamen}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<DtEstudiante_Examen> getEstudiantesCalificacionesExamen(@PathParam("idExamen")
+        final Long idExamen);
     
     @GET
     @Path("asignaturaCarrera/{idCarrera}")

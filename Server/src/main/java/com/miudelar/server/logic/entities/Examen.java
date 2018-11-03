@@ -105,13 +105,17 @@ public class Examen implements Serializable {
         this.asignatura_Carrera = asignatura_Carrera;
     }
 
-//    public List<Estudiante_Examen> getCalificacionesExamenes() {
-//        return this.calificacionesExamenes;
-//    }
-//
-//    public void setCalificacionesExamenes(List<Estudiante_Examen> calificacionesExamenes) {
-//        this.calificacionesExamenes = calificacionesExamenes;
-//    }
+    public List<Estudiante_Examen> getCalificacionesExamenes() {
+        return this.calificacionesExamenes;
+    }
+
+    public void setCalificacionesExamenes(List<Estudiante_Examen> calificacionesExamenes) {
+        this.calificacionesExamenes = calificacionesExamenes;
+    }
+    
+     public void addCalificacionesExamens(Estudiante_Examen calificacionExamen) {
+        this.calificacionesExamenes.add(calificacionExamen);
+    }
     
     public DtExamen toDataType(){
         DtAsignatura_Carrera asignatura_Carrera = new DtAsignatura_Carrera(this.asignatura_Carrera.getId(),

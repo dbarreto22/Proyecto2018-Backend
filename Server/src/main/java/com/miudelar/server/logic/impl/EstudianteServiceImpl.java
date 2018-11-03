@@ -220,13 +220,19 @@ public class EstudianteServiceImpl implements EstudianteService {
 //                System.out.println("curso.getCurso().getAsignatura_Carrera().getId(): "+ curso.getCurso().getAsignatura_Carrera().getId());
 //                System.out.println("idAsig_Carrera: " + idAsig_Carrera);
                 if (curso.getCurso().getAsignatura_Carrera().getId().equals(idAsig_Carrera)) {
-//                    System.out.println("entra");
-                    cursos.add(curso.toDataType());
+                    if (curso.getCalificacion() != null){
+                        System.out.println("entra");
+                        cursos.add(curso.toDataType());
+                    }
                 }
             });
             usuario.getCalificacionesExamenes().forEach(examen -> {
                 if (examen.getExamen().getAsignatura_Carrera().getId().equals(idAsig_Carrera)) {
-                    examenes.add(examen.toDataType());
+                    if (examen.getCalificacion() != null){
+                        System.out.println("entra");
+                        examenes.add(examen.toDataType());
+                    }
+                    
                 }
             });
         }
@@ -244,10 +250,14 @@ public class EstudianteServiceImpl implements EstudianteService {
             return new DtCalificaciones();
         } else {
             usuario.getCalificacionesCursos().forEach(curso -> {
-                cursos.add(curso.toDataType());
+                if (curso.getCalificacion() != null){
+                    cursos.add(curso.toDataType());
+                }
             });
             usuario.getCalificacionesExamenes().forEach(examen -> {
-                examenes.add(examen.toDataType());
+                if (examen.getCalificacion() != null){
+                    examenes.add(examen.toDataType());
+                }
             });
         }
     return new DtCalificaciones(cursos, examenes);
@@ -291,8 +301,14 @@ public class EstudianteServiceImpl implements EstudianteService {
                                         return "Error, el estudiante no tiene aprobada la asignatura: " + previa.getAsignatura().getNombre();
                                     }
                                 }
+                                
+                                Estudiante_Curso e_c = new Estudiante_Curso(usuario, curso);
+                                estudiante_cursoFacade.create(e_c);
                                 usuario.addCurso(curso);
+                                usuario.addcalificacionesCursos(e_c);
                                 usuarioFacade.edit(usuario);
+                                curso.addCalificacionesCursos(e_c);
+                                cursoFacade.edit(curso);
                                 }
                             }
                             
@@ -384,8 +400,13 @@ public class EstudianteServiceImpl implements EstudianteService {
                                         return "Error, el estudiante no tiene aprobada la asignatura: " + previa.getAsignatura().getNombre();
                                     }
                                 }
+                                Estudiante_Examen e_e = new Estudiante_Examen(usuario, examen);
+                                estudiante_ExamenFacade.create(e_e);
                                 usuario.addInscripcionesExamenes(examen);
+                                usuario.addcalificacionesExamenes(e_e);
+                                examen.addCalificacionesExamens(e_e);
                                 usuarioFacade.edit(usuario);
+                                examenFacade.edit(examen);
                                 }
                             }
                             

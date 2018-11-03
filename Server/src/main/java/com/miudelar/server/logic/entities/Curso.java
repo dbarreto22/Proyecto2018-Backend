@@ -120,14 +120,18 @@ public class Curso implements Serializable {
     public void setAsignatura_Carrera(Asignatura_Carrera asignatura_Carrera) {
         this.asignatura_Carrera = asignatura_Carrera;
     }
-//
-//    public List<Estudiante_Curso> getCalificacionesCursos() {
-//        return this.calificacionesCursos;
-//    }
-//
-//    public void setCalificacionesCursos(List<Estudiante_Curso> calificacionesCursos) {
-//        this.calificacionesCursos = calificacionesCursos;
-//    }
+
+    public List<Estudiante_Curso> getCalificacionesCursos() {
+        return this.calificacionesCursos;
+    }
+
+    public void setCalificacionesCursos(List<Estudiante_Curso> calificacionesCursos) {
+        this.calificacionesCursos = calificacionesCursos;
+    }
+    
+    public void addCalificacionesCursos(Estudiante_Curso calificacionCurso) {
+        this.calificacionesCursos.add(calificacionCurso);
+    }
 
     public void addHorario (Horario horario){
         this.horarios.add(horario);
