@@ -36,6 +36,12 @@ public interface EstudianteService {
     public List<DtCurso> getAllCurso();
     
     @GET
+    @Path("examen")
+    @RolesAllowed({"BEDELIA"})
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<DtExamen> getAllExamen();
+    
+    @GET
     @Path("curso/{cedula}")
     @Produces(MediaType.APPLICATION_JSON)
     public List<DtCurso> getCursoByCedula(@PathParam("cedula")

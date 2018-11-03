@@ -62,11 +62,6 @@ public class Examen implements Serializable {
     private List<Estudiante_Examen> calificacionesExamenes;
 
 
-    public Examen(Long id, Date fecha) {
-        this.id = id;
-        this.fecha = fecha;
-    }
-
     public Examen(DtExamen examen) {
         this.fecha = examen.getFecha();
         this.asignatura_Carrera = new Asignatura_Carrera(examen.getAsignatura_Carrera().getAsignatura(), examen.getAsignatura_Carrera().getCarrera());
@@ -86,13 +81,6 @@ public class Examen implements Serializable {
         this.asignatura_Carrera = asignatura_Carrera;
     }
 
-    public Examen(Long id, Date fecha, Asignatura_Carrera asignatura_Carrera, List<Estudiante_Examen> calificacionesExamenes) {
-        this.id = id;
-        this.fecha = fecha;
-        this.asignatura_Carrera = asignatura_Carrera;
-        this.calificacionesExamenes = calificacionesExamenes;
-    }
-    
     public Long getId() {
         return this.id;
     }

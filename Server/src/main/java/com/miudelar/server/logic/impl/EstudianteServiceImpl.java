@@ -160,6 +160,15 @@ public class EstudianteServiceImpl implements EstudianteService {
      }
     
     @Override
+    public List<DtExamen> getAllExamen(){
+        List<DtExamen> examenes = new ArrayList<>();
+        examenFacade.findAll().forEach(examen -> {
+            examenes.add(examen.toDataType());
+        });
+         return examenes;
+     }
+    
+    @Override
     public List<DtCurso> getCursoByCedula(String cedula) {
         List<DtCurso> cursos = new ArrayList<>();
         Usuario usuario = usuarioFacade.find(cedula);
