@@ -135,11 +135,17 @@ public class AdministradorServiceImpl implements AdministradorService {
 //        return message;
 //    }
     @Override
-    public String editUsuario(Usuario usuario) {
+    public String editUsuario(DtUsuario usuario) {
 //        Usuario usuario = gson.fromJson(UsrStr, Usuario.class);
         String message = "OK";
         try {
-            usuarioFacade.edit(usuario);
+            Usuario usr = usuarioFacade.find(usuario.getCedula());
+            usr.setApellido(usuario.getApellido());
+            usr.setEmail(usuario.getEmail());
+            usr.setNombre(usuario.getNombre());
+            usr.setPassword(usuario.getPassword());
+            usuarioFacade.edit(usr);
+            
         } catch (Exception ex) {
             System.out.println("Class:AdministradorServiceImpl: " + ex.getMessage());
             message = ex.getMessage();
@@ -232,9 +238,8 @@ public class AdministradorServiceImpl implements AdministradorService {
     }
 
     @Override
-    public Usuario getUsuario(String cedula) {
-        Usuario usuario = usuarioFacade.find(cedula);
-        return usuario;
+    public DtUsuario getUsuario(String cedula) {
+        return usuarioFacade.find(cedula).toDataType();
     }
 
 //    @Override

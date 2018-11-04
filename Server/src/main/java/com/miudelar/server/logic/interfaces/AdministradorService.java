@@ -50,10 +50,10 @@ public interface AdministradorService {
     @Path("usuario.edit")
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_JSON)
-    public String editUsuario(final Usuario usuario);
+    public String editUsuario(final DtUsuario usuario);
     
     @POST
-    @Path("admin/usuario.delete")
+    @Path("usuario.delete")
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_JSON)
     public String deleteUsuario(final Usuario usuario);
@@ -78,7 +78,7 @@ public interface AdministradorService {
     @GET
     @Path("usuario/{cedula}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Usuario getUsuario(@PathParam("cedula")
+    public DtUsuario getUsuario(@PathParam("cedula")
         final String cedula);
              
 //    @GET
