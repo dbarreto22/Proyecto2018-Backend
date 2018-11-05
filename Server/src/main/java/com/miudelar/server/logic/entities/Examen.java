@@ -35,6 +35,9 @@ import javax.xml.bind.annotation.*;
 @NamedQuery(name = Examen.FIND_BY_FECHA_ASIGCAR, query = "Select E from Examen E, Asignatura_Carrera A where E.fecha = :fecha AND \n"
             + "E.asignatura_Carrera = A \n"
             + "AND A.id = :idAsigCar"),
+    @NamedQuery(name = Examen.FIND_DISPONIBLES_ESTUDIANTE, query = "Select C from Examen C, Usuario U, Carrera B, Asignatura_Carrera A where C.asignatura_Carrera = A AND \n"
+            + "A.carrera = B AND B member of U.carreras \n"
+            + "AND U.cedula = :cedula"),
         @NamedQuery(name = Examen.GET_ESTUDIANTES_INSCRIPTOS_EXAMEN, 
                 query = "SELECT U FROM Examen E, Usuario U \n"
                 + "WHERE E.id = :idExamen \n"
@@ -47,6 +50,7 @@ public class Examen implements Serializable {
     
     public final static String GET_ESTUDIANTES_INSCRIPTOS_EXAMEN = "Examen.GET_ESTUDIANTES_INSCRIPTOS_EXAMEN";
     public final static String FIND_BY_FECHA_ASIGCAR = "Examen.FIND_BY_FECHA_ASIGCAR";
+    public final static String FIND_DISPONIBLES_ESTUDIANTE = "Examen.FIND_DISPONIBLES_ESTUDIANTE";
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -44,4 +44,10 @@ public class ExamenFacade extends AbstractFacade<Examen> implements ExamenFacade
         Query q = getEntityManager().createNamedQuery(Examen.FIND_BY_FECHA_ASIGCAR).setParameter("fecha", fecha).setParameter("idAsigCar", idAsigCar);
         return q.getResultList();
     }
+    
+    @Override
+    public List<Examen> getExamenesDisponiblesEstudiante(String cedula){
+        Query q = getEntityManager().createNamedQuery(Examen.FIND_DISPONIBLES_ESTUDIANTE).setParameter("cedula", cedula);
+        return q.getResultList();
+    }
 }

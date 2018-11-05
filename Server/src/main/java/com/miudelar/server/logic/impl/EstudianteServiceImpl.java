@@ -171,38 +171,18 @@ public class EstudianteServiceImpl implements EstudianteService {
     @Override
     public List<DtCurso> getCursoByCedula(String cedula) {
         List<DtCurso> cursos = new ArrayList<>();
-        Usuario usuario = usuarioFacade.find(cedula);
-        if (usuario == null) {
-            System.out.println("No existe usuario");
-            return cursos;
-        } else {
-            usuario.getCarreras().forEach(carrera -> {
-                carrera.getAsignatura_Carreras().forEach(asig_car -> {
-                    asig_car.getCursos().forEach(curso -> {
-                        cursos.add(curso.toDataType());
-                    });
-                });
-            });
-        }
+        cursoFacade.getCursosDisponiblesEstudiante(cedula).forEach(curso -> {
+        cursos.add(curso.toDataType());});
+        
         return cursos;
     }
     
     @Override
     public List<DtExamen> getExamenByCedula(String cedula){
         List<DtExamen> examenes = new ArrayList<>();
-        Usuario usuario = usuarioFacade.find(cedula);
-        if (usuario == null) {
-            System.out.println("No existe usuario");
-            return examenes;
-        } else {
-            usuario.getCarreras().forEach(carrera -> {
-                carrera.getAsignatura_Carreras().forEach(asig_car -> {
-                    asig_car.getExamenes().forEach(examen -> {
-                        examenes.add(examen.toDataType());
-                    });
-                });
-            });
-        }
+        examenFacade.getExamenesDisponiblesEstudiante(cedula).forEach(examen -> {
+        examenes.add(examen.toDataType());});
+        
         return examenes;
     }
     

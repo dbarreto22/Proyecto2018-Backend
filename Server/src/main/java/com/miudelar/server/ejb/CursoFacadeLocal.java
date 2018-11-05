@@ -36,4 +36,6 @@ public interface CursoFacadeLocal {
     
     public List<Curso> getCursoByFechaAndIdAsigCar(Date fecha, Long idAsigCar);
     
+    public List<Curso> getCursosDisponiblesEstudiante(String cedula);
+    
 }

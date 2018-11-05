@@ -36,4 +36,6 @@ public interface ExamenFacadeLocal {
     
     public List<Examen> getExamenByFechaAndIdAsigCar(Date fecha, Long idAsigCar);
     
+    public List<Examen> getExamenesDisponiblesEstudiante(String cedula);
+    
 }

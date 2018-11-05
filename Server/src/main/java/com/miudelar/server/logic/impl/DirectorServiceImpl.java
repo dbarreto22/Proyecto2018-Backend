@@ -100,31 +100,88 @@ public class DirectorServiceImpl implements DirectorService{
     }
     
     @Override
-    public Carrera getCarrera(Long codigo) {
+    public DtCarrera getCarrera(Long codigo) {
         Carrera carrera = carreraFacade.find(codigo);
-        return carrera;
+        return carrera.toDataType();
+    }
+    
+    public String removeAsignaturaCarrera(String json){
+        String message = "OK";
+        JsonElement jsonTree = parser.parse(json);
+        if (jsonTree.isJsonObject()) {
+            JsonObject jsonObject = jsonTree.getAsJsonObject();
+                Long idAsigCar = jsonObject.get("idAsigCar").getAsLong();
+                Asignatura_Carrera asig_car = asignatura_CarreraFacade.find(idAsigCar);
+                if (!asig_car.getCursos().isEmpty()){
+                    message = "Error, hay cursos creados para esta Asignatura y Carrera";
+                }else{
+                    if (!asig_car.getPrevias().isEmpty()){
+                        message = "Error, hay previas creadas para esta Asignatura y Carrera";
+                    }else{
+                        asignatura_CarreraFacade.remove(asig_car);
+                    }
+                }
+        }
+        return message;
     }
         
+        
     @Override
-    public String editCarrera(Carrera carrera){
+    public String editCarrera(DtCarrera carrera){
 //        Carrera carrera = gson.fromJson(Carr, Carrera.class);
         String message = "OK";
         try {
-            carreraFacade.edit(carrera);
+            Carrera car = carreraFacade.find(carrera.getCodigo());
+            carreraFacade.edit(car);
         } catch (Exception ex) {
             System.out.println("Class:DirectorServiceImpl: "+ ex.getMessage());
             message = ex.getMessage();
+        }
+        return message;
+    }
+    
+    @Override
+    public String asignaturaDelete(String json) {
+        String message = "OK";
+        JsonElement jsonTree = parser.parse(json);
+        if (jsonTree.isJsonObject()) {
+            JsonObject jsonObject = jsonTree.getAsJsonObject();
+                Long codigo = jsonObject.get("codigo").getAsLong();
+                Asignatura asignatura = asignaturaFacade.find(codigo);
+                if(!asignatura.getAsignatura_Carreras().isEmpty()){
+                    message = "Error, no es posible eliminar la asignatura, tiene carreras asociadas";
+                }else{
+                    asignaturaFacade.remove(asignatura);
+                }
+        }
+        return message;
+    }
+    
+    @Override
+    public String carreraDelete(String json){
+        String message = "OK";
+        JsonElement jsonTree = parser.parse(json);
+        if (jsonTree.isJsonObject()) {
+            JsonObject jsonObject = jsonTree.getAsJsonObject();
+                Long codigo = jsonObject.get("codigo").getAsLong();
+                Carrera carrera = carreraFacade.find(codigo);
+                if(!carrera.getAsignatura_Carreras().isEmpty()){
+                    message = "Error, no es posible eliminar la carrera, tiene asignaturas asociadas";
+                }else{
+                    carreraFacade.remove(carrera);
+                }
         }
         return message;
     }
    
     
     @Override
-    public String editAsignatura(Asignatura asignatura){
+    public String editAsignatura(DtAsignatura asignatura){
 //        Asignatura asignatura = gson.fromJson(Asig, Asignatura.class);
         String message = "OK";
         try {
-            asignaturaFacade.edit(asignatura);
+            Asignatura asig = asignaturaFacade.find(asignatura.getCodigo());
+            asignaturaFacade.edit(asig);
         } catch (Exception ex) {
             System.out.println("Class:DirectorServiceImpl: "+ ex.getMessage());
             message = ex.getMessage();
@@ -133,9 +190,9 @@ public class DirectorServiceImpl implements DirectorService{
     }
     
     @Override
-    public Asignatura getAsignatura(Long codigo) {
+    public DtAsignatura getAsignatura(Long codigo) {
         Asignatura asignatura = asignaturaFacade.find(codigo);
-        return asignatura;
+        return asignatura.toDataType();
     }
     
     @Override
@@ -299,8 +356,4 @@ public class DirectorServiceImpl implements DirectorService{
         });
         return asigCar;
     }
-    
-    
-        
-            
 }

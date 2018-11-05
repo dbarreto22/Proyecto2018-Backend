@@ -154,7 +154,7 @@ public class AdministradorServiceImpl implements AdministradorService {
     }
     
     @Override
-    public String deleteUsuario(final Usuario usuario){
+    public String deleteUsuario(DtUsuario usuario){
         String message = "OK";
         Usuario usr = usuarioFacade.find(usuario.getCedula());
         usr.setActivo(Boolean.FALSE);

@@ -39,7 +39,7 @@ public interface DirectorService {
     @GET
     @Path("carrera/{codigo}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Carrera getCarrera(@PathParam("codigo")
+    public DtCarrera getCarrera(@PathParam("codigo")
         final Long codigo);
     
     @POST
@@ -52,7 +52,7 @@ public interface DirectorService {
     @Path("carrera.edit")
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_JSON)
-    public String editCarrera(Carrera carrera);
+    public String editCarrera(DtCarrera carrera);
     
     @POST
     @Path("asignatura")
@@ -64,7 +64,7 @@ public interface DirectorService {
     @Path("asignatura.edit")
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_JSON)
-    public String editAsignatura(final Asignatura asignatura);
+    public String editAsignatura(DtAsignatura asignatura);
     
     @GET
     @Path("asignatura/carrera/{idCarrera}")
@@ -75,7 +75,7 @@ public interface DirectorService {
     @GET
     @Path("asignatura/{codigo}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Asignatura getAsignatura(@PathParam("codigo")
+    public DtAsignatura getAsignatura(@PathParam("codigo")
         final Long codigo) throws NoSuchAlgorithmException;
     
     @POST
@@ -83,6 +83,12 @@ public interface DirectorService {
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_JSON)
     public String saveAsignaturaCarrera(String jsonObject);
+    
+    @POST
+    @Path("asignaturacarrera.remove")
+    @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String removeAsignaturaCarrera(String json);
     
     @POST
     @Path("previas.addPrevia")
@@ -95,6 +101,18 @@ public interface DirectorService {
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_JSON)
     public String removePrevia(String json);
+    
+    @POST
+    @Path("asignatura.delete")
+    @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String asignaturaDelete(String json);
+    
+    @POST
+    @Path("carrera.delete")
+    @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String carreraDelete(String json);
     
     @GET
     @Path("previas/{idAignatura_Carrera_Madre}")

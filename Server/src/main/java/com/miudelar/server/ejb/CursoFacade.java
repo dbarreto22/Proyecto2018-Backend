@@ -45,4 +45,10 @@ public class CursoFacade extends AbstractFacade<Curso> implements CursoFacadeLoc
         return q.getResultList();
     }
     
+    @Override
+    public List<Curso> getCursosDisponiblesEstudiante(String cedula){
+        Query q = getEntityManager().createNamedQuery(Curso.FIND_DISPONIBLES_ESTUDIANTE).setParameter("cedula", cedula);
+        return q.getResultList();
+    }
+    
 }
