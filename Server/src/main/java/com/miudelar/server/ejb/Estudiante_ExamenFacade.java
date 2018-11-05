@@ -55,7 +55,7 @@ public class Estudiante_ExamenFacade extends AbstractFacade<Estudiante_Examen> i
     
      public Estudiante_Examen find(Long idExamen, String cedula){
         Query q = getEntityManager().createNamedQuery(Estudiante_Examen.FIND).setParameter("cedula", cedula).setParameter("idExamen",idExamen);
-        if(q.getSingleResult() instanceof Long){
+        if(q.getSingleResult() instanceof Estudiante_Examen){
             return (Estudiante_Examen)q.getSingleResult();
         }else{
             return null;

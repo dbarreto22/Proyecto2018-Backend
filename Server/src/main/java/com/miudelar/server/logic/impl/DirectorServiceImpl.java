@@ -132,6 +132,7 @@ public class DirectorServiceImpl implements DirectorService{
         String message = "OK";
         try {
             Carrera car = carreraFacade.find(carrera.getCodigo());
+            car.setNombre(carrera.getNombre());
             carreraFacade.edit(car);
         } catch (Exception ex) {
             System.out.println("Class:DirectorServiceImpl: "+ ex.getMessage());
@@ -181,6 +182,7 @@ public class DirectorServiceImpl implements DirectorService{
         String message = "OK";
         try {
             Asignatura asig = asignaturaFacade.find(asignatura.getCodigo());
+            asig.setNombre(asignatura.getNombre());
             asignaturaFacade.edit(asig);
         } catch (Exception ex) {
             System.out.println("Class:DirectorServiceImpl: "+ ex.getMessage());

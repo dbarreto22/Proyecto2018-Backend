@@ -444,8 +444,10 @@ public class BedeliaServiceImpl implements BedeliaService {
                                 message = "No existe el curso";
                             }else{
                                 if (usuario.getCursos().contains(curso)){
+                                    System.out.println("contains(curso)");
                                     Estudiante_Curso e_c = e_cJFacade.find(idCurso,cedula);
                                     if(e_c != null){
+                                        e_c.setCalificacion(calificacion);
                                          e_cJFacade.edit(e_c);
                                         initMgr.sendMail(e_c); 
     //                                    usuario.addcalificacionesCursos(e_c);
@@ -497,6 +499,7 @@ public class BedeliaServiceImpl implements BedeliaService {
                                 if (usuario.getInscripcionesExamenes().contains(examen)){
                                     Estudiante_Examen e_e = e_eJFacade.find(idExamen,cedula);
                                     if (e_e != null){
+                                        e_e.setCalificacion(calificacion);
                                         e_eJFacade.edit(e_e);
                                         initMgr.sendMail(e_e);
 //                                    usuario.addcalificacionesExamenes(e_e);
