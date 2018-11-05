@@ -35,5 +35,7 @@ public interface Estudiante_CursoFacadeLocal {
     public List<Estudiante_Curso> findByCurso(Long idCurso);
 
     int count();
+
+    public Estudiante_Curso find(Long idCurso, String cedula);
     
 }

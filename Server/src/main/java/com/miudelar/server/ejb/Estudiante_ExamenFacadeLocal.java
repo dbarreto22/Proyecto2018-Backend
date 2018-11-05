@@ -35,5 +35,7 @@ public interface Estudiante_ExamenFacadeLocal {
     public Long getMaxCalificacionAsignatura(String cedula, Long asignatura_carrera);
     
     public List<Estudiante_Examen> findByExamen(Long idExamen);
+
+    public Estudiante_Examen find(Long idExamen, String cedula);
     
 }

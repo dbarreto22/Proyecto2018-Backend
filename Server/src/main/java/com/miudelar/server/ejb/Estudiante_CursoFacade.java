@@ -52,4 +52,14 @@ public class Estudiante_CursoFacade extends AbstractFacade<Estudiante_Curso> imp
         Query q = getEntityManager().createNamedQuery(Estudiante_Curso.FINDBY_CURSO).setParameter("idCurso",idCurso);
         return q.getResultList();
     }
+    
+    
+    public Estudiante_Curso find(Long idCurso, String cedula){
+        Query q = getEntityManager().createNamedQuery(Estudiante_Curso.FIND).setParameter("cedula", cedula).setParameter("idCurso",idCurso);
+        if(q.getSingleResult() instanceof Long){
+            return (Estudiante_Curso)q.getSingleResult();
+        }else{
+            return null;
+        }
+    }
 }

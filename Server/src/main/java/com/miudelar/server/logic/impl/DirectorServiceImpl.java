@@ -356,4 +356,14 @@ public class DirectorServiceImpl implements DirectorService{
         });
         return asigCar;
     }
+    
+    @Override
+    public List<DtAsignatura> getAllAsignatura(){
+        List<DtAsignatura> asignaturas = new ArrayList<>();
+        asignaturaFacade.findAll().forEach(asig -> {
+            asignaturas.add(asig.toDataType());
+        });
+        return asignaturas;
+    }
+    
 }

@@ -85,7 +85,7 @@ public interface DirectorService {
     public String saveAsignaturaCarrera(String jsonObject);
     
     @POST
-    @Path("asignaturacarrera.remove")
+    @Path("asignaturacarrera.delete")
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_JSON)
     public String removeAsignaturaCarrera(String json);
@@ -124,6 +124,11 @@ public interface DirectorService {
     @RolesAllowed({"BEDELIA"})
     @Produces(MediaType.APPLICATION_JSON)
     public List<DtAsignatura_Carrera> getAllAsignaturaCarrera();
+    
+    @GET
+    @Path("asignatura")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<DtAsignatura> getAllAsignatura();
     
 //    public void saveCarrera(DtCarrera dtCarr);
         

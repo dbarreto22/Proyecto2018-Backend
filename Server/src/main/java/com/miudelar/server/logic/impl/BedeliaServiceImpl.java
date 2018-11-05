@@ -444,19 +444,22 @@ public class BedeliaServiceImpl implements BedeliaService {
                                 message = "No existe el curso";
                             }else{
                                 if (usuario.getCursos().contains(curso)){
-                                    Estudiante_Curso e_c = new Estudiante_Curso(calificacion, usuario, curso);
-                                    e_cJFacade.create(e_c);
-                                    usuario.addcalificacionesCursos(e_c);
-                                    usaurioJpaController.edit(usuario);
-                                    curso.addCalificacionesCursos(e_c);
-                                    cursoFacade.edit(curso);
-                                    initMgr.sendMail(e_c); 
+                                    Estudiante_Curso e_c = e_cJFacade.find(idCurso,cedula);
+                                    if(e_c != null){
+                                         e_cJFacade.edit(e_c);
+                                        initMgr.sendMail(e_c); 
+    //                                    usuario.addcalificacionesCursos(e_c);
+    //                                    usaurioJpaController.edit(usuario);
+    //                                    curso.addCalificacionesCursos(e_c);
+//                                    cursoFacade.edit(curso);
+                                    }else{
+                                        message = "Error, El estudiante " + usuario.getCedula() +" no se encuentra inscripto al curso";
+                                    }
                                 }else{
                                    message = "Error, El estudiante " + usuario.getCedula() +" no se encuentra inscripto al curso";
                                 }
                             }
                         }
-                        
                     }else{
                         message = "Error, Calificacion: " + calificacion.toString() + " no es un valor válido";
                     }
@@ -492,15 +495,19 @@ public class BedeliaServiceImpl implements BedeliaService {
                                message = "No existe el examen";
                             }else{
                                 if (usuario.getInscripcionesExamenes().contains(examen)){
-                                    Estudiante_Examen e_e = new Estudiante_Examen(usuario, examen, calificacion);
-                                    e_eJFacade.create(e_e);
-                                    usuario.addcalificacionesExamenes(e_e);
-                                    usaurioJpaController.edit(usuario);
-                                    examen.addCalificacionesExamens(e_e);
-                                    examenFacade.edit(examen);
-                                    initMgr.sendMail(e_e);
+                                    Estudiante_Examen e_e = e_eJFacade.find(idExamen,cedula);
+                                    if (e_e != null){
+                                        e_eJFacade.edit(e_e);
+                                        initMgr.sendMail(e_e);
+//                                    usuario.addcalificacionesExamenes(e_e);
+//                                    usaurioJpaController.edit(usuario);
+//                                    examen.addCalificacionesExamens(e_e);
+//                                    examenFacade.edit(examen);
+                                    }else{
+                                        message = "El estutdiante " + usuario.getCedula() +" no se encuentra inscripto al examen";
+                                    }
                                 }else{
-                                    message = "El esutdiante " + usuario.getCedula() +" no se encuentra inscripto al examen";
+                                    message = "El estutdiante " + usuario.getCedula() +" no se encuentra inscripto al examen";
                                 }
                             }
                         }
