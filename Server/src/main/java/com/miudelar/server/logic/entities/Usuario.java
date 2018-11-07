@@ -3,6 +3,7 @@
  */
 package com.miudelar.server.logic.entities;
 
+import com.miudelar.server.logic.datatypes.DtCarrera;
 import com.miudelar.server.logic.datatypes.DtRol;
 import com.miudelar.server.logic.datatypes.DtUsuario;
 import java.io.Serializable;
@@ -226,6 +227,15 @@ public class Usuario implements Serializable {
         return dtUsuario;
     }
 
+    public DtUsuario toDataCarrera() {
+        List <DtCarrera> dtcarrera = new ArrayList<DtCarrera>();
+        this.carreras.forEach(carrera -> {
+            dtcarrera.add(new DtCarrera(carrera.getCodigo(), carrera.getNombre()));
+        });
+        DtUsuario dtUsuario = new DtUsuario(cedula, nombre, apellido, email, dtcarrera);
+        return dtUsuario;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 7;

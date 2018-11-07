@@ -135,6 +135,11 @@ public interface BedeliaService {
     public String cargarNotasExamen(String json);
     
     @GET
+    @Path("estudiantesCarrera")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<DtUsuario> getEstudiantesCarrera();
+    
+    @GET
     @Path("actaCurso/{idCurso}")
     @Produces(MediaType.TEXT_PLAIN)
     public String getActaFinCurso(@PathParam("idCurso")

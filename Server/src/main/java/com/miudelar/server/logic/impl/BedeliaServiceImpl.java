@@ -17,6 +17,7 @@ import com.miudelar.server.ejb.Estudiante_ExamenFacadeLocal;
 import com.miudelar.server.ejb.ExamenFacadeLocal;
 import com.miudelar.server.ejb.HorarioFacadeLocal;
 import com.miudelar.server.ejb.Periodo_ExamenFacadeLocal;
+import com.miudelar.server.ejb.RolFacadeLocal;
 import com.miudelar.server.ejb.UsuarioFacadeLocal;
 import com.miudelar.server.logic.datatypes.DtAsignatura;
 import com.miudelar.server.logic.datatypes.DtAsignatura_Carrera;
@@ -35,6 +36,7 @@ import com.miudelar.server.logic.entities.Estudiante_Examen;
 import com.miudelar.server.logic.entities.Examen;
 import com.miudelar.server.logic.entities.Horario;
 import com.miudelar.server.logic.entities.Periodo_Examen;
+import com.miudelar.server.logic.entities.Rol;
 import com.miudelar.server.logic.entities.Usuario;
 import com.miudelar.server.logic.interfaces.*;
 import java.io.File;
@@ -84,16 +86,38 @@ public class BedeliaServiceImpl implements BedeliaService {
     private Periodo_ExamenFacadeLocal periodoFacade = lookupPeriodo_ExamenFacadeBean();
     private Estudiante_CursoFacadeLocal e_cJFacade = lookupEstudiante_CursoFacadeBean();
     private Estudiante_ExamenFacadeLocal e_eJFacade = lookupEstudiante_ExamenFacadeBean();
-    private UsuarioFacadeLocal usaurioJpaController = lookupUsuarioFacadeBean();
+    private UsuarioFacadeLocal usuarioFacade = lookupUsuarioFacadeBean();
     private ExamenFacadeLocal examenFacade = lookupExamenFacadeBean();
     private CarreraFacadeLocal carreraFacade = lookupCarreraFacadeBean();
     private Asignatura_CarreraFacadeLocal asignatura_CarreraFacade = lookupAsignatura_CarreraFacadeBean();
-    InitMgr initMgr = new InitMgr();
+    private RolFacadeLocal rolFacade = lookupRolFacadeBean();
+    private InitMgr initMgr = new InitMgr();
+    
     
      private Asignatura_CarreraFacadeLocal lookupAsignatura_CarreraFacadeBean() {
         try {
             Context c = new InitialContext();
             return (Asignatura_CarreraFacadeLocal) c.lookup("java:app/miudelar-server/Asignatura_CarreraFacade");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+     
+     private RolFacadeLocal lookupRolFacadeBean() {
+        try {
+            Context c = new InitialContext();
+            return (RolFacadeLocal) c.lookup("java:app/miudelar-server/RolFacade");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+     
+     private UsuarioFacadeLocal lookupUsuarioFacadeBean() {
+        try {
+            Context c = new InitialContext();
+            return (UsuarioFacadeLocal) c.lookup("java:app/miudelar-server/UsuarioFacade");
         } catch (NamingException ne) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
             throw new RuntimeException(ne);
@@ -109,17 +133,7 @@ public class BedeliaServiceImpl implements BedeliaService {
             throw new RuntimeException(ne);
         }
     }
-    
-    private UsuarioFacadeLocal lookupUsuarioFacadeBean() {
-        try {
-            Context c = new InitialContext();
-            return (UsuarioFacadeLocal) c.lookup("java:app/miudelar-server/UsuarioFacade");
-        } catch (NamingException ne) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
-            throw new RuntimeException(ne);
-        }
-    }
-
+   
     private HorarioFacadeLocal lookupHorarioFacadeBean() {
         try {
             Context c = new InitialContext();
@@ -435,7 +449,7 @@ public class BedeliaServiceImpl implements BedeliaService {
                     String cedula = jsonObject.get("cedula").getAsString();
                     Long calificacion = jsonObject.get("calificacion").getAsLong();
                     if (calificacion < 13 && calificacion >= 0) {
-                        Usuario usuario = usaurioJpaController.find(cedula);
+                        Usuario usuario = usuarioFacade.find(cedula);
                         if (usuario == null){
                             message = "No existe el usuario";
                         }else{
@@ -451,7 +465,7 @@ public class BedeliaServiceImpl implements BedeliaService {
                                          e_cJFacade.edit(e_c);
                                         initMgr.sendMail(e_c); 
     //                                    usuario.addcalificacionesCursos(e_c);
-    //                                    usaurioJpaController.edit(usuario);
+    //                                    usuarioFacade.edit(usuario);
     //                                    curso.addCalificacionesCursos(e_c);
 //                                    cursoFacade.edit(curso);
                                     }else{
@@ -488,7 +502,7 @@ public class BedeliaServiceImpl implements BedeliaService {
                     Long calificacion = jsonObject.get("calificacion").getAsLong();
                     
                     if (calificacion < 13 && calificacion >= 0) {
-                        Usuario usuario = usaurioJpaController.find(cedula);
+                        Usuario usuario = usuarioFacade.find(cedula);
                         if (usuario == null){
                             message = "No existe el usuario";
                         }else{
@@ -503,7 +517,7 @@ public class BedeliaServiceImpl implements BedeliaService {
                                         e_eJFacade.edit(e_e);
                                         initMgr.sendMail(e_e);
 //                                    usuario.addcalificacionesExamenes(e_e);
-//                                    usaurioJpaController.edit(usuario);
+//                                    usuarioFacade.edit(usuario);
 //                                    examen.addCalificacionesExamens(e_e);
 //                                    examenFacade.edit(examen);
                                     }else{
@@ -557,7 +571,7 @@ public class BedeliaServiceImpl implements BedeliaService {
             parameters.put("subReport", body);
             parameters.put("logo", inputStream);
             
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, conn);
             output = Base64.encodeBytes(JasperExportManager.exportReportToPdf(jasperPrint));
 
         } catch (JRException | SQLException | NamingException ex) {
@@ -639,6 +653,16 @@ public class BedeliaServiceImpl implements BedeliaService {
             Logger.getLogger(BedeliaServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
         return output;
+    }
+    
+    public List<DtUsuario> getEstudiantesCarrera(){
+        List<DtUsuario> estudiantes = new ArrayList<DtUsuario>();
+        Rol rol = rolFacade.find(4L);
+        usuarioFacade.findAll().forEach(usuario -> {
+        if (usuario.getRoles().contains(rol)){
+            estudiantes.add(usuario.toDataCarrera());
+        }});
+        return estudiantes;
     }
     
     private boolean tieneEstudiantesInscriptosCurso(Long idCurso){
