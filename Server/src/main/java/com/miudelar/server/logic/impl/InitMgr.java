@@ -39,9 +39,9 @@ import javax.mail.internet.MimeMessage;
 import java.net.URL;
 
 public class InitMgr implements InitMgt {
-    
-    private static final String ClaveFireBase = "AIzaSyBUHk23l8mH_2XKfB7MCcnuJQ7a2i-uTP4";
-    
+
+    private static final String ClaveFireBase = "AAAAVd9KhGs:APA91bH9rgqW514ylHKsYuBz0d-gJxO7fvyljn6GqgNl2FHYp4WOtXiXpGWsmXw67wTB_AwlqIhFpn4eBCJR9XmdiPoQ9L-fCyu9qDBO-Yp2M0PY7b7Kb3IIDSD5dPnseVV9TS3cFJ1f";
+
     @Override
     public List<Asignatura_Carrera> getAllPrevias(Asignatura_Carrera asigcar) {
         List<Asignatura_Carrera> listAsigCar = new ArrayList<>();
@@ -60,37 +60,37 @@ public class InitMgr implements InitMgt {
             }
         }
     }
-    
+
     @Override
     public String sendMail(Object notaObj) {
         System.out.println("sendMail");
         try {
             final String username = "grupo4.miudelar@gmail.com";
             final String password = "tecnoinf.grupo4";
-            
+
             Properties props = new Properties();
             props.put("mail.smtp.auth", "true");
             props.put("mail.smtp.starttls.enable", "true");
             props.put("mail.smtp.host", "smtp.gmail.com");
             props.put("mail.smtp.port", "587");
-            
+
             Session session = Session.getInstance(props,
-                new javax.mail.Authenticator() {
-                    protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(username, password);
-                    }
-                });
-            
+                    new javax.mail.Authenticator() {
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(username, password);
+                }
+            });
+
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress("grupo4.miudelar@gmail.com"));
-            
-            if (notaObj instanceof Estudiante_Curso){
-                Estudiante_Curso curso = (Estudiante_Curso)notaObj;
+
+            if (notaObj instanceof Estudiante_Curso) {
+                Estudiante_Curso curso = (Estudiante_Curso) notaObj;
                 System.out.println("curso: " + curso.getCalificacion());
                 armarMsg(message, curso.getUsuario(), "curso", curso.getCurso().getAsignatura_Carrera().getAsignatura().getNombre(), curso.getCalificacion());
-            }else{
-                if (notaObj instanceof Estudiante_Examen){
-                    Estudiante_Examen examen = (Estudiante_Examen)notaObj;
+            } else {
+                if (notaObj instanceof Estudiante_Examen) {
+                    Estudiante_Examen examen = (Estudiante_Examen) notaObj;
                     System.out.println("examen: " + examen.getCalificacion());
                     armarMsg(message, examen.getUsuario(), "examen", examen.getExamen().getAsignatura_Carrera().getAsignatura().getNombre(), examen.getCalificacion());
                 }
@@ -99,29 +99,28 @@ public class InitMgr implements InitMgt {
             Transport.send(message);
 
             System.out.println("Done");
-            
+
         } catch (MessagingException ex) {
             Logger.getLogger(InitMgr.class.getName()).log(Level.SEVERE, null, ex);
         }
         return "ok";
     }
-    
+
     public static Message armarMsg(Message message, Usuario usuario, String tipo, String asignatura, Long calificacion) {
         System.out.println("armarMsg");
         try {
             System.out.println("usuario.getEmail(): " + usuario.getEmail());
             message.setRecipients(Message.RecipientType.TO,
-            InternetAddress.parse(usuario.getEmail()));
+                    InternetAddress.parse(usuario.getEmail()));
             message.setSubject("Se ha cargado una calificación");
             message.setText("Estimado/a " + usuario.getNombre() + ", "
-                + "\n\n Usted ha obtenido un " + calificacion + " en el " + tipo + " de " + asignatura +"."
-                + "\n\n\n\n MiUdelar");
-                } catch (MessagingException e) {
+                    + "\n\n Usted ha obtenido un " + calificacion + " en el " + tipo + " de " + asignatura + "."
+                    + "\n\n\n\n MiUdelar");
+        } catch (MessagingException e) {
             throw new RuntimeException(e);
         }
         return message;
     }
-   
 
     @Override
     public int sendPushWithSimpleAndroid(Object notaObj) {
@@ -129,30 +128,30 @@ public class InitMgr implements InitMgt {
         String message = "Usted ha obtenido un ";
         String deviceToken = "";
         int response = 0;
-        if (notaObj instanceof Estudiante_Curso){
-                Estudiante_Curso curso = (Estudiante_Curso)notaObj;
-                deviceToken = curso.getUsuario().getDeviceToken();
-                message += curso.getCalificacion();
-                message += " en el curso de " + curso.getCurso().getAsignatura_Carrera().getAsignatura().getNombre() +".";
-            }else{
-                if (notaObj instanceof Estudiante_Examen){
-                    Estudiante_Examen examen = (Estudiante_Examen)notaObj;
-                    deviceToken = examen.getUsuario().getDeviceToken();
-                    message += examen.getCalificacion();
-                    message += " en el curso de " + examen.getExamen().getAsignatura_Carrera().getAsignatura().getNombre() +".";
-                }
+        if (notaObj instanceof Estudiante_Curso) {
+            Estudiante_Curso curso = (Estudiante_Curso) notaObj;
+            deviceToken = curso.getUsuario().getDeviceToken();
+            message += curso.getCalificacion();
+            message += " en el curso de " + curso.getCurso().getAsignatura_Carrera().getAsignatura().getNombre() + ".";
+        } else {
+            if (notaObj instanceof Estudiante_Examen) {
+                Estudiante_Examen examen = (Estudiante_Examen) notaObj;
+                deviceToken = examen.getUsuario().getDeviceToken();
+                message += examen.getCalificacion();
+                message += " en el curso de " + examen.getExamen().getAsignatura_Carrera().getAsignatura().getNombre() + ".";
             }
+        }
 
-        String pushMessage = "{\"data\":{\"title\":\"" +
-                title +
-                "\",\"message\":\"" +
-                message +
-                "\"}"
-                + ",\"to\":\"" +
-                deviceToken +
-                "\""
+        String pushMessage = "{\"data\":{\"title\":\""
+                + title
+                + "\",\"message\":\""
+                + message
+                + "\"}"
+                + ",\"to\":\""
+                + deviceToken
+                + "\""
                 + "}";
-        
+
         URL url;
         try {
             url = new URL("https://fcm.googleapis.com/fcm/send");
@@ -173,7 +172,6 @@ public class InitMgr implements InitMgt {
         }
         return response;
     }
-    
 
 //    AdministradorService administradorService = ManagersFactory.getInstance().getAdministradorService();
 //    BedeliaService bedeliaService = ManagersFactory.getInstance().getBedeliaService();
