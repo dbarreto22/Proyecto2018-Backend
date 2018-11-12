@@ -19,6 +19,8 @@ import com.miudelar.server.logic.entities.Estudiante_Examen;
 import com.miudelar.server.logic.entities.Usuario;
 import com.miudelar.server.logic.factories.ManagersFactory;
 import com.miudelar.server.logic.interfaces.*;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -34,9 +36,12 @@ import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.net.URL;
 
 public class InitMgr implements InitMgt {
-
+    
+    private static final String ClaveFireBase = "AIzaSyBUHk23l8mH_2XKfB7MCcnuJQ7a2i-uTP4";
+    
     @Override
     public List<Asignatura_Carrera> getAllPrevias(Asignatura_Carrera asigcar) {
         List<Asignatura_Carrera> listAsigCar = new ArrayList<>();
@@ -56,12 +61,7 @@ public class InitMgr implements InitMgt {
         }
     }
     
-//    public static void getPreviaMadre(Asignatura_Carrera asic_car) {
-//         while (asic_car != null){
-//            asic_car =  asic_car.getEsPreviaDe();
-//         }
-//    }
-
+    @Override
     public String sendMail(Object notaObj) {
         System.out.println("sendMail");
         try {
@@ -121,6 +121,59 @@ public class InitMgr implements InitMgt {
         }
         return message;
     }
+   
+
+    @Override
+    public int sendPushWithSimpleAndroid(Object notaObj) {
+        String title = "Se ha cargado una calificación";
+        String message = "Usted ha obtenido un ";
+        String deviceToken = "";
+        int response = 0;
+        if (notaObj instanceof Estudiante_Curso){
+                Estudiante_Curso curso = (Estudiante_Curso)notaObj;
+                deviceToken = curso.getUsuario().getDeviceToken();
+                message += curso.getCalificacion();
+                message += " en el curso de " + curso.getCurso().getAsignatura_Carrera().getAsignatura().getNombre() +".";
+            }else{
+                if (notaObj instanceof Estudiante_Examen){
+                    Estudiante_Examen examen = (Estudiante_Examen)notaObj;
+                    deviceToken = examen.getUsuario().getDeviceToken();
+                    message += examen.getCalificacion();
+                    message += " en el curso de " + examen.getExamen().getAsignatura_Carrera().getAsignatura().getNombre() +".";
+                }
+            }
+
+        String pushMessage = "{\"data\":{\"title\":\"" +
+                title +
+                "\",\"message\":\"" +
+                message +
+                "\"}"
+                + ",\"to\":\"" +
+                deviceToken +
+                "\""
+                + "}";
+        
+        URL url;
+        try {
+            url = new URL("https://fcm.googleapis.com/fcm/send");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestProperty("Authorization", "key=" + ClaveFireBase);
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setRequestMethod("POST");
+            conn.setDoOutput(true);
+            // Send FCM message content.
+            OutputStream outputStream = conn.getOutputStream();
+            outputStream.write(pushMessage.getBytes());
+            response = conn.getResponseCode();
+            System.out.println(conn.getResponseCode());
+            System.out.println(conn.getResponseMessage());
+        } catch (Exception ex) {
+            response = 505;
+            Logger.getLogger(InitMgr.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+        }
+        return response;
+    }
+    
 
 //    AdministradorService administradorService = ManagersFactory.getInstance().getAdministradorService();
 //    BedeliaService bedeliaService = ManagersFactory.getInstance().getBedeliaService();

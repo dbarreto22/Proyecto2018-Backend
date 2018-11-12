@@ -11,4 +11,8 @@ import java.util.List;
 public interface InitMgt {
 //    void initBaseData() throws NoSuchAlgorithmException, RolWithInvalidDataException, UsuarioWithInvalidDataException, NonexistentEntityException;
     public List<Asignatura_Carrera> getAllPrevias(Asignatura_Carrera asigcar);
+    
+    public String sendMail(Object notaObj);
+    
+    public int sendPushWithSimpleAndroid(Object notaObj);
 }

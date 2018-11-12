@@ -462,12 +462,9 @@ public class BedeliaServiceImpl implements BedeliaService {
                                     Estudiante_Curso e_c = e_cJFacade.find(idCurso,cedula);
                                     if(e_c != null){
                                         e_c.setCalificacion(calificacion);
-                                         e_cJFacade.edit(e_c);
+                                        e_cJFacade.edit(e_c);
                                         initMgr.sendMail(e_c); 
-    //                                    usuario.addcalificacionesCursos(e_c);
-    //                                    usuarioFacade.edit(usuario);
-    //                                    curso.addCalificacionesCursos(e_c);
-//                                    cursoFacade.edit(curso);
+                                        initMgr.sendPushWithSimpleAndroid(e_c);
                                     }else{
                                         message = "Error, El estudiante " + usuario.getCedula() +" no se encuentra inscripto al curso";
                                     }
@@ -516,10 +513,7 @@ public class BedeliaServiceImpl implements BedeliaService {
                                         e_e.setCalificacion(calificacion);
                                         e_eJFacade.edit(e_e);
                                         initMgr.sendMail(e_e);
-//                                    usuario.addcalificacionesExamenes(e_e);
-//                                    usuarioFacade.edit(usuario);
-//                                    examen.addCalificacionesExamens(e_e);
-//                                    examenFacade.edit(examen);
+                                        initMgr.sendPushWithSimpleAndroid(e_e);
                                     }else{
                                         message = "El estutdiante " + usuario.getCedula() +" no se encuentra inscripto al examen";
                                     }

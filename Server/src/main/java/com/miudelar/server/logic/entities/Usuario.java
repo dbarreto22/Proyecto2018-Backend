@@ -54,6 +54,9 @@ public class Usuario implements Serializable {
     
     @Basic
     private Boolean activo;
+    
+    @Basic
+    private String deviceToken;
 
     @OneToMany(targetEntity = Estudiante_Examen.class, fetch = FetchType.EAGER)
     private List<Estudiante_Examen> calificacionesExamenes;
@@ -142,6 +145,14 @@ public class Usuario implements Serializable {
         this.password = password;
     }
 
+    public String getDeviceToken() {
+        return deviceToken;
+    }
+
+    public void setDeviceToken(String deviceToken) {
+        this.deviceToken = deviceToken;
+    }
+    
     public List<Estudiante_Examen> getCalificacionesExamenes() {
         return this.calificacionesExamenes;
     }

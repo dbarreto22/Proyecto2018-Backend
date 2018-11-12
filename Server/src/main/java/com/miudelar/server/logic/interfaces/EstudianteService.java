@@ -29,6 +29,12 @@ import javax.ws.rs.core.MediaType;
 @RolesAllowed({"ESTUDIANTE"})
 public interface EstudianteService {
     
+    @POST
+    @Path("token")
+    @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String loadToken(String json);
+    
     @GET
     @Path("curso")
     @RolesAllowed({"BEDELIA"})
