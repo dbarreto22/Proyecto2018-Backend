@@ -5,6 +5,7 @@
  */
 package com.miudelar.server.logic.impl;
 
+import com.google.gson.JsonObject;
 import com.miudelar.server.exceptions.NonexistentEntityException;
 import com.miudelar.server.exceptions.RolWithInvalidDataException;
 import com.miudelar.server.exceptions.UsuarioWithInvalidDataException;
@@ -19,6 +20,8 @@ import com.miudelar.server.logic.entities.Estudiante_Examen;
 import com.miudelar.server.logic.entities.Usuario;
 import com.miudelar.server.logic.factories.ManagersFactory;
 import com.miudelar.server.logic.interfaces.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.security.NoSuchAlgorithmException;
@@ -37,6 +40,7 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.net.URL;
+import java.util.HashMap;
 
 public class InitMgr implements InitMgt {
 
@@ -141,10 +145,17 @@ public class InitMgr implements InitMgt {
                 message += " en el curso de " + examen.getExamen().getAsignatura_Carrera().getAsignatura().getNombre() + ".";
             }
         }
+        
+        JsonObject info = new JsonObject();
+        JsonObject json = new JsonObject();
+        info.addProperty("title", title);
+        info.addProperty("body", message);
+        json.addProperty("to", deviceToken);
+        json.addProperty("notification", info.toString());
 
-        String pushMessage = "{\"data\":{\"title\":\""
+        String pushMessage = "{\"notification\":{\"title\":\""
                 + title
-                + "\",\"message\":\""
+                + "\",\"body\":\""
                 + message
                 + "\"}"
                 + ",\"to\":\""
@@ -153,6 +164,8 @@ public class InitMgr implements InitMgt {
                 + "}";
 
         URL url;
+        System.out.println("pushMessage: "+ pushMessage);
+        System.out.println("json: " + json);
         try {
             url = new URL("https://fcm.googleapis.com/fcm/send");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -163,9 +176,17 @@ public class InitMgr implements InitMgt {
             // Send FCM message content.
             OutputStream outputStream = conn.getOutputStream();
             outputStream.write(pushMessage.getBytes());
+            
             response = conn.getResponseCode();
             System.out.println(conn.getResponseCode());
             System.out.println(conn.getResponseMessage());
+            BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+            StringBuilder sb = new StringBuilder();
+            String output;
+            while ((output = br.readLine()) != null) {
+                sb.append(output);
+              }
+            System.out.println("sb.toString(): " + sb.toString());
         } catch (Exception ex) {
             response = 505;
             Logger.getLogger(InitMgr.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
