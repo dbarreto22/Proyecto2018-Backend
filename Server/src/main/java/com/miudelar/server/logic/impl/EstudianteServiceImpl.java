@@ -151,6 +151,8 @@ public class EstudianteServiceImpl implements EstudianteService {
 
     @Override
     public String loadToken(String json) {
+        System.out.println("LOAD TOKEN");
+        System.out.println("json " + json);
         String message = "OK";
         try {
             JsonElement jsonTree = parser.parse(json);
@@ -159,13 +161,13 @@ public class EstudianteServiceImpl implements EstudianteService {
                 String cedula = jsonObject.get("cedula").getAsString();
                 String token = jsonObject.get("token").getAsString();
                 Usuario usuario = usuarioFacade.find(cedula);
-                if (usuario == null){
-                   message = "No se encontró el usuario"; 
-                }else{
+                if (usuario == null) {
+                    message = "No se encontró el usuario";
+                } else {
                     usuario.setDeviceToken(token);
                     usuarioFacade.edit(usuario);
                 }
-                
+
             }
         } catch (JsonSyntaxException ex) {
             System.out.println("Class:EstudianteServiceImpl: " + ex.getMessage() + " " + json);
@@ -288,36 +290,39 @@ public class EstudianteServiceImpl implements EstudianteService {
                     if (curso == null) {
                         message = "No existe el curso";
                     } else {
-                        Asignatura_Carrera asig_car = curso.getAsignatura_Carrera();
-                        Long max = estudiante_cursoFacade.getMaxCalificacionAsignatura(cedula, asig_car.getId());
-                        if (max.compareTo(6L) > 0) {
-                            return "Error, el estudiante ya tiene aprobada esta asignatura";
+                        if (estudiante_cursoFacade.find(idCurso, cedula) != null) {
+                            return "El estudiante ya se encuentra inscripto al curso";
                         } else {
-                            if (usuario.getCursos().contains(curso)) {
-                                return "Error, el estudiante ya se encuentra inscripto a este curso";
+                            Asignatura_Carrera asig_car = curso.getAsignatura_Carrera();
+                            Long max = estudiante_cursoFacade.getMaxCalificacionAsignatura(cedula, asig_car.getId());
+                            if (max.compareTo(6L) > 0) {
+                                return "Error, el estudiante ya tiene aprobada esta asignatura";
                             } else {
-                                //Valido previas
-                                List<Asignatura_Carrera> previas = initMgr.getAllPrevias(asig_car);
-                                for (Asignatura_Carrera previa : previas) {
-                                    max = estudiante_cursoFacade.getMaxCalificacionAsignatura(cedula, previa.getId());
+                                if (usuario.getCursos().contains(curso)) {
+                                    return "Error, el estudiante ya se encuentra inscripto a este curso";
+                                } else {
+                                    //Valido previas
+                                    List<Asignatura_Carrera> previas = initMgr.getAllPrevias(asig_car);
+                                    for (Asignatura_Carrera previa : previas) {
+                                        max = estudiante_cursoFacade.getMaxCalificacionAsignatura(cedula, previa.getId());
 //                                    System.out.println("max: " + max);
 //                                    System.out.println("previa.getId(): " + previa.getId());
 //                                    System.out.println("asig_car.getId(): " + asig_car.getId());
-                                    if (max.compareTo(6L) < 0 && !asig_car.getId().equals(previa.getId())) {
-                                        return "Error, el estudiante no tiene aprobada la asignatura: " + previa.getAsignatura().getNombre();
+                                        if (max.compareTo(6L) < 0 && !asig_car.getId().equals(previa.getId())) {
+                                            return "Error, el estudiante no tiene aprobada la asignatura: " + previa.getAsignatura().getNombre();
+                                        }
                                     }
-                                }
 
-                                Estudiante_Curso e_c = new Estudiante_Curso(usuario, curso);
-                                estudiante_cursoFacade.create(e_c);
-                                usuario.addCurso(curso);
-                                usuario.addcalificacionesCursos(e_c);
-                                usuarioFacade.edit(usuario);
-                                curso.addCalificacionesCursos(e_c);
-                                cursoFacade.edit(curso);
+                                    Estudiante_Curso e_c = new Estudiante_Curso(usuario, curso);
+                                    estudiante_cursoFacade.create(e_c);
+                                    usuario.addCurso(curso);
+                                    usuario.addcalificacionesCursos(e_c);
+                                    usuarioFacade.edit(usuario);
+                                    curso.addCalificacionesCursos(e_c);
+                                    cursoFacade.edit(curso);
+                                }
                             }
                         }
-
                     }
                 }
             } else {
@@ -387,32 +392,36 @@ public class EstudianteServiceImpl implements EstudianteService {
                     if (examen == null) {
                         message = "No existe el examen";
                     } else {
-                        Asignatura_Carrera asig_car = examen.getAsignatura_Carrera();
-                        Long max = estudiante_ExamenFacade.getMaxCalificacionAsignatura(cedula, asig_car.getId());
-                        if (max.compareTo(3L) > 0) {
-                            return "Error, el estudiante ya tiene aprobado este examen";
+                        if (estudiante_ExamenFacade.find(idExamen, cedula) != null) {
+                            return "El estudiante ya se encuentra inscripto al examen";
                         } else {
-                            if (usuario.getInscripcionesExamenes().contains(examen)) {
-                                return "Error, el estudiante ya se encuentra inscripto a este examen";
+                            Asignatura_Carrera asig_car = examen.getAsignatura_Carrera();
+                            Long max = estudiante_ExamenFacade.getMaxCalificacionAsignatura(cedula, asig_car.getId());
+                            if (max.compareTo(3L) > 0) {
+                                return "Error, el estudiante ya tiene aprobado este examen";
                             } else {
-                                //Valido previas
-                                List<Asignatura_Carrera> previas = initMgr.getAllPrevias(asig_car);
-                                for (Asignatura_Carrera previa : previas) {
-                                    max = estudiante_cursoFacade.getMaxCalificacionAsignatura(cedula, previa.getId());
-                                    System.out.println("max: " + max);
-                                    System.out.println("previa.getId(): " + previa.getId());
-                                    System.out.println("asig_car.getId(): " + asig_car.getId());
-                                    if (max.compareTo(6L) < 0 && !asig_car.getId().equals(previa.getId())) {
-                                        return "Error, el estudiante no tiene aprobada la asignatura: " + previa.getAsignatura().getNombre();
+                                if (usuario.getInscripcionesExamenes().contains(examen)) {
+                                    return "Error, el estudiante ya se encuentra inscripto a este examen";
+                                } else {
+                                    //Valido previas
+                                    List<Asignatura_Carrera> previas = initMgr.getAllPrevias(asig_car);
+                                    for (Asignatura_Carrera previa : previas) {
+                                        max = estudiante_cursoFacade.getMaxCalificacionAsignatura(cedula, previa.getId());
+                                        System.out.println("max: " + max);
+                                        System.out.println("previa.getId(): " + previa.getId());
+                                        System.out.println("asig_car.getId(): " + asig_car.getId());
+                                        if (max.compareTo(6L) < 0 && !asig_car.getId().equals(previa.getId())) {
+                                            return "Error, el estudiante no tiene aprobada la asignatura: " + previa.getAsignatura().getNombre();
+                                        }
                                     }
+                                    Estudiante_Examen e_e = new Estudiante_Examen(usuario, examen);
+                                    estudiante_ExamenFacade.create(e_e);
+                                    usuario.addInscripcionesExamenes(examen);
+                                    usuario.addcalificacionesExamenes(e_e);
+                                    examen.addCalificacionesExamens(e_e);
+                                    usuarioFacade.edit(usuario);
+                                    examenFacade.edit(examen);
                                 }
-                                Estudiante_Examen e_e = new Estudiante_Examen(usuario, examen);
-                                estudiante_ExamenFacade.create(e_e);
-                                usuario.addInscripcionesExamenes(examen);
-                                usuario.addcalificacionesExamenes(e_e);
-                                examen.addCalificacionesExamens(e_e);
-                                usuarioFacade.edit(usuario);
-                                examenFacade.edit(examen);
                             }
                         }
 
