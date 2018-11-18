@@ -5,6 +5,7 @@
  */
 package com.miudelar.server.logic.impl;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.miudelar.server.exceptions.NonexistentEntityException;
 import com.miudelar.server.exceptions.RolWithInvalidDataException;
@@ -131,41 +132,50 @@ public class InitMgr implements InitMgt {
         String title = "Se ha cargado una calificación";
         String message = "Usted ha obtenido un ";
         String deviceToken = "";
+        String tipo = "";
         int response = 0;
         if (notaObj instanceof Estudiante_Curso) {
             Estudiante_Curso curso = (Estudiante_Curso) notaObj;
             deviceToken = curso.getUsuario().getDeviceToken();
+            tipo = "curso";
             message += curso.getCalificacion();
             message += " en el curso de " + curso.getCurso().getAsignatura_Carrera().getAsignatura().getNombre() + ".";
         } else {
             if (notaObj instanceof Estudiante_Examen) {
                 Estudiante_Examen examen = (Estudiante_Examen) notaObj;
                 deviceToken = examen.getUsuario().getDeviceToken();
+                tipo = "examen";
                 message += examen.getCalificacion();
                 message += " en el curso de " + examen.getExamen().getAsignatura_Carrera().getAsignatura().getNombre() + ".";
             }
         }
         
         JsonObject info = new JsonObject();
+        JsonObject data = new JsonObject(); 
         JsonObject json = new JsonObject();
+        
         info.addProperty("title", title);
         info.addProperty("body", message);
+        
+        data.addProperty("tipo", "curso");
+        
         json.addProperty("to", deviceToken);
-        json.addProperty("notification", info.toString());
+        json.add("notification", info);
+        json.add("data", data);
 
-        String pushMessage = "{\"notification\":{\"title\":\""
-                + title
-                + "\",\"body\":\""
-                + message
-                + "\"}"
-                + ",\"to\":\""
-                + deviceToken
-                + "\""
-                + "}";
+//        String pushMessage = "{\"notification\":{\"title\":\""
+//                + title
+//                + "\",\"body\":\""
+//                + message
+//                + "\"}"
+//                + ",\"to\":\""
+//                + deviceToken
+//                + "\""
+//                + "}";
 
         URL url;
-        System.out.println("pushMessage: "+ pushMessage);
-        System.out.println("json: " + json);
+//        System.out.println("pushMessage: "+ pushMessage);
+        
         try {
             url = new URL("https://fcm.googleapis.com/fcm/send");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -175,7 +185,9 @@ public class InitMgr implements InitMgt {
             conn.setDoOutput(true);
             // Send FCM message content.
             OutputStream outputStream = conn.getOutputStream();
-            outputStream.write(pushMessage.getBytes());
+            String jsonString = new Gson().toJson(json);
+            byte[] utf8JsonString = jsonString.getBytes("UTF8");
+            outputStream.write(utf8JsonString);
             
             response = conn.getResponseCode();
             System.out.println(conn.getResponseCode());
