@@ -154,13 +154,10 @@ public class InitMgr implements InitMgt {
         JsonObject data = new JsonObject(); 
         JsonObject json = new JsonObject();
         
-        info.addProperty("title", title);
-        info.addProperty("body", message);
-        
+        data.addProperty("title", title);
+        data.addProperty("body", message);
         data.addProperty("tipo", "curso");
-        
         json.addProperty("to", deviceToken);
-        json.add("notification", info);
         json.add("data", data);
 
 //        String pushMessage = "{\"notification\":{\"title\":\""
