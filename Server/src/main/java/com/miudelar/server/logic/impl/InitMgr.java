@@ -185,6 +185,7 @@ public class InitMgr implements InitMgt {
             String jsonString = new Gson().toJson(json);
             byte[] utf8JsonString = jsonString.getBytes("UTF8");
             outputStream.write(utf8JsonString);
+            System.out.println("utf8JsonString: " + utf8JsonString.toString());
             
             response = conn.getResponseCode();
             System.out.println(conn.getResponseCode());

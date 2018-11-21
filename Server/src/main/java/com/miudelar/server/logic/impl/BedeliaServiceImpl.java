@@ -196,8 +196,9 @@ public class BedeliaServiceImpl implements BedeliaService {
     
     @Override
     public List<DtUsuario> getEstudiantesInscriptosExamen(Long idExamen){
-        //TODO
         List<DtUsuario> usuarios = new ArrayList<>();
+        examenFacade.getEstudiantesInscriptos(idExamen).forEach(estudiante -> {
+        usuarios.add(estudiante.toDataType());});
         return usuarios;
     }
     
