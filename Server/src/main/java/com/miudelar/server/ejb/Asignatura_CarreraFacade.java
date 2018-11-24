@@ -35,7 +35,7 @@ public class Asignatura_CarreraFacade extends AbstractFacade<Asignatura_Carrera>
     @Override
     public Asignatura_Carrera findByCods(Long carrera, Long asignatura){
         Query q = getEntityManager().createNamedQuery(Asignatura_Carrera.FIND_BY_CODS).setParameter("carrera", carrera).setParameter("asignatura", asignatura);
-        if(q.getResultList() != null && q.getSingleResult() != null && q.getSingleResult() instanceof Asignatura_Carrera){
+        if(!q.getResultList().isEmpty() && q.getSingleResult() instanceof Asignatura_Carrera){
             return (Asignatura_Carrera)q.getSingleResult();
         }else{
             return null;
