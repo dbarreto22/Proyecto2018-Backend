@@ -6,9 +6,11 @@
 package com.miudelar.server.ejb;
 
 import com.miudelar.server.logic.entities.Asignatura;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -27,6 +29,12 @@ public class AsignaturaFacade extends AbstractFacade<Asignatura> implements Asig
 
     public AsignaturaFacade() {
         super(Asignatura.class);
+    }
+    
+    @Override
+    public List<Asignatura> findByCarrera(Long codigo){
+        Query q = getEntityManager().createNamedQuery(Asignatura.FIND_BY_CARRERA).setParameter("codigo", codigo);
+        return q.getResultList();
     }
     
 }

@@ -27,8 +27,8 @@ import javax.xml.bind.annotation.*;
 //@XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 //@NamedQueries({
-//    @NamedQuery(name = "Carrera.findAll", query = "Select e from Carrera e"),
-//    @NamedQuery(name = "Carrera.findByNombre", query = "Select c from Carrera c where c.nombre=:nombre")})
+//    @NamedQuery(name = "Carrera.findAsignaturas", query = "Select e from Carrera e"),
+//    @NamedQuery(name = "Carrera.findAsignaturas", query = "Select c from Carrera c where c.nombre=:nombre")})
 public class Carrera implements Serializable {
 
     @Id
@@ -39,18 +39,18 @@ public class Carrera implements Serializable {
     private String nombre;
 
 //    @XmlTransient
-    @OneToMany(targetEntity = Asignatura_Carrera.class, fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, targetEntity = Asignatura_Carrera.class, mappedBy = "carrera")
     private List<Asignatura_Carrera> asignatura_Carreras;
 
     /*@XmlTransient
-    @ManyToMany(targetEntity = Usuario.class, mappedBy = "carreras", fetch = FetchType.EAGER)
+    @ManyToMany(targetEntity = Usuario.class, mappedBy = "carreras")
     private List<Usuario> usuarios;*/
 
-    @ManyToMany(targetEntity = Periodo_Examen.class, fetch = FetchType.EAGER)
+    @ManyToMany(targetEntity = Periodo_Examen.class)
     private List<Periodo_Examen> periodos_Examenes;
 
-    @ManyToMany(targetEntity = Asignatura.class, fetch = FetchType.EAGER)
-    private List<Asignatura> asignaturas;
+//    @ManyToMany(targetEntity = Asignatura.class)
+//    private List<Asignatura> asignaturas;
 
     public Carrera(Long codigo, String nombre) {
         this.codigo = codigo;
@@ -77,13 +77,7 @@ public class Carrera implements Serializable {
     }
 
     public List<Asignatura_Carrera> getAsignatura_Carreras() {
-        List<Asignatura_Carrera> result = new ArrayList<>();
-        this.asignatura_Carreras.forEach(asig -> {
-            if (!result.contains(asig)){
-                result.add(asig);
-            }
-        });
-        return result;
+        return this.asignatura_Carreras;
     }
 
     public void setAsignatura_Carreras(List<Asignatura_Carrera> asignatura_Carreras) {
@@ -98,21 +92,10 @@ public class Carrera implements Serializable {
         this.periodos_Examenes = periodos_Examenes;
     }
 
-    public List<Asignatura> getAsignaturas() {
-        return this.asignaturas;
-    }
-
-    public void setAsignaturas(List<Asignatura> asignaturas) {
-        this.asignaturas = asignaturas;
-    }
-    
     public void addAsignatura_Carrera(Asignatura_Carrera asignatura_Carreras){
         this.asignatura_Carreras.add(asignatura_Carreras);
     }
     
-    public void addAsignatura(Asignatura asignatura){
-        this.asignaturas.add(asignatura);
-    }
     
     public DtCarrera toDataType(){
         DtCarrera car = new DtCarrera(codigo, nombre);
@@ -143,7 +126,5 @@ public class Carrera implements Serializable {
         }
         return true;
     }
-    
-    
 
 }

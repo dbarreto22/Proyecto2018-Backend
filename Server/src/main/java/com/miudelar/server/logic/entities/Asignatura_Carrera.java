@@ -38,16 +38,15 @@ public class Asignatura_Carrera implements Serializable {
     public final static String FIND_BY_CODS = "Asignatura_Carrera.FIND_BY_CODS";
     
     @Id
-    @GeneratedValue(generator = "asignatura_carrera_gen")
-    @SequenceGenerator(name="asignatura_carrera_gen", sequenceName = "asignatura_carrera_seq")
+    @GeneratedValue( strategy=GenerationType.AUTO )
     private Long id;
     
     @XmlTransient
-    @OneToMany(targetEntity = Examen.class, fetch = FetchType.EAGER)
-    private List<Examen> examenes;
+    @OneToMany(targetEntity = Examen.class)
+        private List<Examen> examenes;
     
     @XmlTransient
-    @OneToMany(targetEntity = Curso.class, fetch = FetchType.EAGER)
+    @OneToMany(targetEntity = Curso.class, mappedBy = "asignatura_Carrera" )
     private List<Curso> cursos;
     
     @ManyToOne(targetEntity = Carrera.class)
@@ -56,14 +55,14 @@ public class Asignatura_Carrera implements Serializable {
     @ManyToOne(targetEntity = Asignatura.class)
     private Asignatura asignatura;
     
-    @ManyToMany(targetEntity = Periodo_Examen.class, fetch = FetchType.EAGER)
+    @ManyToMany(targetEntity = Periodo_Examen.class)
     private List<Periodo_Examen> periodos_Examen;
 
-    @ManyToMany(targetEntity = Asignatura_Carrera.class, fetch = FetchType.EAGER)
+    @ManyToMany(targetEntity = Asignatura_Carrera.class)
     private List<Asignatura_Carrera> previas;
 
     @XmlTransient
-    @ManyToMany(targetEntity = Asignatura_Carrera.class, mappedBy = "previas", fetch = FetchType.EAGER)
+    @ManyToMany(targetEntity = Asignatura_Carrera.class, mappedBy = "previas")
     private List<Asignatura_Carrera> esPreviaDe;
 
     public Asignatura_Carrera(Asignatura asignatura, Carrera carrera) {

@@ -93,7 +93,7 @@ public class DirectorServiceImpl implements DirectorService{
     @Override
     public List<DtAsignatura> getAsignaturasByCarrera(Long idCarrera) throws NoSuchAlgorithmException{
         List<DtAsignatura> asignaturas = new ArrayList<>();
-        carreraFacade.find(idCarrera).getAsignaturas().forEach(asignatura -> {
+        asignaturaFacade.findByCarrera(idCarrera).forEach(asignatura -> {
             asignaturas.add(new DtAsignatura(asignatura.getCodigo(), asignatura.getNombre()));
         });
         return asignaturas;
@@ -105,6 +105,7 @@ public class DirectorServiceImpl implements DirectorService{
         return carrera.toDataType();
     }
     
+    @Override
     public String removeAsignaturaCarrera(String json){
         String message = "OK";
         JsonElement jsonTree = parser.parse(json);
@@ -216,24 +217,20 @@ public class DirectorServiceImpl implements DirectorService{
                         if (carrera == null){
                             message = "No existe carrera";
                         }else{
-                            
-                            System.out.println("asignatura: " + asignatura.getCodigo());
-                            System.out.println("carrera: " + carrera.getCodigo());
-                            carrera.addAsignatura(asignatura);
-                            carreraFacade.edit(carrera);
+//                            if (asignatura_CarreraFacade.findByCods(codigoCarrera, codigoAsignatura) != null){
+//                                message = "Ya existe la relación";
+//                            }else{
+                                System.out.println("asignatura: " + asignatura.getCodigo());
+                                System.out.println("carrera: " + carrera.getCodigo());
 
-                            ////        Creo entidad relación
-                            Asignatura_Carrera asignatura_carreraEntity = new Asignatura_Carrera(asignatura, carrera);
-                            asignatura_CarreraFacade.create(asignatura_carreraEntity);
-                               
-                            Asignatura_Carrera asignatura_carrera = asignatura_CarreraFacade.findByCods(carrera.getCodigo(), asignatura.getCodigo());
-                            System.out.println("asignatura_carreraEntity: " + asignatura_carrera.getId());
-                            ////        Asocio entidad relación
-                            asignatura.addAsignatura_Carrera(asignatura_carrera);
-                            asignaturaFacade.edit(asignatura);
-                            
-                            carrera.addAsignatura_Carrera(asignatura_carrera);
-                            carreraFacade.edit(carrera);
+                                ////        Creo entidad relación
+                                Asignatura_Carrera asignatura_carreraEntity = new Asignatura_Carrera(asignatura, carrera);
+                                asignatura_CarreraFacade.create(asignatura_carreraEntity);
+
+                                Asignatura_Carrera asignatura_carrera = asignatura_CarreraFacade.findByCods(carrera.getCodigo(), asignatura.getCodigo());
+                                System.out.println("asignatura_carreraEntity: " + asignatura_carrera.getId());
+
+//                            }
                         }
                     }
             } else {

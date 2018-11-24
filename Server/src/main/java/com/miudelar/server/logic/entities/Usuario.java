@@ -58,22 +58,22 @@ public class Usuario implements Serializable {
     @Basic
     private String deviceToken;
 
-    @OneToMany(targetEntity = Estudiante_Examen.class, fetch = FetchType.EAGER)
+    @OneToMany(targetEntity = Estudiante_Examen.class)
     private List<Estudiante_Examen> calificacionesExamenes;
 
-    @OneToMany(targetEntity = Estudiante_Curso.class, fetch = FetchType.EAGER)
+    @OneToMany(targetEntity = Estudiante_Curso.class)
     private List<Estudiante_Curso> calificacionesCursos;
 
-    @ManyToMany(targetEntity = Rol.class, fetch = FetchType.EAGER)
+    @ManyToMany(targetEntity = Rol.class)
     private List<Rol> roles;
 
-    @ManyToMany(targetEntity = Carrera.class, fetch = FetchType.EAGER)
+    @ManyToMany(targetEntity = Carrera.class)
     private List<Carrera> carreras;
 
-    @ManyToMany(targetEntity = Examen.class, fetch = FetchType.EAGER)
+    @ManyToMany(targetEntity = Examen.class)
     private List<Examen> inscripcionesExamenes;
 
-    @ManyToMany(targetEntity = Curso.class, fetch = FetchType.EAGER)
+    @ManyToMany(targetEntity = Curso.class)
     private List<Curso> cursos;
 
     public Usuario(String cedula, String nombre, String apellido, String email, String password) {

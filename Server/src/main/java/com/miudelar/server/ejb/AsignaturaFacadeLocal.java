@@ -6,6 +6,7 @@
 package com.miudelar.server.ejb;
 
 import com.miudelar.server.logic.entities.Asignatura;
+import com.miudelar.server.logic.entities.Asignatura_Carrera;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -29,5 +30,7 @@ public interface AsignaturaFacadeLocal {
     List<Asignatura> findRange(int[] range);
 
     int count();
+    
+    List<Asignatura> findByCarrera(Long codigo);
     
 }

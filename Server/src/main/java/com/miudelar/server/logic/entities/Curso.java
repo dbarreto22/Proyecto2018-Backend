@@ -60,17 +60,17 @@ public class Curso implements Serializable {
     @Basic
     private Date fecha;
 
-    @ManyToOne(targetEntity = Asignatura_Carrera.class, fetch = FetchType.EAGER)
+    @ManyToOne(targetEntity = Asignatura_Carrera.class)
     private Asignatura_Carrera asignatura_Carrera;
 
-    @OneToMany(targetEntity = Horario.class, fetch = FetchType.EAGER)
+    @OneToMany(targetEntity = Horario.class)
     private List<Horario> horarios;
 
-    @OneToMany(targetEntity = Estudiante_Curso.class, fetch = FetchType.EAGER)
+    @OneToMany(targetEntity = Estudiante_Curso.class)
     private List<Estudiante_Curso> calificacionesCursos;
 
 //    @XmlTransient
-//    @ManyToMany(targetEntity = Usuario.class, mappedBy = "cursos", fetch = FetchType.EAGER)
+//    @ManyToMany(targetEntity = Usuario.class, mappedBy = "cursos")
 //    private List<Usuario> inscriptos;
 
 

@@ -61,10 +61,10 @@ public class Examen implements Serializable {
     @Basic
     private Date fecha;
 
-    @ManyToOne(targetEntity = Asignatura_Carrera.class, fetch = FetchType.EAGER)
+    @ManyToOne(targetEntity = Asignatura_Carrera.class)
     private Asignatura_Carrera asignatura_Carrera;
 
-    @OneToMany(targetEntity = Estudiante_Examen.class, fetch = FetchType.EAGER)
+    @OneToMany(targetEntity = Estudiante_Examen.class)
     private List<Estudiante_Examen> calificacionesExamenes;
 
 

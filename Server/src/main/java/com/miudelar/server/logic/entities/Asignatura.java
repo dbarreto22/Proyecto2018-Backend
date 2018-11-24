@@ -25,11 +25,16 @@ import javax.xml.bind.annotation.*;
  */
 //@XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-//@NamedQueries({
+@NamedQueries({
 //    @NamedQuery(name = "Asignatura.findAll", query = "Select e from Asignatura e"),
-//    @NamedQuery(name = "Asignatura.findByNombre", query = "Select a from Asignatura a where a.nombre=:nombre")})
+    @NamedQuery(name = Asignatura.FIND_BY_CARRERA, query = "SELECT A FROM Asignatura A, Asignatura_Carrera B, Carrera C \n"
+            + " WHERE C.codigo = :codigo \n "
+            + " AND B member of C.asignatura_Carreras \n "
+            + " AND B.asignatura = A")})
 public class Asignatura implements Serializable {
 
+    public final static String FIND_BY_CARRERA = "Asignatura.FIND_BY_CARRERA";
+    
     @Id
     private Long codigo;
 
@@ -38,7 +43,7 @@ public class Asignatura implements Serializable {
     private String nombre;
 
 //    @XmlTransient
-    @OneToMany(targetEntity = Asignatura_Carrera.class, fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, targetEntity = Asignatura_Carrera.class, mappedBy = "asignatura")
     private List<Asignatura_Carrera> asignatura_Carreras;
 
     public Asignatura(Long codigo, String nombre) {
