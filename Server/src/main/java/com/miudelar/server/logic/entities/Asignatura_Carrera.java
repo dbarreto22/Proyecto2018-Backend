@@ -20,6 +20,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 import javax.xml.bind.annotation.*;
 
 /**
@@ -27,14 +28,18 @@ import javax.xml.bind.annotation.*;
  */
 //@XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-//@NamedQuery(name = Asignatura_Carrera.FIND_BY_CODS, query = "SELECT A FROM Asignatura_Carrera A "
-//            + "WHERE A.carrera_codigo = :carrera AND A.asignatura_codigo = :asignatura)")
+@NamedQuery(name = Asignatura_Carrera.FIND_BY_CODS, query = "SELECT A FROM Asignatura_Carrera A, Carrera B, Asignatura C \n"
+            + "WHERE A.carrera = B \n"
+            + "AND B.codigo = :carrera AND \n"
+            + "C.codigo = :asignatura AND \n"
+            + "A.asignatura = C")
 public class Asignatura_Carrera implements Serializable {
 
-//    public final static String FIND_BY_CODS = "Asignatura_Carrera.FIND_BY_CODS";
+    public final static String FIND_BY_CODS = "Asignatura_Carrera.FIND_BY_CODS";
     
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(generator = "asignatura_carrera_gen")
+    @SequenceGenerator(name="asignatura_carrera_gen", sequenceName = "asignatura_carrera_seq")
     private Long id;
     
     @XmlTransient
@@ -62,6 +67,12 @@ public class Asignatura_Carrera implements Serializable {
     private List<Asignatura_Carrera> esPreviaDe;
 
     public Asignatura_Carrera(Asignatura asignatura, Carrera carrera) {
+        this.carrera = carrera;
+        this.asignatura = asignatura;
+    }
+    
+    public Asignatura_Carrera(Long id, Asignatura asignatura, Carrera carrera) {
+        this.id = id;
         this.carrera = carrera;
         this.asignatura = asignatura;
     }

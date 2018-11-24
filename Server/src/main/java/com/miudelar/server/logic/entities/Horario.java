@@ -13,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.SequenceGenerator;
 import javax.xml.bind.annotation.*;
 
 /**
@@ -27,7 +28,8 @@ import javax.xml.bind.annotation.*;
 public class Horario implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(generator = "horario_gen")
+    @SequenceGenerator(name="horario_gen", sequenceName = "horario_seq")
     private Long id;
     
     @Basic

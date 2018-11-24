@@ -30,4 +30,6 @@ public interface Asignatura_CarreraFacadeLocal {
 
     int count();
     
+    public Asignatura_Carrera findByCods(Long carrera, Long asignatura);
+    
 }

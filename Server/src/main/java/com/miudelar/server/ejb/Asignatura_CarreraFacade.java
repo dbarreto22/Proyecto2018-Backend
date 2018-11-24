@@ -5,10 +5,13 @@
  */
 package com.miudelar.server.ejb;
 
+import com.miudelar.server.logic.datatypes.DtAsignatura_Carrera;
 import com.miudelar.server.logic.entities.Asignatura_Carrera;
+import com.miudelar.server.logic.entities.Curso;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -27,6 +30,16 @@ public class Asignatura_CarreraFacade extends AbstractFacade<Asignatura_Carrera>
 
     public Asignatura_CarreraFacade() {
         super(Asignatura_Carrera.class);
+    }
+    
+    @Override
+    public Asignatura_Carrera findByCods(Long carrera, Long asignatura){
+        Query q = getEntityManager().createNamedQuery(Asignatura_Carrera.FIND_BY_CODS).setParameter("carrera", carrera).setParameter("asignatura", asignatura);
+        if(q.getSingleResult() instanceof Asignatura_Carrera){
+            return (Asignatura_Carrera)q.getSingleResult();
+        }else{
+            return null;
+        }
     }
     
 }

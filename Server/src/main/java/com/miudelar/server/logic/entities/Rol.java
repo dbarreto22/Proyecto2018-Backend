@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.SequenceGenerator;
 import javax.xml.bind.annotation.*;
 
 /**
@@ -26,7 +27,8 @@ import javax.xml.bind.annotation.*;
 public class Rol implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(generator = "rol_gen")
+    @SequenceGenerator(name="rol_gen", sequenceName = "rol_seq")
     private Long id;
 
     @Basic

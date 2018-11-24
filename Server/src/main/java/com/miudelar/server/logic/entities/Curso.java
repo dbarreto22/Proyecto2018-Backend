@@ -25,6 +25,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 import javax.xml.bind.annotation.*;
 
 /**
@@ -52,7 +53,8 @@ public class Curso implements Serializable {
     public final static String FIND_DISPONIBLES_ESTUDIANTE = "Curso.FIND_DISPONIBLES_ESTUDIANTE";
     
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(generator = "curso_gen")
+    @SequenceGenerator(name="curso_gen", sequenceName = "curso_seq")
     private Long id;
     
     @Basic

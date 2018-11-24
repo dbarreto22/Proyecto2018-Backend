@@ -216,17 +216,23 @@ public class DirectorServiceImpl implements DirectorService{
                         if (carrera == null){
                             message = "No existe carrera";
                         }else{
+                            
+                            System.out.println("asignatura: " + asignatura.getCodigo());
+                            System.out.println("carrera: " + carrera.getCodigo());
                             carrera.addAsignatura(asignatura);
+                            carreraFacade.edit(carrera);
 
                             ////        Creo entidad relación
                             Asignatura_Carrera asignatura_carreraEntity = new Asignatura_Carrera(asignatura, carrera);
                             asignatura_CarreraFacade.create(asignatura_carreraEntity);
-
+                               
+                            Asignatura_Carrera asignatura_carrera = asignatura_CarreraFacade.findByCods(carrera.getCodigo(), asignatura.getCodigo());
+                            System.out.println("asignatura_carreraEntity: " + asignatura_carrera.getId());
                             ////        Asocio entidad relación
-                            asignatura.addAsignatura_Carrera(asignatura_carreraEntity);
+                            asignatura.addAsignatura_Carrera(asignatura_carrera);
                             asignaturaFacade.edit(asignatura);
-
-                            carrera.addAsignatura_Carrera(asignatura_carreraEntity);
+                            
+                            carrera.addAsignatura_Carrera(asignatura_carrera);
                             carreraFacade.edit(carrera);
                         }
                     }
