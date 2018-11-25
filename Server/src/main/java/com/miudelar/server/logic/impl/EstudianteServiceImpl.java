@@ -224,7 +224,7 @@ public class EstudianteServiceImpl implements EstudianteService {
             System.out.println("getCalificaciones: usuario is null");
             return new DtCalificaciones();
         } else {
-            usuario.getCalificacionesCursos().forEach(curso -> {
+            usuario.getCursos().forEach(curso -> {
 //                System.out.println("curso.getCurso().getAsignatura_Carrera().getId(): "+ curso.getCurso().getAsignatura_Carrera().getId());
 //                System.out.println("idAsig_Carrera: " + idAsig_Carrera);
                 if (curso.getCurso().getAsignatura_Carrera().getId().equals(idAsig_Carrera)) {
@@ -234,7 +234,7 @@ public class EstudianteServiceImpl implements EstudianteService {
                     }
                 }
             });
-            usuario.getCalificacionesExamenes().forEach(examen -> {
+            usuario.getExamenes().forEach(examen -> {
                 if (examen.getExamen().getAsignatura_Carrera().getId().equals(idAsig_Carrera)) {
                     if (examen.getCalificacion() != null) {
                         System.out.println("entra");
@@ -257,12 +257,12 @@ public class EstudianteServiceImpl implements EstudianteService {
             System.out.println("getCalificaciones: usuario is null");
             return new DtCalificaciones();
         } else {
-            usuario.getCalificacionesCursos().forEach(curso -> {
+            usuario.getCursos().forEach(curso -> {
                 if (curso.getCalificacion() != null) {
                     cursos.add(curso.toDataType());
                 }
             });
-            usuario.getCalificacionesExamenes().forEach(examen -> {
+            usuario.getExamenes().forEach(examen -> {
                 if (examen.getCalificacion() != null) {
                     examenes.add(examen.toDataType());
                 }
@@ -315,11 +315,6 @@ public class EstudianteServiceImpl implements EstudianteService {
 
                                     Estudiante_Curso e_c = new Estudiante_Curso(usuario, curso);
                                     estudiante_cursoFacade.create(e_c);
-                                    usuario.addCurso(curso);
-                                    usuario.addcalificacionesCursos(e_c);
-                                    usuarioFacade.edit(usuario);
-                                    curso.addCalificacionesCursos(e_c);
-                                    cursoFacade.edit(curso);
                                 }
                             }
                         }
@@ -400,7 +395,7 @@ public class EstudianteServiceImpl implements EstudianteService {
                             if (max.compareTo(3L) > 0) {
                                 return "Error, el estudiante ya tiene aprobado este examen";
                             } else {
-                                if (usuario.getInscripcionesExamenes().contains(examen)) {
+                                if (usuario.getExamenes().contains(examen)) {
                                     return "Error, el estudiante ya se encuentra inscripto a este examen";
                                 } else {
                                     //Valido previas
@@ -416,11 +411,11 @@ public class EstudianteServiceImpl implements EstudianteService {
                                     }
                                     Estudiante_Examen e_e = new Estudiante_Examen(usuario, examen);
                                     estudiante_ExamenFacade.create(e_e);
-                                    usuario.addInscripcionesExamenes(examen);
-                                    usuario.addcalificacionesExamenes(e_e);
-                                    examen.addCalificacionesExamens(e_e);
-                                    usuarioFacade.edit(usuario);
-                                    examenFacade.edit(examen);
+//                                    usuario.addInscripcionesExamenes(examen);
+//                                    usuario.addexamenes(e_e);
+//                                    examen.addExamenes(e_e);
+//                                    usuarioFacade.edit(usuario);
+//                                    examenFacade.edit(examen);
                                 }
                             }
                         }

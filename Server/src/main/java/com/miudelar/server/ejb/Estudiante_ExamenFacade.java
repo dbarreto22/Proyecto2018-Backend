@@ -40,7 +40,7 @@ public class Estudiante_ExamenFacade extends AbstractFacade<Estudiante_Examen> i
     @Override
     public Long getMaxCalificacionAsignatura(String cedula, Long asignatura_carrera){
         Query q = getEntityManager().createNamedQuery(Estudiante_Examen.GET_MAX_CALIF_ASIG).setParameter("cedula", cedula).setParameter("asignatura_carrera", asignatura_carrera);
-        if(q.getSingleResult() instanceof Long){
+        if(!q.getResultList().isEmpty() && q.getSingleResult() instanceof Long){
             return (Long)q.getSingleResult();
         }else{
             return 0L;
@@ -55,7 +55,7 @@ public class Estudiante_ExamenFacade extends AbstractFacade<Estudiante_Examen> i
     
      public Estudiante_Examen find(Long idExamen, String cedula){
         Query q = getEntityManager().createNamedQuery(Estudiante_Examen.FIND).setParameter("cedula", cedula).setParameter("idExamen",idExamen);
-        if(q.getSingleResult() instanceof Estudiante_Examen){
+        if(!q.getResultList().isEmpty() && q.getSingleResult() instanceof Estudiante_Examen){
             return (Estudiante_Examen)q.getSingleResult();
         }else{
             return null;

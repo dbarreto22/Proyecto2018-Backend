@@ -29,8 +29,7 @@ import javax.xml.bind.annotation.*;
 public class Periodo_Examen implements Serializable {
 
     @Id
-    @GeneratedValue(generator = "periodoexam_gen")
-    @SequenceGenerator(name="periodoexam_gen", sequenceName = "periodoexam_seq")
+    @GeneratedValue( strategy=GenerationType.AUTO )
     private Long id;
 
     @Basic

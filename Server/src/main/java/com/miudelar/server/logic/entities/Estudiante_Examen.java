@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.*;
                 + "AND A.id = :asignatura_carrera AND C.examen member of A.examenes"),
     @NamedQuery(name = Estudiante_Examen.FINDBY_EXAMEN, 
                 query = "SELECT E FROM Estudiante_Examen E, Examen C \n"
-                + "WHERE C.id = :idExamen AND E member of C.calificacionesExamenes \n"),
+                + "WHERE C.id = :idExamen AND E member of C.examenes \n"),
     @NamedQuery(name = Estudiante_Examen.FIND, 
                 query = "SELECT E FROM Estudiante_Examen E, Examen C, Usuario U \n"
                 + "WHERE C.id = :idExamen AND C = E.examen AND \n"

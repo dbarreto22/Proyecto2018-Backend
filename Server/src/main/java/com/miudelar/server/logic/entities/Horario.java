@@ -28,8 +28,7 @@ import javax.xml.bind.annotation.*;
 public class Horario implements Serializable {
 
     @Id
-    @GeneratedValue(generator = "horario_gen")
-    @SequenceGenerator(name="horario_gen", sequenceName = "horario_seq")
+    @GeneratedValue( strategy=GenerationType.AUTO )
     private Long id;
     
     @Basic

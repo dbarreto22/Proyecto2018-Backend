@@ -6,6 +6,7 @@ package com.miudelar.server.logic.datatypes;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
@@ -21,17 +22,14 @@ public class DtUsuario implements Serializable {
 
     private String password;
 
-    private List<DtEstudiante_Examen> calificacionesExamenes;
+    private List<DtEstudiante_Examen> examenes;
 
-    private List<DtEstudiante_Curso> calificacionesCursos;
+    private List<DtEstudiante_Curso> cursos;
 
     private List<DtRol> roles;
 
     private List<DtCarrera> carreras;
 
-    private List<DtExamen> inscripcionesExamenes;
-
-    private List<DtCurso> cursos;
 
     public DtUsuario(String cedula, String nombre, String apellido, String email, String password, List<DtRol> roles) {
         this.cedula = cedula;
@@ -102,20 +100,16 @@ public class DtUsuario implements Serializable {
         this.password = password;
     }
 
-    public List<DtEstudiante_Examen> getCalificacionesExamenes() {
-        return this.calificacionesExamenes;
+    public List<DtEstudiante_Examen> getExamenes() {
+        return this.examenes;
     }
 
-    public void setCalificacionesExamenes(List<DtEstudiante_Examen> calificacionesExamenes) {
-        this.calificacionesExamenes = calificacionesExamenes;
+    public void setExamenes(List<DtEstudiante_Examen> examenes) {
+        this.examenes = examenes;
     }
 
-    public List<DtEstudiante_Curso> getCalificacionesCursos() {
-        return this.calificacionesCursos;
-    }
-
-    public void setCalificacionesCursos(List<DtEstudiante_Curso> calificacionesCursos) {
-        this.calificacionesCursos = calificacionesCursos;
+    public List<DtEstudiante_Curso> getCursos() {
+        return this.cursos;
     }
 
     public List<DtRol> getRoles() {
@@ -132,22 +126,6 @@ public class DtUsuario implements Serializable {
 
     public void setCarreras(List<DtCarrera> carreras) {
         this.carreras = carreras;
-    }
-
-    public List<DtExamen> getInscripcionesExamenes() {
-        return this.inscripcionesExamenes;
-    }
-
-    public void setInscripcionesExamenes(List<DtExamen> inscripcionesExamenes) {
-        this.inscripcionesExamenes = inscripcionesExamenes;
-    }
-
-    public List<DtCurso> getCursos() {
-        return this.cursos;
-    }
-
-    public void setCursos(List<DtCurso> cursos) {
-        this.cursos = cursos;
     }
 
     @Override

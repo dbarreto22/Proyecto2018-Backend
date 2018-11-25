@@ -40,9 +40,10 @@ import javax.xml.bind.annotation.*;
             + "A.carrera = B AND B member of U.carreras \n"
             + "AND U.cedula = :cedula"),
         @NamedQuery(name = Examen.GET_ESTUDIANTES_INSCRIPTOS_EXAMEN, 
-                query = "SELECT U FROM Examen E, Usuario U \n"
-                + "WHERE E.id = :idExamen \n"
-                + "AND E member of U.inscripcionesExamenes")
+                query = "SELECT U FROM Examen C, Estudiante_Examen E, Usuario U \n"
+                + "WHERE C.id = :idExamen \n"
+                + "AND E.examen = C \n"
+                + "AND E.usuario = U")
 })
 //@NamedQueries({
 //    @NamedQuery(name = "Examen.findAll", query = "Select e from Examen e"),
@@ -54,8 +55,7 @@ public class Examen implements Serializable {
     public final static String FIND_DISPONIBLES_ESTUDIANTE = "Examen.FIND_DISPONIBLES_ESTUDIANTE";
     
     @Id
-    @GeneratedValue(generator = "examen_gen")
-    @SequenceGenerator(name="examen_gen", sequenceName = "examen_seq")
+    @GeneratedValue( strategy=GenerationType.AUTO )
     private Long id;
 
     @Basic
@@ -64,8 +64,8 @@ public class Examen implements Serializable {
     @ManyToOne(targetEntity = Asignatura_Carrera.class)
     private Asignatura_Carrera asignatura_Carrera;
 
-    @OneToMany(targetEntity = Estudiante_Examen.class)
-    private List<Estudiante_Examen> calificacionesExamenes;
+    @OneToMany(fetch = FetchType.EAGER, targetEntity = Estudiante_Examen.class, mappedBy = "examen")
+    private List<Estudiante_Examen> examenes;
 
 
     public Examen(DtExamen examen) {
@@ -111,16 +111,16 @@ public class Examen implements Serializable {
         this.asignatura_Carrera = asignatura_Carrera;
     }
 
-    public List<Estudiante_Examen> getCalificacionesExamenes() {
-        return this.calificacionesExamenes;
+    public List<Estudiante_Examen> getExamenes() {
+        return this.examenes;
     }
 
-    public void setCalificacionesExamenes(List<Estudiante_Examen> calificacionesExamenes) {
-        this.calificacionesExamenes = calificacionesExamenes;
+    public void setExamenes(List<Estudiante_Examen> examenes) {
+        this.examenes = examenes;
     }
     
-     public void addCalificacionesExamens(Estudiante_Examen calificacionExamen) {
-        this.calificacionesExamenes.add(calificacionExamen);
+     public void addExamenes(Estudiante_Examen calificacionExamen) {
+        this.examenes.add(calificacionExamen);
     }
     
     public DtExamen toDataType(){

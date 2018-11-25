@@ -27,8 +27,7 @@ import javax.xml.bind.annotation.*;
 public class Rol implements Serializable {
 
     @Id
-    @GeneratedValue(generator = "rol_gen")
-    @SequenceGenerator(name="rol_gen", sequenceName = "rol_seq")
+    @GeneratedValue( strategy=GenerationType.AUTO )
     private Long id;
 
     @Basic

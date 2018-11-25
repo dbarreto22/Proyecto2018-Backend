@@ -263,7 +263,9 @@ public class BedeliaServiceImpl implements BedeliaService {
                     
                     if(idCurso.equals(0L)){
                         message = "El curso se ha creado correctamente";      
+                        System.out.println("idAsigCar: " + idAsigCar);
                         Asignatura_Carrera asigcar = asignatura_CarreraFacade.find(idAsigCar);
+                        System.out.println("asigcar: " + asigcar.getId());
                         Curso curso = new Curso(fecha, asigcar);
                         cursoFacade.create(curso);
                     }else{
@@ -458,8 +460,8 @@ public class BedeliaServiceImpl implements BedeliaService {
                             if (curso == null){
                                 message = "No existe el curso";
                             }else{
-                                if (usuario.getCursos().contains(curso)){
-                                    System.out.println("contains(curso)");
+                                    System.out.println("idCurso: " + idCurso);
+                                    System.out.println("cedula: " + cedula);
                                     Estudiante_Curso e_c = e_cJFacade.find(idCurso,cedula);
                                     if(e_c != null){
                                         e_c.setCalificacion(calificacion);
@@ -469,9 +471,6 @@ public class BedeliaServiceImpl implements BedeliaService {
                                     }else{
                                         message = "Error, El estudiante " + usuario.getCedula() +" no se encuentra inscripto al curso";
                                     }
-                                }else{
-                                   message = "Error, El estudiante " + usuario.getCedula() +" no se encuentra inscripto al curso";
-                                }
                             }
                         }
                     }else{
@@ -508,7 +507,6 @@ public class BedeliaServiceImpl implements BedeliaService {
                             if (examen == null){
                                message = "No existe el examen";
                             }else{
-                                if (usuario.getInscripcionesExamenes().contains(examen)){
                                     Estudiante_Examen e_e = e_eJFacade.find(idExamen,cedula);
                                     if (e_e != null){
                                         e_e.setCalificacion(calificacion);
@@ -518,9 +516,6 @@ public class BedeliaServiceImpl implements BedeliaService {
                                     }else{
                                         message = "El estutdiante " + usuario.getCedula() +" no se encuentra inscripto al examen";
                                     }
-                                }else{
-                                    message = "El estutdiante " + usuario.getCedula() +" no se encuentra inscripto al examen";
-                                }
                             }
                         }
                     }else{

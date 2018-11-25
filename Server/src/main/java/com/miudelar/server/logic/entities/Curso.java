@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -42,9 +43,10 @@ import javax.xml.bind.annotation.*;
             + "A.carrera = B AND B member of U.carreras \n"
             + "AND U.cedula = :cedula"),
         @NamedQuery(name = Curso.GET_ESTUDIANTES_INSCRIPTOS_CURSO, 
-                query = "SELECT U FROM Curso C, Usuario U \n"
+                query = "SELECT U FROM Curso C, Estudiante_Curso E, Usuario U \n"
                 + "WHERE C.id = :idCurso \n"
-                + "AND C member of U.cursos")
+                + "AND E.curso = C \n"
+                + "AND E.usuario = U")
 })
 public class Curso implements Serializable {
     
@@ -53,8 +55,7 @@ public class Curso implements Serializable {
     public final static String FIND_DISPONIBLES_ESTUDIANTE = "Curso.FIND_DISPONIBLES_ESTUDIANTE";
     
     @Id
-    @GeneratedValue(generator = "curso_gen")
-    @SequenceGenerator(name="curso_gen", sequenceName = "curso_seq")
+    @GeneratedValue( strategy=GenerationType.AUTO )
     private Long id;
     
     @Basic
@@ -63,11 +64,12 @@ public class Curso implements Serializable {
     @ManyToOne(targetEntity = Asignatura_Carrera.class)
     private Asignatura_Carrera asignatura_Carrera;
 
-    @OneToMany(targetEntity = Horario.class)
-    private List<Horario> horarios;
+    @OneToMany(targetEntity = Horario.class, fetch = FetchType.EAGER)
+    private Set<Horario> horarios;
 
-    @OneToMany(targetEntity = Estudiante_Curso.class)
-    private List<Estudiante_Curso> calificacionesCursos;
+    
+    @OneToMany(fetch = FetchType.EAGER, targetEntity = Estudiante_Curso.class, mappedBy = "curso")
+    private List<Estudiante_Curso> cursos;
 
 //    @XmlTransient
 //    @ManyToMany(targetEntity = Usuario.class, mappedBy = "cursos")
@@ -102,11 +104,11 @@ public class Curso implements Serializable {
         this.id = id;
     }
 
-    public List<Horario> getHorarios() {
+    public Set<Horario> getHorarios() {
         return this.horarios;
     }
 
-    public void setHorarios(List<Horario> horarios) {
+    public void setHorarios(Set<Horario> horarios) {
         this.horarios = horarios;
     }
 
@@ -127,16 +129,16 @@ public class Curso implements Serializable {
         this.asignatura_Carrera = asignatura_Carrera;
     }
 
-    public List<Estudiante_Curso> getCalificacionesCursos() {
-        return this.calificacionesCursos;
+    public List<Estudiante_Curso> getCursos() {
+        return this.cursos;
     }
 
-    public void setCalificacionesCursos(List<Estudiante_Curso> calificacionesCursos) {
-        this.calificacionesCursos = calificacionesCursos;
+    public void setCursos(List<Estudiante_Curso> cursos) {
+        this.cursos = cursos;
     }
     
-    public void addCalificacionesCursos(Estudiante_Curso calificacionCurso) {
-        this.calificacionesCursos.add(calificacionCurso);
+    public void addCursos(Estudiante_Curso calificacionCurso) {
+        this.cursos.add(calificacionCurso);
     }
 
     public void addHorario (Horario horario){

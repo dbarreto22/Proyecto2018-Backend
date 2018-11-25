@@ -9,6 +9,7 @@ import com.miudelar.server.logic.datatypes.DtCarrera;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -56,14 +57,14 @@ public class Asignatura_Carrera implements Serializable {
     private Asignatura asignatura;
     
     @ManyToMany(targetEntity = Periodo_Examen.class)
-    private List<Periodo_Examen> periodos_Examen;
+    private Set<Periodo_Examen> periodos_Examen;
 
-    @ManyToMany(targetEntity = Asignatura_Carrera.class)
-    private List<Asignatura_Carrera> previas;
+    @ManyToMany(fetch = FetchType.EAGER, targetEntity = Asignatura_Carrera.class)
+    private Set<Asignatura_Carrera> previas;
 
     @XmlTransient
     @ManyToMany(targetEntity = Asignatura_Carrera.class, mappedBy = "previas")
-    private List<Asignatura_Carrera> esPreviaDe;
+    private Set<Asignatura_Carrera> esPreviaDe;
 
     public Asignatura_Carrera(Asignatura asignatura, Carrera carrera) {
         this.carrera = carrera;
@@ -124,11 +125,11 @@ public class Asignatura_Carrera implements Serializable {
         this.asignatura = asignatura;
     }
 
-    public List<Asignatura_Carrera> getPrevias() {
+    public Set<Asignatura_Carrera> getPrevias() {
         return this.previas;
     }
 
-    public void setPrevias(List<Asignatura_Carrera> previas) {
+    public void setPrevias(Set<Asignatura_Carrera> previas) {
         this.previas = previas;
     }
     
@@ -140,11 +141,11 @@ public class Asignatura_Carrera implements Serializable {
         this.previas.remove(previa);
     }
 
-    public List<Asignatura_Carrera> getEsPreviaDe() {
+    public Set<Asignatura_Carrera> getEsPreviaDe() {
         return this.esPreviaDe;
     }
 
-    public void setEsPreviaDe(List<Asignatura_Carrera> esPreviaDe) {
+    public void setEsPreviaDe(Set<Asignatura_Carrera> esPreviaDe) {
         this.esPreviaDe = esPreviaDe;
     }
     

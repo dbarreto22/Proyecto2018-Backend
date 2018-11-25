@@ -19,7 +19,7 @@ public class DtCurso implements Serializable {
 
     private List<DtHorario> horarios;
 
-    private List<DtEstudiante_Curso> calificacionesCursos;
+    private List<DtEstudiante_Curso> cursos;
 
     private List<DtUsuario> inscriptos;
 
@@ -69,12 +69,12 @@ public class DtCurso implements Serializable {
         this.horarios = horarios;
     }
 
-    public List<DtEstudiante_Curso> getCalificacionesCursos() {
-        return this.calificacionesCursos;
+    public List<DtEstudiante_Curso> getCursos() {
+        return this.cursos;
     }
 
-    public void setCalificacionesCursos(List<DtEstudiante_Curso> calificacionesCursos) {
-        this.calificacionesCursos = calificacionesCursos;
+    public void setCursos(List<DtEstudiante_Curso> cursos) {
+        this.cursos = cursos;
     }
 
     public List<DtUsuario> getInscriptos() {

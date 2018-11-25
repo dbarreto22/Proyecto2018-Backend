@@ -42,6 +42,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Set;
 
 public class InitMgr implements InitMgt {
 
@@ -57,7 +58,7 @@ public class InitMgr implements InitMgt {
     public static void addAllNodes(Asignatura_Carrera asic_car, List<Asignatura_Carrera> listOfNodes) {
         if (asic_car != null && !listOfNodes.contains(asic_car)) {
             listOfNodes.add(asic_car);
-            List<Asignatura_Carrera> children = asic_car.getPrevias();
+            Set<Asignatura_Carrera> children = asic_car.getPrevias();
             if (children != null) {
                 for (Asignatura_Carrera child : children) {
                     addAllNodes(child, listOfNodes);

@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -58,23 +59,23 @@ public class Usuario implements Serializable {
     @Basic
     private String deviceToken;
 
-    @OneToMany(targetEntity = Estudiante_Examen.class)
-    private List<Estudiante_Examen> calificacionesExamenes;
+    @OneToMany(fetch = FetchType.EAGER, targetEntity = Estudiante_Examen.class, mappedBy = "usuario")
+    private Set<Estudiante_Examen> examenes;
 
-    @OneToMany(targetEntity = Estudiante_Curso.class)
-    private List<Estudiante_Curso> calificacionesCursos;
+    @OneToMany(fetch = FetchType.EAGER, targetEntity = Estudiante_Curso.class, mappedBy = "usuario")
+    private Set<Estudiante_Curso> cursos;
 
-    @ManyToMany(targetEntity = Rol.class)
-    private List<Rol> roles;
+    @ManyToMany(targetEntity = Rol.class, fetch = FetchType.EAGER)
+    private Set<Rol> roles;
 
     @ManyToMany(targetEntity = Carrera.class)
     private List<Carrera> carreras;
 
-    @ManyToMany(targetEntity = Examen.class)
-    private List<Examen> inscripcionesExamenes;
+//    @ManyToMany(targetEntity = Examen.class)
+//    private List<Examen> inscripcionesExamenes;
 
-    @ManyToMany(targetEntity = Curso.class)
-    private List<Curso> cursos;
+//    @ManyToMany(targetEntity = Curso.class)
+//    private List<Curso> cursos;
 
     public Usuario(String cedula, String nombre, String apellido, String email, String password) {
         this.activo = true;
@@ -153,27 +154,27 @@ public class Usuario implements Serializable {
         this.deviceToken = deviceToken;
     }
     
-    public List<Estudiante_Examen> getCalificacionesExamenes() {
-        return this.calificacionesExamenes;
+    public Set<Estudiante_Examen> getExamenes() {
+        return this.examenes;
     }
 
-    public void setCalificacionesExamenes(List<Estudiante_Examen> calificacionesExamenes) {
-        this.calificacionesExamenes = calificacionesExamenes;
+    public void setExamenes(Set<Estudiante_Examen> examenes) {
+        this.examenes = examenes;
     }
 
-    public List<Estudiante_Curso> getCalificacionesCursos() {
-        return this.calificacionesCursos;
+    public Set<Estudiante_Curso> getCursos() {
+        return this.cursos;
     }
 
-    public void setCalificacionesCursos(List<Estudiante_Curso> calificacionesCursos) {
-        this.calificacionesCursos = calificacionesCursos;
+    public void setCursos(Set<Estudiante_Curso> cursos) {
+        this.cursos = cursos;
     }
 
-    public List<Rol> getRoles() {
+    public Set<Rol> getRoles() {
         return this.roles;
     }
 
-    public void setRoles(List<Rol> roles) {
+    public void setRoles(Set<Rol> roles) {
         this.roles = roles;
     }
     
@@ -197,37 +198,37 @@ public class Usuario implements Serializable {
         this.carreras.add(carrera);
     }
 
-    public List<Examen> getInscripcionesExamenes() {
-        return this.inscripcionesExamenes;
-    }
-
-    public void setInscripcionesExamenes(List<Examen> inscripcionesExamenes) {
-        this.inscripcionesExamenes = inscripcionesExamenes;
-    }
+//    public List<Examen> getInscripcionesExamenes() {
+//        return this.inscripcionesExamenes;
+//    }
+//
+//    public void setInscripcionesExamenes(List<Examen> inscripcionesExamenes) {
+//        this.inscripcionesExamenes = inscripcionesExamenes;
+//    }
+//    
+//    public void addInscripcionesExamenes(Examen examen) {
+//        this.inscripcionesExamenes.add(examen);
+//    }   
     
-    public void addInscripcionesExamenes(Examen examen) {
-        this.inscripcionesExamenes.add(examen);
-    }   
-    
-    public void addcalificacionesExamenes(Estudiante_Examen examen) {
-        this.calificacionesExamenes.add(examen);
+    public void addexamenes(Estudiante_Examen examen) {
+        this.examenes.add(examen);
     }  
     
-    public void addcalificacionesCursos(Estudiante_Curso curso) {
-        this.calificacionesCursos.add(curso);
+    public void addcursos(Estudiante_Curso curso) {
+        this.cursos.add(curso);
     } 
     
-    public List<Curso> getCursos() {
-        return this.cursos;
-    }
-
-    public void setCursos(List<Curso> cursos) {
-        this.cursos = cursos;
-    }
-    
-    public void addCurso(Curso curso) {
-        this.cursos.add(curso);
-    }
+//    public List<Curso> getCursos() {
+//        return this.cursos;
+//    }
+//
+//    public void setCursos(List<Curso> cursos) {
+//        this.cursos = cursos;
+//    }
+//    
+//    public void addCurso(Curso curso) {
+//        this.cursos.add(curso);
+//    }
     
     public DtUsuario toDataType() {
         List <DtRol> dtroles = new ArrayList<DtRol>();

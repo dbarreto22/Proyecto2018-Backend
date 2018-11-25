@@ -32,7 +32,7 @@ public interface DirectorService {
     
     @GET
     @Path("carrera")
-    @RolesAllowed({"ESTUDIANTE"})
+    @RolesAllowed({"ESTUDIANTE", "BEDELIA"})
     @Produces(MediaType.APPLICATION_JSON)
     public List<DtCarrera> getAllCarrera();
     

@@ -17,7 +17,7 @@ public class DtExamen implements Serializable {
 
     private DtAsignatura_Carrera asignatura_Carrera;
 
-    private List<DtEstudiante_Examen> calificacionesExamenes;
+    private List<DtEstudiante_Examen> examenes;
 
     private List<DtUsuario> inscriptos;
 
@@ -61,12 +61,12 @@ public class DtExamen implements Serializable {
         this.asignatura_Carrera = asignatura_Carrera;
     }
 
-    public List<DtEstudiante_Examen> getCalificacionesExamenes() {
-        return this.calificacionesExamenes;
+    public List<DtEstudiante_Examen> getExamenes() {
+        return this.examenes;
     }
 
-    public void setCalificacionesExamenes(List<DtEstudiante_Examen> calificacionesExamenes) {
-        this.calificacionesExamenes = calificacionesExamenes;
+    public void setExamenes(List<DtEstudiante_Examen> examenes) {
+        this.examenes = examenes;
     }
 
     public List<DtUsuario> getInscriptos() {

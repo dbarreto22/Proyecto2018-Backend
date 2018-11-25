@@ -7,6 +7,7 @@ package com.miudelar.server.ejb;
 
 import com.miudelar.server.logic.entities.Periodo_Examen;
 import java.util.List;
+import java.util.Set;
 import javax.ejb.Local;
 
 /**

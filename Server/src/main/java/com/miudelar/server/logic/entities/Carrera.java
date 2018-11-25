@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -46,8 +47,8 @@ public class Carrera implements Serializable {
     @ManyToMany(targetEntity = Usuario.class, mappedBy = "carreras")
     private List<Usuario> usuarios;*/
 
-    @ManyToMany(targetEntity = Periodo_Examen.class)
-    private List<Periodo_Examen> periodos_Examenes;
+    @ManyToMany(targetEntity = Periodo_Examen.class, fetch = FetchType.EAGER)
+    private Set<Periodo_Examen> periodos_Examenes;
 
 //    @ManyToMany(targetEntity = Asignatura.class)
 //    private List<Asignatura> asignaturas;
@@ -84,11 +85,11 @@ public class Carrera implements Serializable {
         this.asignatura_Carreras = asignatura_Carreras;
     }
 
-    public List<Periodo_Examen> getPeriodos_Examenes() {
+    public Set<Periodo_Examen> getPeriodos_Examenes() {
         return this.periodos_Examenes;
     }
 
-    public void setPeriodos_Examenes(List<Periodo_Examen> periodos_Examenes) {
+    public void setPeriodos_Examenes(Set<Periodo_Examen> periodos_Examenes) {
         this.periodos_Examenes = periodos_Examenes;
     }
 

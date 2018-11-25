@@ -223,11 +223,6 @@ public class DirectorServiceImpl implements DirectorService {
                             ////        Creo entidad relación
                             Asignatura_Carrera asignatura_carreraEntity = new Asignatura_Carrera(asignatura, carrera);
                             asignatura_CarreraFacade.create(asignatura_carreraEntity);
-
-                            Asignatura_Carrera asignatura_carrera = asignatura_CarreraFacade.findByCods(carrera.getCodigo(), asignatura.getCodigo());
-                            System.out.println("asignatura_carreraEntity: " + asignatura_carrera.getId());
-
-//                            }
                         }
                     }
                 }
