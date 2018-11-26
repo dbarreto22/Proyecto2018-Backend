@@ -43,7 +43,7 @@ public class Asignatura_Carrera implements Serializable {
     private Long id;
     
     @XmlTransient
-    @OneToMany(targetEntity = Examen.class)
+    @OneToMany(targetEntity = Examen.class, mappedBy = "asignatura_Carrera")
         private List<Examen> examenes;
     
     @XmlTransient

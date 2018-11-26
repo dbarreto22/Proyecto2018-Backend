@@ -213,6 +213,16 @@ public class EstudianteServiceImpl implements EstudianteService {
 
         return examenes;
     }
+    
+    
+    @Override
+    public List<DtCarrera> getCarreraByCedula(String cedula){
+        List <DtCarrera> carreras = new ArrayList<>();
+        usuarioFacade.find(cedula).getCarreras().forEach(carrera -> {
+            carreras.add(carrera.toDataType());
+        });
+        return carreras;
+    }
 
     @Override
     public DtCalificaciones getCalificaciones(String cedula, Long idAsig_Carrera) {
