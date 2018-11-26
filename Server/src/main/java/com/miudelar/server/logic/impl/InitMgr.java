@@ -151,16 +151,18 @@ public class InitMgr implements InitMgt {
             }
         }
         
-        JsonObject info = new JsonObject();
-        JsonObject data = new JsonObject(); 
-        JsonObject json = new JsonObject();
-        
-        data.addProperty("title", title);
-        data.addProperty("body", message);
-        data.addProperty("tipo", "curso");
-        json.addProperty("to", deviceToken);
-        json.add("data", data);
+        if (deviceToken != ""){
+            JsonObject info = new JsonObject();
+            JsonObject data = new JsonObject(); 
+            JsonObject json = new JsonObject();
 
+            data.addProperty("title", title);
+            data.addProperty("body", message);
+            data.addProperty("tipo", "curso");
+            json.addProperty("to", deviceToken);
+            json.add("data", data);
+        
+        
 //        String pushMessage = "{\"notification\":{\"title\":\""
 //                + title
 //                + "\",\"body\":\""
@@ -203,6 +205,10 @@ public class InitMgr implements InitMgt {
             Logger.getLogger(InitMgr.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
         }
         return response;
+        }else{
+            return 0;
+            
+        }
     }
 
 //    AdministradorService administradorService = ManagersFactory.getInstance().getAdministradorService();

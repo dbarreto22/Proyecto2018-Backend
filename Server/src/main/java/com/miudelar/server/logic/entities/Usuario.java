@@ -68,8 +68,8 @@ public class Usuario implements Serializable {
     @ManyToMany(targetEntity = Rol.class, fetch = FetchType.EAGER)
     private Set<Rol> roles;
 
-    @ManyToMany(targetEntity = Carrera.class)
-    private List<Carrera> carreras;
+    @ManyToMany(fetch = FetchType.EAGER,targetEntity = Carrera.class)
+    private Set<Carrera> carreras;
 
 //    @ManyToMany(targetEntity = Examen.class)
 //    private List<Examen> inscripcionesExamenes;
@@ -186,11 +186,11 @@ public class Usuario implements Serializable {
         this.roles.remove(rol);
     }
 
-    public List<Carrera> getCarreras() {
+    public Set<Carrera> getCarreras() {
         return this.carreras;
     }
 
-    public void setCarreras(List<Carrera> carreras) {
+    public void setCarreras(Set<Carrera> carreras) {
         this.carreras = carreras;
     }
     
