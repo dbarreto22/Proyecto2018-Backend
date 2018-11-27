@@ -101,7 +101,7 @@ public class InitMgr implements InitMgt {
                     armarMsg(message, examen.getUsuario(), "examen", examen.getExamen().getAsignatura_Carrera().getAsignatura().getNombre(), examen.getCalificacion());
                 }
             }
-
+            
             Transport.send(message);
 
             System.out.println("Done");
@@ -150,10 +150,11 @@ public class InitMgr implements InitMgt {
                 message += " en el curso de " + examen.getExamen().getAsignatura_Carrera().getAsignatura().getNombre() + ".";
             }
         }
-        
-        if (deviceToken != ""){
+
+        if (deviceToken != null && deviceToken != "") {
+            System.out.println("deviceToken: " + deviceToken); 
             JsonObject info = new JsonObject();
-            JsonObject data = new JsonObject(); 
+            JsonObject data = new JsonObject();
             JsonObject json = new JsonObject();
 
             data.addProperty("title", title);
@@ -161,53 +162,42 @@ public class InitMgr implements InitMgt {
             data.addProperty("tipo", "curso");
             json.addProperty("to", deviceToken);
             json.add("data", data);
-        
-        
-//        String pushMessage = "{\"notification\":{\"title\":\""
-//                + title
-//                + "\",\"body\":\""
-//                + message
-//                + "\"}"
-//                + ",\"to\":\""
-//                + deviceToken
-//                + "\""
-//                + "}";
 
-        URL url;
-//        System.out.println("pushMessage: "+ pushMessage);
-        
-        try {
-            url = new URL("https://fcm.googleapis.com/fcm/send");
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestProperty("Authorization", "key=" + ClaveFireBase);
-            conn.setRequestProperty("Content-Type", "application/json");
-            conn.setRequestMethod("POST");
-            conn.setDoOutput(true);
-            // Send FCM message content.
-            OutputStream outputStream = conn.getOutputStream();
-            String jsonString = new Gson().toJson(json);
-            byte[] utf8JsonString = jsonString.getBytes("UTF8");
-            outputStream.write(utf8JsonString);
-            System.out.println("utf8JsonString: " + utf8JsonString.toString());
-            
-            response = conn.getResponseCode();
-            System.out.println(conn.getResponseCode());
-            System.out.println(conn.getResponseMessage());
-            BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
-            StringBuilder sb = new StringBuilder();
-            String output;
-            while ((output = br.readLine()) != null) {
-                sb.append(output);
-              }
-            System.out.println("sb.toString(): " + sb.toString());
-        } catch (Exception ex) {
-            response = 505;
-            Logger.getLogger(InitMgr.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
-        }
-        return response;
-        }else{
+            URL url;
+            //        System.out.println("pushMessage: "+ pushMessage);
+
+            try {
+                url = new URL("https://fcm.googleapis.com/fcm/send");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestProperty("Authorization", "key=" + ClaveFireBase);
+                conn.setRequestProperty("Content-Type", "application/json");
+                conn.setRequestMethod("POST");
+                conn.setDoOutput(true);
+                // Send FCM message content.
+                OutputStream outputStream = conn.getOutputStream();
+                String jsonString = new Gson().toJson(json);
+                byte[] utf8JsonString = jsonString.getBytes("UTF8");
+                outputStream.write(utf8JsonString);
+                System.out.println("utf8JsonString: " + utf8JsonString.toString());
+
+                response = conn.getResponseCode();
+                System.out.println(conn.getResponseCode());
+                System.out.println(conn.getResponseMessage());
+                BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+                StringBuilder sb = new StringBuilder();
+                String output;
+                while ((output = br.readLine()) != null) {
+                    sb.append(output);
+                }
+                System.out.println("sb.toString(): " + sb.toString());
+            } catch (Exception ex) {
+                response = 505;
+                Logger.getLogger(InitMgr.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+            }
+            return response;
+        } else {
             return 0;
-            
+
         }
     }
 

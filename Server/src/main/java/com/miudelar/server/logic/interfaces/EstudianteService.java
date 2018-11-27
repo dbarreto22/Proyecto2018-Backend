@@ -37,13 +37,13 @@ public interface EstudianteService {
     
     @GET
     @Path("curso")
-    @RolesAllowed({"BEDELIA"})
+    @RolesAllowed({"ESTUDIANTE","BEDELIA"})
     @Produces(MediaType.APPLICATION_JSON)
     public List<DtCurso> getAllCurso();
     
     @GET
     @Path("examen")
-    @RolesAllowed({"BEDELIA"})
+    @RolesAllowed({"ESTUDIANTE","BEDELIA"})
     @Produces(MediaType.APPLICATION_JSON)
     public List<DtExamen> getAllExamen();
     

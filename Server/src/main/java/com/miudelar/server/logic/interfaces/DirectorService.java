@@ -32,7 +32,7 @@ public interface DirectorService {
     
     @GET
     @Path("carrera")
-    @RolesAllowed({"ESTUDIANTE", "BEDELIA"})
+    @RolesAllowed({"DIRECTOR", "ESTUDIANTE", "BEDELIA"})
     @Produces(MediaType.APPLICATION_JSON)
     public List<DtCarrera> getAllCarrera();
     
@@ -121,7 +121,7 @@ public interface DirectorService {
     
     @GET
     @Path("asignaturacarrera")
-    @RolesAllowed({"BEDELIA"})
+    @RolesAllowed({"DIRECTOR","BEDELIA"})
     @Produces(MediaType.APPLICATION_JSON)
     public List<DtAsignatura_Carrera> getAllAsignaturaCarrera();
     

@@ -72,15 +72,16 @@ import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import org.jboss.resteasy.util.Base64;
 import net.sf.jasperreports.engine.JREmptyDataSource;
+
 /**
  *
  * @author rmoreno
  */
 public class BedeliaServiceImpl implements BedeliaService {
-    
+
     JsonParser parser = new JsonParser();
     Gson gson = new Gson();
-    
+
     private HorarioFacadeLocal horarioFacade = lookupHorarioFacadeBean();
     private CursoFacadeLocal cursoFacade = lookupCursoFacadeBean();
     private Periodo_ExamenFacadeLocal periodoFacade = lookupPeriodo_ExamenFacadeBean();
@@ -92,9 +93,8 @@ public class BedeliaServiceImpl implements BedeliaService {
     private Asignatura_CarreraFacadeLocal asignatura_CarreraFacade = lookupAsignatura_CarreraFacadeBean();
     private RolFacadeLocal rolFacade = lookupRolFacadeBean();
     private InitMgr initMgr = new InitMgr();
-    
-    
-     private Asignatura_CarreraFacadeLocal lookupAsignatura_CarreraFacadeBean() {
+
+    private Asignatura_CarreraFacadeLocal lookupAsignatura_CarreraFacadeBean() {
         try {
             Context c = new InitialContext();
             return (Asignatura_CarreraFacadeLocal) c.lookup("java:app/miudelar-server/Asignatura_CarreraFacade");
@@ -103,8 +103,8 @@ public class BedeliaServiceImpl implements BedeliaService {
             throw new RuntimeException(ne);
         }
     }
-     
-     private RolFacadeLocal lookupRolFacadeBean() {
+
+    private RolFacadeLocal lookupRolFacadeBean() {
         try {
             Context c = new InitialContext();
             return (RolFacadeLocal) c.lookup("java:app/miudelar-server/RolFacade");
@@ -113,8 +113,8 @@ public class BedeliaServiceImpl implements BedeliaService {
             throw new RuntimeException(ne);
         }
     }
-     
-     private UsuarioFacadeLocal lookupUsuarioFacadeBean() {
+
+    private UsuarioFacadeLocal lookupUsuarioFacadeBean() {
         try {
             Context c = new InitialContext();
             return (UsuarioFacadeLocal) c.lookup("java:app/miudelar-server/UsuarioFacade");
@@ -123,7 +123,7 @@ public class BedeliaServiceImpl implements BedeliaService {
             throw new RuntimeException(ne);
         }
     }
-    
+
     private CarreraFacadeLocal lookupCarreraFacadeBean() {
         try {
             Context c = new InitialContext();
@@ -133,7 +133,7 @@ public class BedeliaServiceImpl implements BedeliaService {
             throw new RuntimeException(ne);
         }
     }
-   
+
     private HorarioFacadeLocal lookupHorarioFacadeBean() {
         try {
             Context c = new InitialContext();
@@ -193,374 +193,375 @@ public class BedeliaServiceImpl implements BedeliaService {
             throw new RuntimeException(ne);
         }
     }
-    
+
     @Override
-    public List<DtUsuario> getEstudiantesInscriptosExamen(Long idExamen){
+    public List<DtUsuario> getEstudiantesInscriptosExamen(Long idExamen) {
         List<DtUsuario> usuarios = new ArrayList<>();
         examenFacade.getEstudiantesInscriptos(idExamen).forEach(estudiante -> {
-        usuarios.add(estudiante.toDataType());});
+            usuarios.add(estudiante.toDataType());
+        });
         return usuarios;
     }
-    
+
     @Override
-    public List<DtUsuario> getEstudiantesInscriptosCurso(Long idCurso){
+    public List<DtUsuario> getEstudiantesInscriptosCurso(Long idCurso) {
         List<DtUsuario> usuarios = new ArrayList<>();
         cursoFacade.getEstudiantesInscriptos(idCurso).forEach(estudiante -> {
-        usuarios.add(estudiante.toDataType());});
+            usuarios.add(estudiante.toDataType());
+        });
         return usuarios;
     }
-    
+
     @Override
-    public List<DtEstudiante_Curso> getEstudiantesCalificacionesCurso(Long idCurso){
+    public List<DtEstudiante_Curso> getEstudiantesCalificacionesCurso(Long idCurso) {
         List<DtEstudiante_Curso> cursos = new ArrayList<>();
         e_cJFacade.findByCurso(idCurso).forEach(curso -> {
-        cursos.add(curso.toDataType());});
+            cursos.add(curso.toDataType());
+        });
         return cursos;
     }
-    
+
     @Override
-    public List<DtEstudiante_Examen> getEstudiantesCalificacionesExamen(Long idExamen){
+    public List<DtEstudiante_Examen> getEstudiantesCalificacionesExamen(Long idExamen) {
         List<DtEstudiante_Examen> examenes = new ArrayList<>();
         e_eJFacade.findByExamen(idExamen).forEach(examen -> {
-        examenes.add(examen.toDataType());});
+            examenes.add(examen.toDataType());
+        });
         return examenes;
     }
-    
+
     @Override
-    public List<DtAsignatura_Carrera> getAsignaturaCarreraByCarrera(Long idCarrera){
+    public List<DtAsignatura_Carrera> getAsignaturaCarreraByCarrera(Long idCarrera) {
         List<DtAsignatura_Carrera> asignaturas = new ArrayList<>();
         List<Asignatura_Carrera> list = carreraFacade.find(idCarrera).getAsignatura_Carreras();
         System.out.println("list.size(): " + list.size());
         list.forEach(asignatura -> {
-            asignaturas.add(new DtAsignatura_Carrera(asignatura.getId(), 
+            asignaturas.add(new DtAsignatura_Carrera(asignatura.getId(),
                     new DtCarrera(asignatura.getCarrera().getCodigo(), asignatura.getCarrera().getNombre()),
                     new DtAsignatura(asignatura.getAsignatura().getCodigo(), asignatura.getAsignatura().getNombre())));
         });
         return asignaturas;
     }
-    
+
     @Override
-    public DtCurso getCurso(Long idCurso){
+    public DtCurso getCurso(Long idCurso) {
         return cursoFacade.find(idCurso).toDataType();
     }
-    
+
     @Override
-    public DtExamen getExamen(Long idExamen){
+    public DtExamen getExamen(Long idExamen) {
         return examenFacade.find(idExamen).toDataType();
     }
-    
+
     @Override
-    public String saveCurso(String json){
-        String message = "OK"; 
-        try {
-            JsonElement jsonTree = parser.parse(json);
-            if (jsonTree.isJsonObject()) {
-                JsonObject jsonObject = jsonTree.getAsJsonObject();
-                    Long idCurso = jsonObject.get("idCurso").getAsLong();
-                    String sfecha = jsonObject.get("fecha").getAsString();
-                    Date fecha = new SimpleDateFormat("dd/MM/yyyy").parse(sfecha);
-                    Long idAsigCar = jsonObject.get("idAsigCar").getAsLong();
-                    
-                    if(idCurso.equals(0L)){
-                        message = "El curso se ha creado correctamente";      
-                        System.out.println("idAsigCar: " + idAsigCar);
-                        Asignatura_Carrera asigcar = asignatura_CarreraFacade.find(idAsigCar);
-                        System.out.println("asigcar: " + asigcar.getId());
-                        Curso curso = new Curso(fecha, asigcar);
-                        cursoFacade.create(curso);
-                    }else{
-                        if(tieneEstudiantesInscriptosCurso(idCurso)){
-                             message = "Error: El curso tiene estudiantes inscriptos"; 
-                        }else{
-                            message = "El curso se ha editado correctamente";     
-                            Curso curso = cursoFacade.find(idCurso);
-                            curso.setFecha(fecha);
-                            cursoFacade.edit(curso);
-                        }
-                        
-                    }
-                   
-            }        
-            
-        } catch (Exception ex) {
-            System.out.println("Class:BedeliaServiceImpl: "+ ex.getMessage());
-            message = ex.getMessage();
-        }
-        return message;
-    }
-    
-    @Override
-    public String saveExamen(String json){
-        String message = "OK"; 
-        try {
-            JsonElement jsonTree = parser.parse(json);
-            if (jsonTree.isJsonObject()) {
-                JsonObject jsonObject = jsonTree.getAsJsonObject();
-                    Long idExamen = jsonObject.get("idExamen").getAsLong();
-                    String sfecha = jsonObject.get("fecha").getAsString();
-                    Date fecha = new SimpleDateFormat("dd/MM/yyyy").parse(sfecha);
-                    Long idAsigCar = jsonObject.get("idAsigCar").getAsLong();
-                    
-                    if(idExamen.equals(0L)){
-                        message = "El examen se ha creado correctamente";      
-                        Asignatura_Carrera asigcar = asignatura_CarreraFacade.find(idAsigCar);
-                        Examen examen = new Examen(fecha, asigcar);
-                        examenFacade.create(examen);
-                    }else{
-                        if(tieneEstudiantesInscriptosExamen(idExamen)){
-                             message = "Error: El examen tiene estudiantes inscriptos"; 
-                        }else{
-                            message = "El examen se ha editado correctamente";     
-                            Examen examen = examenFacade.find(idExamen);
-                            examen.setFecha(fecha);
-                            examenFacade.edit(examen);
-                        }
-                    }
-            }        
-            
-        } catch (Exception ex) {
-            System.out.println("Class:BedeliaServiceImpl: "+ ex.getMessage());
-            message = ex.getMessage();
-        }
-        return message;
-    }
-    
-    @Override
-    public String removeCurso(String json){
-        String message = "OK"; 
-        try {
-            JsonElement jsonTree = parser.parse(json);
-            if (jsonTree.isJsonObject()) {
-                JsonObject jsonObject = jsonTree.getAsJsonObject();
-                    Long idCurso = jsonObject.get("idCurso").getAsLong();
-                    if(cursoFacade.getEstudiantesInscriptos(idCurso).size() > 0){
-                        message = "El curso tiene estudiantes inscriptos";
-                    }else{
-                        Curso curso = cursoFacade.find(idCurso);
-                        cursoFacade.remove(curso);
-                        message = "El curso fue eliminado";
-                    }
-            }   
-             } catch (Exception ex) {
-            System.out.println("Class:BedeliaServiceImpl: "+ ex.getMessage());
-            message = ex.getMessage();
-        }
-        return message;
-    }
-    
-    @Override
-    public String removeExamen(String json){
-        String message = "OK"; 
-        try {
-            JsonElement jsonTree = parser.parse(json);
-            if (jsonTree.isJsonObject()) {
-                JsonObject jsonObject = jsonTree.getAsJsonObject();
-                    Long idExamen = jsonObject.get("idExamen").getAsLong();
-                    if(examenFacade.getEstudiantesInscriptos(idExamen).size() > 0){
-                        message = "El examen tiene estudiantes inscriptos";
-                    }else{
-                        Examen examen = examenFacade.find(idExamen);
-                        examenFacade.remove(examen);
-                        message = "El examen fue eliminado";
-                    }
-            }   
-             } catch (Exception ex) {
-            System.out.println("Class:BedeliaServiceImpl: "+ ex.getMessage());
-            message = ex.getMessage();
-        }
-        return message;
-    }
-    
-    @Override
-    public String saveHorario(String json){
+    public String saveCurso(String json) {
         String message = "OK";
         try {
             JsonElement jsonTree = parser.parse(json);
             if (jsonTree.isJsonObject()) {
                 JsonObject jsonObject = jsonTree.getAsJsonObject();
-                    Long idCurso = jsonObject.get("idCurso").getAsLong();
-                    JsonObject jsonHora = jsonObject.get("jsonHora").getAsJsonObject();
-                    DtHorario dtHorario = gson.fromJson(jsonHora, DtHorario.class);
-                    
-                    Curso curso = cursoFacade.find(idCurso);
-                    if (curso == null){
-                        message = "El curso no existe";
-                    }else{
-                        //        Creo Horario
-                        Horario horario = new Horario(dtHorario.getDia(), dtHorario.getHoraInicio(), dtHorario.getHoraFin());
-                        horarioFacade.create(horario);
+                Long idCurso = jsonObject.get("idCurso").getAsLong();
+                String sfecha = jsonObject.get("fecha").getAsString();
+                Date fecha = new SimpleDateFormat("dd/MM/yyyy").parse(sfecha);
+                Long idAsigCar = jsonObject.get("idAsigCar").getAsLong();
 
-                        ////        Creo realación
-                        curso.addHorario(horario);
+                if (idCurso.equals(0L)) {
+                    message = "El curso se ha creado correctamente";
+                    System.out.println("idAsigCar: " + idAsigCar);
+                    Asignatura_Carrera asigcar = asignatura_CarreraFacade.find(idAsigCar);
+                    System.out.println("asigcar: " + asigcar.getId());
+                    Curso curso = new Curso(fecha, asigcar);
+                    cursoFacade.create(curso);
+                } else {
+                    if (tieneEstudiantesInscriptosCurso(idCurso)) {
+                        message = "Error: El curso tiene estudiantes inscriptos";
+                    } else {
+                        message = "El curso se ha editado correctamente";
+                        Curso curso = cursoFacade.find(idCurso);
+                        curso.setFecha(fecha);
                         cursoFacade.edit(curso);
                     }
-            } else {
-                message = "Esto no es un json o no lo entiendo: " + json;
+
+                }
+
             }
+
         } catch (Exception ex) {
-            System.out.println("Class:BedeliaServiceImpl: "+ ex.getMessage()+ " " +json);
-            message = ex.getMessage()+ " " +json;
-        }
-        return message;
-    }
-    
-    @Override
-    public String editHorario(Horario horario){
-        String message = "OK";
-        try {
-            horarioFacade.edit(horario);
-        } catch (Exception ex) {
-            System.out.println("Class:BedeliaServiceImpl: "+ ex.getMessage());
+            System.out.println("Class:BedeliaServiceImpl: " + ex.getMessage());
             message = ex.getMessage();
         }
         return message;
     }
-    
+
     @Override
-    public String savePeriodoExamen(DtPeriodo_Examen dtPeriodo){
-    String message = "OK";
-        try {
-            Periodo_Examen periodo = new Periodo_Examen(dtPeriodo);
-            periodoFacade.create(periodo);
-        } catch (Exception ex) {
-            System.out.println("Class:BedeliaServiceImpl: "+ ex.getMessage());
-            message = ex.getMessage();
-        }
-        return message;
-    }
-    
-    @Override 
-    public String editPeriodoExamen(Periodo_Examen periodo){
-        String message = "OK";
-        try {
-            periodoFacade.edit(periodo);
-        } catch (Exception ex) {
-            System.out.println("Class:BedeliaServiceImpl: "+ ex.getMessage());
-            message = ex.getMessage();
-        }
-        return message;
-    }
-    
-    @Override
-    public String cargarNotasCurso(String json){
+    public String saveExamen(String json) {
         String message = "OK";
         try {
             JsonElement jsonTree = parser.parse(json);
             if (jsonTree.isJsonObject()) {
                 JsonObject jsonObject = jsonTree.getAsJsonObject();
-                    Long idCurso = jsonObject.get("idCurso").getAsLong();
-                    String cedula = jsonObject.get("cedula").getAsString();
-                    Long calificacion = jsonObject.get("calificacion").getAsLong();
-                    if (calificacion < 13 && calificacion >= 0) {
-                        Usuario usuario = usuarioFacade.find(cedula);
-                        if (usuario == null){
-                            message = "No existe el usuario";
-                        }else{
-                            Curso curso = cursoFacade.find(idCurso);
-                            if (curso == null){
-                                message = "No existe el curso";
-                            }else{
-                                    System.out.println("idCurso: " + idCurso);
-                                    System.out.println("cedula: " + cedula);
-                                    Estudiante_Curso e_c = e_cJFacade.find(idCurso,cedula);
-                                    if(e_c != null){
-                                        e_c.setCalificacion(calificacion);
-                                        e_cJFacade.edit(e_c);
-                                        initMgr.sendMail(e_c); 
-                                        initMgr.sendPushWithSimpleAndroid(e_c);
-                                    }else{
-                                        message = "Error, El estudiante " + usuario.getCedula() +" no se encuentra inscripto al curso";
-                                    }
-                            }
-                        }
-                    }else{
-                        message = "Error, Calificacion: " + calificacion.toString() + " no es un valor válido";
+                Long idExamen = jsonObject.get("idExamen").getAsLong();
+                String sfecha = jsonObject.get("fecha").getAsString();
+                Date fecha = new SimpleDateFormat("dd/MM/yyyy").parse(sfecha);
+                Long idAsigCar = jsonObject.get("idAsigCar").getAsLong();
+
+                if (idExamen.equals(0L)) {
+                    message = "El examen se ha creado correctamente";
+                    Asignatura_Carrera asigcar = asignatura_CarreraFacade.find(idAsigCar);
+                    Examen examen = new Examen(fecha, asigcar);
+                    examenFacade.create(examen);
+                } else {
+                    if (tieneEstudiantesInscriptosExamen(idExamen)) {
+                        message = "Error: El examen tiene estudiantes inscriptos";
+                    } else {
+                        message = "El examen se ha editado correctamente";
+                        Examen examen = examenFacade.find(idExamen);
+                        examen.setFecha(fecha);
+                        examenFacade.edit(examen);
                     }
-            } else {
-                message = "Esto no es un json o no lo entiendo: " + json;
+                }
             }
+
         } catch (Exception ex) {
-            System.out.println("Class:BedeliaServiceImpl: "+ ex.getMessage()+ " " +json);
-            message = ex.getMessage()+ " " +json;
+            System.out.println("Class:BedeliaServiceImpl: " + ex.getMessage());
+            message = ex.getMessage();
         }
         return message;
     }
-    
+
     @Override
-    public String cargarNotasExamen(String json){
+    public String removeCurso(String json) {
         String message = "OK";
         try {
             JsonElement jsonTree = parser.parse(json);
             if (jsonTree.isJsonObject()) {
                 JsonObject jsonObject = jsonTree.getAsJsonObject();
-                if (jsonObject.get("cedula").isJsonObject() && jsonObject.get("idExamen").isJsonObject() && jsonObject.get("calificacion").isJsonObject()) {
-                    Long idExamen = jsonObject.get("idExamen").getAsLong();
-                    String cedula = jsonObject.get("cedula").getAsString();
-                    Long calificacion = jsonObject.get("calificacion").getAsLong();
-                    
-                    if (calificacion < 13 && calificacion >= 0) {
-                        Usuario usuario = usuarioFacade.find(cedula);
-                        if (usuario == null){
-                            message = "No existe el usuario";
-                        }else{
-                            Examen examen = examenFacade.find(idExamen);
-                            if (examen == null){
-                               message = "No existe el examen";
-                            }else{
-                                    Estudiante_Examen e_e = e_eJFacade.find(idExamen,cedula);
-                                    if (e_e != null){
-                                        e_e.setCalificacion(calificacion);
-                                        e_eJFacade.edit(e_e);
-                                        initMgr.sendMail(e_e);
-                                        initMgr.sendPushWithSimpleAndroid(e_e);
-                                    }else{
-                                        message = "El estutdiante " + usuario.getCedula() +" no se encuentra inscripto al examen";
-                                    }
-                            }
-                        }
-                    }else{
-                        message = "Calificacion: " + calificacion.toString() + " no es un valor válido";
-                    }
-                }else{
-                    message = "Formato incorrecto";
+                Long idCurso = jsonObject.get("idCurso").getAsLong();
+                if (cursoFacade.getEstudiantesInscriptos(idCurso).size() > 0) {
+                    message = "El curso tiene estudiantes inscriptos";
+                } else {
+                    Curso curso = cursoFacade.find(idCurso);
+                    cursoFacade.remove(curso);
+                    message = "El curso fue eliminado";
+                }
+            }
+        } catch (Exception ex) {
+            System.out.println("Class:BedeliaServiceImpl: " + ex.getMessage());
+            message = ex.getMessage();
+        }
+        return message;
+    }
+
+    @Override
+    public String removeExamen(String json) {
+        String message = "OK";
+        try {
+            JsonElement jsonTree = parser.parse(json);
+            if (jsonTree.isJsonObject()) {
+                JsonObject jsonObject = jsonTree.getAsJsonObject();
+                Long idExamen = jsonObject.get("idExamen").getAsLong();
+                if (examenFacade.getEstudiantesInscriptos(idExamen).size() > 0) {
+                    message = "El examen tiene estudiantes inscriptos";
+                } else {
+                    Examen examen = examenFacade.find(idExamen);
+                    examenFacade.remove(examen);
+                    message = "El examen fue eliminado";
+                }
+            }
+        } catch (Exception ex) {
+            System.out.println("Class:BedeliaServiceImpl: " + ex.getMessage());
+            message = ex.getMessage();
+        }
+        return message;
+    }
+
+    @Override
+    public String saveHorario(String json) {
+        String message = "OK";
+        try {
+            JsonElement jsonTree = parser.parse(json);
+            if (jsonTree.isJsonObject()) {
+                JsonObject jsonObject = jsonTree.getAsJsonObject();
+                Long idCurso = jsonObject.get("idCurso").getAsLong();
+                JsonObject jsonHora = jsonObject.get("jsonHora").getAsJsonObject();
+                DtHorario dtHorario = gson.fromJson(jsonHora, DtHorario.class);
+
+                Curso curso = cursoFacade.find(idCurso);
+                if (curso == null) {
+                    message = "El curso no existe";
+                } else {
+                    //        Creo Horario
+                    Horario horario = new Horario(dtHorario.getDia(), dtHorario.getHoraInicio(), dtHorario.getHoraFin());
+                    horarioFacade.create(horario);
+
+                    ////        Creo realación
+                    curso.addHorario(horario);
+                    cursoFacade.edit(curso);
                 }
             } else {
                 message = "Esto no es un json o no lo entiendo: " + json;
             }
         } catch (Exception ex) {
-            System.out.println("Class:BedeliaServiceImpl: "+ ex.getMessage()+ " " +json);
-            message = ex.getMessage()+ " " +json;
+            System.out.println("Class:BedeliaServiceImpl: " + ex.getMessage() + " " + json);
+            message = ex.getMessage() + " " + json;
         }
         return message;
     }
-    
-  
+
+    @Override
+    public String editHorario(Horario horario) {
+        String message = "OK";
+        try {
+            horarioFacade.edit(horario);
+        } catch (Exception ex) {
+            System.out.println("Class:BedeliaServiceImpl: " + ex.getMessage());
+            message = ex.getMessage();
+        }
+        return message;
+    }
+
+    @Override
+    public String savePeriodoExamen(DtPeriodo_Examen dtPeriodo) {
+        String message = "OK";
+        try {
+            Periodo_Examen periodo = new Periodo_Examen(dtPeriodo);
+            periodoFacade.create(periodo);
+        } catch (Exception ex) {
+            System.out.println("Class:BedeliaServiceImpl: " + ex.getMessage());
+            message = ex.getMessage();
+        }
+        return message;
+    }
+
+    @Override
+    public String editPeriodoExamen(Periodo_Examen periodo) {
+        String message = "OK";
+        try {
+            periodoFacade.edit(periodo);
+        } catch (Exception ex) {
+            System.out.println("Class:BedeliaServiceImpl: " + ex.getMessage());
+            message = ex.getMessage();
+        }
+        return message;
+    }
+
+    @Override
+    public String cargarNotasCurso(String json) {
+        String message = "OK";
+        try {
+            JsonElement jsonTree = parser.parse(json);
+            if (jsonTree.isJsonObject()) {
+                JsonObject jsonObject = jsonTree.getAsJsonObject();
+                Long idCurso = jsonObject.get("idCurso").getAsLong();
+                String cedula = jsonObject.get("cedula").getAsString();
+                Long calificacion = jsonObject.get("calificacion").getAsLong();
+                if (calificacion < 13 && calificacion >= 0) {
+                    Usuario usuario = usuarioFacade.find(cedula);
+                    if (usuario == null) {
+                        message = "No existe el usuario";
+                    } else {
+                        Curso curso = cursoFacade.find(idCurso);
+                        if (curso == null) {
+                            message = "No existe el curso";
+                        } else {
+                            System.out.println("idCurso: " + idCurso);
+                            System.out.println("cedula: " + cedula);
+                            Estudiante_Curso e_c = e_cJFacade.find(idCurso, cedula);
+                            if (e_c != null) {
+                                e_c.setCalificacion(calificacion);
+                                e_cJFacade.edit(e_c);
+                                initMgr.sendMail(e_c);
+                                initMgr.sendPushWithSimpleAndroid(e_c);
+                            } else {
+                                message = "Error, El estudiante " + usuario.getCedula() + " no se encuentra inscripto al curso";
+                            }
+                        }
+                    }
+                } else {
+                    message = "Error, Calificacion: " + calificacion.toString() + " no es un valor válido";
+                }
+            } else {
+                message = "Esto no es un json o no lo entiendo: " + json;
+            }
+        } catch (Exception ex) {
+            System.out.println("Class:BedeliaServiceImpl: " + ex.getMessage() + " " + json);
+            message = ex.getMessage() + " " + json;
+        }
+        return message;
+    }
+
+    @Override
+    public String cargarNotasExamen(String json) {
+        String message = "OK";
+        try {
+            JsonElement jsonTree = parser.parse(json);
+            System.out.println("json: " + json);
+            if (jsonTree.isJsonObject()) {
+                JsonObject jsonObject = jsonTree.getAsJsonObject();
+                Long idExamen = jsonObject.get("idExamen").getAsLong();
+                String cedula = jsonObject.get("cedula").getAsString();
+                Long calificacion = jsonObject.get("calificacion").getAsLong();
+
+                if (calificacion < 13 && calificacion >= 0) {
+                    Usuario usuario = usuarioFacade.find(cedula);
+                    if (usuario == null) {
+                        message = "No existe el usuario";
+                    } else {
+                        Examen examen = examenFacade.find(idExamen);
+                        if (examen == null) {
+                            message = "No existe el examen";
+                        } else {
+                            Estudiante_Examen e_e = e_eJFacade.find(idExamen, cedula);
+                            System.out.println("e_e: " + e_e.getCalificacion() + " " + e_e.getUsuario().getCedula() + " " + e_e.getExamen().getId());
+                            if (e_e != null) {
+                                e_e.setCalificacion(calificacion);
+                                e_eJFacade.edit(e_e);
+                                initMgr.sendMail(e_e);
+                                initMgr.sendPushWithSimpleAndroid(e_e);
+                            } else {
+                                message = "El estudiante " + usuario.getCedula() + " no se encuentra inscripto al examen";
+                            }
+                        }
+                    }
+                } else {
+                    message = "Calificacion: " + calificacion.toString() + " no es un valor válido";
+                }
+            } else {
+                message = "Esto no es un json o no lo entiendo: " + json;
+            }
+        } catch (Exception ex) {
+            System.out.println("Class:BedeliaServiceImpl: " + ex.getMessage() + " " + json);
+            message = ex.getMessage() + " " + json;
+        }
+        return message;
+    }
+
     @Override
     public String getActaFinCurso(Long idCurso) {
         String output = "";
         InputStream inputStream = null;
         try {
             InitialContext initialContext = new InitialContext();
-            DataSource dataSource = (DataSource)initialContext.lookup("java:jboss/datasources/PostgresqlDS");
+            DataSource dataSource = (DataSource) initialContext.lookup("java:jboss/datasources/PostgresqlDS");
             Connection conn = dataSource.getConnection();
 //            conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/miudelar", "postgres", "gxsalud");
             System.out.println(conn.toString());
-            
+
             URL url1 = BedeliaServiceImpl.class.getResource("ActaCurso.jasper");
             System.out.println("url: " + url1);
             URL url2 = BedeliaServiceImpl.class.getResource("ActaCurso_body.jasper");
             System.out.println("url: " + url2);
             inputStream = BedeliaServiceImpl.class.getResourceAsStream("Logo_MiUdelar.png");
             System.out.println("url: " + inputStream);
-            
+
             Map parameters = new HashMap();
             JasperReport jasperReport = (JasperReport) JRLoader.loadObject(url1);
             JasperReport body = (JasperReport) JRLoader.loadObject(url2);
-            
+
             parameters.put("cursoId", idCurso);
             parameters.put("subReport", body);
             parameters.put("logo", inputStream);
-            
+
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, conn);
             output = Base64.encodeBytes(JasperExportManager.exportReportToPdf(jasperPrint));
 
@@ -572,31 +573,31 @@ public class BedeliaServiceImpl implements BedeliaService {
     }
 
     @Override
-    public String getActaExamen(Long idExamen){
+    public String getActaExamen(Long idExamen) {
         String output = "";
         InputStream inputStream = null;
         try {
             System.out.println("idExamen: " + idExamen);
             InitialContext initialContext = new InitialContext();
-            DataSource dataSource = (DataSource)initialContext.lookup("java:jboss/datasources/PostgresqlDS");
+            DataSource dataSource = (DataSource) initialContext.lookup("java:jboss/datasources/PostgresqlDS");
             Connection conn = dataSource.getConnection();
             System.out.println(conn.toString());
-            
+
             URL url1 = BedeliaServiceImpl.class.getResource("ActaExamen.jasper");
             System.out.println("url1: " + url1);
             URL url2 = BedeliaServiceImpl.class.getResource("ActaExamen_body.jasper");
             System.out.println("url2: " + url2);
             inputStream = BedeliaServiceImpl.class.getResourceAsStream("Logo_MiUdelar.png");
             System.out.println("url3: " + inputStream);
-            
+
             Map parameters = new HashMap();
             JasperReport jasperReport = (JasperReport) JRLoader.loadObject(url1);
             JasperReport body = (JasperReport) JRLoader.loadObject(url2);
-            
+
             parameters.put("examenId", idExamen);
             parameters.put("subReport", body);
             parameters.put("logo", inputStream);
-            
+
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, conn);
             output = Base64.encodeBytes(JasperExportManager.exportReportToPdf(jasperPrint));
 
@@ -606,35 +607,35 @@ public class BedeliaServiceImpl implements BedeliaService {
         }
         return output;
     }
-    
+
     @Override
-    public String getEscolaridad(String cedula, Long codigoCarrera){
+    public String getEscolaridad(String cedula, Long codigoCarrera) {
         String output = "";
         InputStream inputStream = null;
         try {
             System.out.println("codigoCarrera: " + codigoCarrera);
             System.out.println("cedula: " + cedula);
             InitialContext initialContext = new InitialContext();
-            DataSource dataSource = (DataSource)initialContext.lookup("java:jboss/datasources/PostgresqlDS");
+            DataSource dataSource = (DataSource) initialContext.lookup("java:jboss/datasources/PostgresqlDS");
             Connection conn = dataSource.getConnection();
             System.out.println(conn.toString());
-            
+
             URL url1 = BedeliaServiceImpl.class.getResource("Escolaridad.jasper");
             System.out.println("url1: " + url1);
             URL url2 = BedeliaServiceImpl.class.getResource("Escolaridad_body.jasper");
             System.out.println("url2: " + url2);
             inputStream = BedeliaServiceImpl.class.getResourceAsStream("Logo_MiUdelar.png");
             System.out.println("url3: " + inputStream);
-            
+
             Map parameters = new HashMap();
             JasperReport jasperReport = (JasperReport) JRLoader.loadObject(url1);
             JasperReport body = (JasperReport) JRLoader.loadObject(url2);
-            
+
             parameters.put("codCarrera", codigoCarrera);
             parameters.put("cedula", cedula);
             parameters.put("subReport", body);
             parameters.put("logo", inputStream);
-            
+
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, conn);
             output = Base64.encodeBytes(JasperExportManager.exportReportToPdf(jasperPrint));
 
@@ -644,31 +645,32 @@ public class BedeliaServiceImpl implements BedeliaService {
         }
         return output;
     }
-    
-    public List<DtUsuario> getEstudiantesCarrera(){
+
+    public List<DtUsuario> getEstudiantesCarrera() {
         List<DtUsuario> estudiantes = new ArrayList<DtUsuario>();
         Rol rol = rolFacade.find(4L);
         usuarioFacade.findAll().forEach(usuario -> {
-        if (usuario.getRoles().contains(rol)){
-            estudiantes.add(usuario.toDataCarrera());
-        }});
+            if (usuario.getRoles().contains(rol)) {
+                estudiantes.add(usuario.toDataCarrera());
+            }
+        });
         return estudiantes;
     }
-    
-    private boolean tieneEstudiantesInscriptosCurso(Long idCurso){
-        if (cursoFacade.getEstudiantesInscriptos(idCurso).size() > 0){
+
+    private boolean tieneEstudiantesInscriptosCurso(Long idCurso) {
+        if (cursoFacade.getEstudiantesInscriptos(idCurso).size() > 0) {
             return true;
-        }else{
-             return false;
-        }
-    }
-    
-    private boolean tieneEstudiantesInscriptosExamen(Long idExamen){
-        if (examenFacade.getEstudiantesInscriptos(idExamen).size() > 0){
-            return true;
-        }else{
-             return false;
+        } else {
+            return false;
         }
     }
 
-} 
+    private boolean tieneEstudiantesInscriptosExamen(Long idExamen) {
+        if (examenFacade.getEstudiantesInscriptos(idExamen).size() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+}

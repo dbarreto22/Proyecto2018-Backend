@@ -238,8 +238,12 @@ public class DirectorServiceImpl implements DirectorService {
 
     @Override
     public String saveCarrera(DtCarrera carrera) {
+        String message = "";
+        if (carreraFacade.find(carrera.getCodigo()) != null){
+            return "La carrera con código : " + carrera.getCodigo() + " ya fue ingresada";
+        }else{
         Carrera carreraEntity = new Carrera(carrera.getCodigo(), carrera.getNombre());
-        String message = "OK";
+        message = "OK";
         try {
             carreraFacade.create(carreraEntity);
         } catch (Exception ex) {
@@ -247,12 +251,17 @@ public class DirectorServiceImpl implements DirectorService {
             message = ex.getMessage();
         }
         return message;
+        }
     }
 
     @Override
     public String saveAsignatura(DtAsignatura asignatura) {
+        String message = "";
+        if (asignaturaFacade.find(asignatura.getCodigo()) != null){
+            return "La carrera con código : " + asignatura.getCodigo() + " ya fue ingresada";
+        }else{
         Asignatura asignaturaEntity = new Asignatura(asignatura.getCodigo(), asignatura.getNombre());
-        String message = "OK";
+            message = "OK";
         try {
             asignaturaFacade.create(asignaturaEntity);
         } catch (Exception ex) {
@@ -260,6 +269,7 @@ public class DirectorServiceImpl implements DirectorService {
             message = ex.getMessage();
         }
         return message;
+        }
     }
 
     @Override

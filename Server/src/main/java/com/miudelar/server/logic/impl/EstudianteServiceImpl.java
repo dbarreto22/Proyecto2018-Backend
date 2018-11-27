@@ -213,11 +213,10 @@ public class EstudianteServiceImpl implements EstudianteService {
 
         return examenes;
     }
-    
-    
+
     @Override
-    public List<DtCarrera> getCarreraByCedula(String cedula){
-        List <DtCarrera> carreras = new ArrayList<>();
+    public List<DtCarrera> getCarreraByCedula(String cedula) {
+        List<DtCarrera> carreras = new ArrayList<>();
         usuarioFacade.find(cedula).getCarreras().forEach(carrera -> {
             carreras.add(carrera.toDataType());
         });
@@ -300,34 +299,39 @@ public class EstudianteServiceImpl implements EstudianteService {
                     if (curso == null) {
                         message = "No existe el curso";
                     } else {
-                        if (estudiante_cursoFacade.find(idCurso, cedula) != null) {
-                            return "El estudiante ya se encuentra inscripto al curso";
-                        } else {
-                            Asignatura_Carrera asig_car = curso.getAsignatura_Carrera();
-                            Long max = estudiante_cursoFacade.getMaxCalificacionAsignatura(cedula, asig_car.getId());
-                            if (max.compareTo(6L) > 0) {
-                                return "Error, el estudiante ya tiene aprobada esta asignatura";
+                        if (estaInscripto(usuario, curso.getAsignatura_Carrera().getCarrera())) {
+                            if (estudiante_cursoFacade.find(idCurso, cedula) != null) {
+                                return "El estudiante ya se encuentra inscripto al curso";
                             } else {
-                                if (usuario.getCursos().contains(curso)) {
-                                    return "Error, el estudiante ya se encuentra inscripto a este curso";
+                                Asignatura_Carrera asig_car = curso.getAsignatura_Carrera();
+                                Long max = estudiante_cursoFacade.getMaxCalificacionAsignatura(cedula, asig_car.getId());
+                                if (max.compareTo(6L) > 0) {
+                                    return "Error, el estudiante ya tiene aprobada esta asignatura";
                                 } else {
-                                    //Valido previas
-                                    List<Asignatura_Carrera> previas = initMgr.getAllPrevias(asig_car);
-                                    for (Asignatura_Carrera previa : previas) {
-                                        max = estudiante_cursoFacade.getMaxCalificacionAsignatura(cedula, previa.getId());
+                                    if (usuario.getCursos().contains(curso)) {
+                                        return "Error, el estudiante ya se encuentra inscripto a este curso";
+                                    } else {
+                                        //Valido previas
+                                        List<Asignatura_Carrera> previas = initMgr.getAllPrevias(asig_car);
+                                        for (Asignatura_Carrera previa : previas) {
+                                            max = estudiante_cursoFacade.getMaxCalificacionAsignatura(cedula, previa.getId());
 //                                    System.out.println("max: " + max);
 //                                    System.out.println("previa.getId(): " + previa.getId());
 //                                    System.out.println("asig_car.getId(): " + asig_car.getId());
-                                        if (max.compareTo(6L) < 0 && !asig_car.getId().equals(previa.getId())) {
-                                            return "Error, el estudiante no tiene aprobada la asignatura: " + previa.getAsignatura().getNombre();
+                                            if (max.compareTo(6L) < 0 && !asig_car.getId().equals(previa.getId())) {
+                                                return "Error, el estudiante no tiene aprobada la asignatura: " + previa.getAsignatura().getNombre();
+                                            }
                                         }
-                                    }
 
-                                    Estudiante_Curso e_c = new Estudiante_Curso(usuario, curso);
-                                    estudiante_cursoFacade.create(e_c);
+                                        Estudiante_Curso e_c = new Estudiante_Curso(usuario, curso);
+                                        estudiante_cursoFacade.create(e_c);
+                                    }
                                 }
                             }
+                        } else {
+                            return "El estudiante no se encuentra inscripto a la carrera: " + curso.getAsignatura_Carrera().getCarrera().getNombre();
                         }
+
                     }
                 }
             } else {
@@ -397,37 +401,43 @@ public class EstudianteServiceImpl implements EstudianteService {
                     if (examen == null) {
                         message = "No existe el examen";
                     } else {
-                        if (estudiante_ExamenFacade.find(idExamen, cedula) != null) {
-                            return "El estudiante ya se encuentra inscripto al examen";
-                        } else {
-                            Asignatura_Carrera asig_car = examen.getAsignatura_Carrera();
-                            Long max = estudiante_ExamenFacade.getMaxCalificacionAsignatura(cedula, asig_car.getId());
-                            if (max.compareTo(3L) > 0) {
-                                return "Error, el estudiante ya tiene aprobado este examen";
+                        if (estaInscripto(usuario, examen.getAsignatura_Carrera().getCarrera())) {
+                            
+                        
+                            if (estudiante_ExamenFacade.find(idExamen, cedula) != null) {
+                                return "El estudiante ya se encuentra inscripto al examen";
                             } else {
-                                if (usuario.getExamenes().contains(examen)) {
-                                    return "Error, el estudiante ya se encuentra inscripto a este examen";
+                                Asignatura_Carrera asig_car = examen.getAsignatura_Carrera();
+                                Long max = estudiante_ExamenFacade.getMaxCalificacionAsignatura(cedula, asig_car.getId());
+                                if (max.compareTo(3L) > 0) {
+                                    return "Error, el estudiante ya tiene aprobado este examen";
                                 } else {
-                                    //Valido previas
-                                    List<Asignatura_Carrera> previas = initMgr.getAllPrevias(asig_car);
-                                    for (Asignatura_Carrera previa : previas) {
-                                        max = estudiante_cursoFacade.getMaxCalificacionAsignatura(cedula, previa.getId());
-                                        System.out.println("max: " + max);
-                                        System.out.println("previa.getId(): " + previa.getId());
-                                        System.out.println("asig_car.getId(): " + asig_car.getId());
-                                        if (max.compareTo(6L) < 0 && !asig_car.getId().equals(previa.getId())) {
-                                            return "Error, el estudiante no tiene aprobada la asignatura: " + previa.getAsignatura().getNombre();
+                                    if (usuario.getExamenes().contains(examen)) {
+                                        return "Error, el estudiante ya se encuentra inscripto a este examen";
+                                    } else {
+                                        //Valido previas
+                                        List<Asignatura_Carrera> previas = initMgr.getAllPrevias(asig_car);
+                                        for (Asignatura_Carrera previa : previas) {
+                                            max = estudiante_cursoFacade.getMaxCalificacionAsignatura(cedula, previa.getId());
+                                            System.out.println("max: " + max);
+                                            System.out.println("previa.getId(): " + previa.getId());
+                                            System.out.println("asig_car.getId(): " + asig_car.getId());
+                                            if (max.compareTo(6L) < 0 && !asig_car.getId().equals(previa.getId())) {
+                                                return "Error, el estudiante no tiene aprobada la asignatura: " + previa.getAsignatura().getNombre();
+                                            }
                                         }
+                                        Estudiante_Examen e_e = new Estudiante_Examen(usuario, examen);
+                                        estudiante_ExamenFacade.create(e_e);
+    //                                    usuario.addInscripcionesExamenes(examen);
+    //                                    usuario.addexamenes(e_e);
+    //                                    examen.addExamenes(e_e);
+    //                                    usuarioFacade.edit(usuario);
+    //                                    examenFacade.edit(examen);
                                     }
-                                    Estudiante_Examen e_e = new Estudiante_Examen(usuario, examen);
-                                    estudiante_ExamenFacade.create(e_e);
-//                                    usuario.addInscripcionesExamenes(examen);
-//                                    usuario.addexamenes(e_e);
-//                                    examen.addExamenes(e_e);
-//                                    usuarioFacade.edit(usuario);
-//                                    examenFacade.edit(examen);
                                 }
                             }
+                        }else{
+                            return "El estudiante no se encuentra inscripto a la carrera: " + examen.getAsignatura_Carrera().getCarrera().getNombre();
                         }
 
                     }
@@ -441,4 +451,15 @@ public class EstudianteServiceImpl implements EstudianteService {
         }
         return message;
     }
+
+    private boolean estaInscripto(Usuario usuario, Carrera carreraCurso) {
+        boolean estaInscripto = false;
+        for (Carrera carrera : usuario.getCarreras()) {
+            if (carreraCurso.getCodigo().equals(carrera.getCodigo())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

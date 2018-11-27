@@ -23,9 +23,9 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 public class AdministradorServiceImpl implements AdministradorService {
-
+    
     JsonParser parser = new JsonParser();
-
+    
     private RolFacadeLocal rolFacade = lookupRolFacadeBean();
     
     private UsuarioFacadeLocal usuarioFacade = lookupUsuarioFacadeBean();
@@ -51,7 +51,7 @@ public class AdministradorServiceImpl implements AdministradorService {
             throw new RuntimeException(ne);
         }
     }
-
+    
     @Override
     public void rolSave(String tipo) throws RolWithInvalidDataException {
         System.out.println("tipo: " + tipo);
@@ -63,7 +63,7 @@ public class AdministradorServiceImpl implements AdministradorService {
             throw new RolWithInvalidDataException();
         }
     }
-
+    
     @Override
     public List<DtRol> getAllRol() throws NoSuchAlgorithmException {
         List<DtRol> roles = new ArrayList<>();
@@ -72,11 +72,11 @@ public class AdministradorServiceImpl implements AdministradorService {
         });
         return roles;
     }
-
+    
     @Override
     public String login(String json) {
         String message;
-
+        
         JsonElement jsonTree = parser.parse(json);
         if (jsonTree.isJsonObject()) {
             JsonObject jsonObject = jsonTree.getAsJsonObject();
@@ -99,41 +99,35 @@ public class AdministradorServiceImpl implements AdministradorService {
                 System.out.println("Class:AdministradorServiceImpl: " + ex.getMessage() + " " + json);
                 message = ex.getMessage() + " " + json;
             }
-
+            
         } else {
             message = "Esto no es un json o no lo entiendo: " + json;
         }
-
+        
         return message;
     }
-
+    
     @Override
     public String saveUsuario(DtUsuario usuario) {
+        String message = "";
 //        DtUsuario usuario = gson.fromJson(dtUsrStr, DtUsuario.class);
-        Usuario usuarioEntity = new Usuario(usuario);
-        String message = "OK";
-        try {
-            usuarioFacade.create(usuarioEntity);
-        } catch (Exception ex) {
-            System.out.println("Class:AdministradorServiceImpl: " + ex.getMessage());
-            message = ex.getMessage();
+        if(usuarioFacade.find(usuario.getCedula())!= null){
+            message = "Error, el usuario ya existe en el sistema";
+        }else{
+            Usuario usuarioEntity = new Usuario(usuario);
+            try {
+                usuarioFacade.create(usuarioEntity);
+            } catch (Exception ex) {
+                System.out.println("Excepcion: " + ex.getMessage());
+                message = ex.getMessage();
+            }
+            message = "OK";
         }
+        
         return message;
     }
 
-//    @Override
-//    public String saveUsuario(DtUsuario usuario){
-//        System.out.println("usuarioToJson: " + gson.toJson(usuario));
-//        Usuario usuarioEntity = new Usuario(usuario);
-//        String message = "OK";
-//        try {
-//            usuarioFacade.create(usuarioEntity);
-//        } catch (Exception ex) {
-//            System.out.println("Class:AdministradorServiceImpl: "+ ex.getMessage());
-//            message = ex.getMessage();
-//        }
-//        return message;
-//    }
+
     @Override
     public String editUsuario(DtUsuario usuario) {
 //        Usuario usuario = gson.fromJson(UsrStr, Usuario.class);
@@ -154,24 +148,36 @@ public class AdministradorServiceImpl implements AdministradorService {
     }
     
     @Override
-    public String deleteUsuario(DtUsuario usuario){
+    public String deleteUsuario(String json) {
         String message = "OK";
-        Usuario usr = usuarioFacade.find(usuario.getCedula());
-        usr.setActivo(Boolean.FALSE);
+        try {
+            JsonElement jsonTree = parser.parse(json);
+            if (jsonTree.isJsonObject()) {
+                JsonObject jsonObject = jsonTree.getAsJsonObject();
+                String cedula = jsonObject.get("cedula").getAsString();
+                Usuario usr = usuarioFacade.find(cedula);
+                usr.setActivo(Boolean.FALSE);
+                usuarioFacade.edit(usr);
+                return message;
+            }
+        } catch (Exception ex) {
+            System.out.println("Class:AdministradorServiceImpl: " + ex.getMessage() + " " + json);
+            message = ex.getMessage() + " " + json;
+        }
         return message;
     }
-
+    
     @Override
     public String addRol(String json) {
         String message = "OK";
         try {
             JsonElement jsonTree = parser.parse(json);
-
+            
             if (jsonTree.isJsonObject()) {
                 JsonObject jsonObject = jsonTree.getAsJsonObject();
                 String cedula = jsonObject.get("cedula").getAsString();
                 Long idRol = jsonObject.get("idRol").getAsLong();
-
+                
                 Usuario usuario = usuarioFacade.find(cedula);
                 if (usuario == null) {
                     message = "El usuario no existe";
@@ -184,7 +190,7 @@ public class AdministradorServiceImpl implements AdministradorService {
                         usuarioFacade.edit(usuario);
                     }
                 }
-
+                
             } else {
                 message = "Esto no es un json o no lo entiendo: " + json;
             }
@@ -194,18 +200,18 @@ public class AdministradorServiceImpl implements AdministradorService {
         }
         return message;
     }
-
+    
     @Override
     public String removeRol(String json) {
         String message = "OK";
         try {
             JsonElement jsonTree = parser.parse(json);
-
+            
             if (jsonTree.isJsonObject()) {
                 JsonObject jsonObject = jsonTree.getAsJsonObject();
                 String cedula = jsonObject.get("cedula").getAsString();
                 Long idRol = jsonObject.get("idRol").getAsLong();
-
+                
                 Usuario usuario = usuarioFacade.find(cedula);
                 if (usuario == null) {
                     message = "El usuario no existe";
@@ -222,12 +228,12 @@ public class AdministradorServiceImpl implements AdministradorService {
                 message = "Esto no es un json o no lo entiendo: " + json;
             }
         } catch (Exception ex) {
-            System.out.println("Class:AdministradorServiceImpl: " + ex.getMessage()+ " " +json);
-            message = ex.getMessage()+ " " +json;
+            System.out.println("Class:AdministradorServiceImpl: " + ex.getMessage() + " " + json);
+            message = ex.getMessage() + " " + json;
         }
         return message;
     }
-
+    
     @Override
     public List<DtUsuario> getAllUsuario() throws NoSuchAlgorithmException {
         List<DtUsuario> usuarios = new ArrayList<>();
@@ -236,10 +242,15 @@ public class AdministradorServiceImpl implements AdministradorService {
         });
         return usuarios;
     }
-
+    
     @Override
     public DtUsuario getUsuario(String cedula) {
-        return usuarioFacade.find(cedula).toDataType();
+        Usuario usuario = usuarioFacade.find(cedula);
+        if (usuario != null) {
+            return usuario.toDataType();
+        } else {
+            return new DtUsuario();
+        }
     }
 
 //    @Override
