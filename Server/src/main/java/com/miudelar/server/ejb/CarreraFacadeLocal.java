@@ -30,4 +30,6 @@ public interface CarreraFacadeLocal {
 
     int count();
     
+    List<Carrera> findByNombre(String nombre);
+    
 }

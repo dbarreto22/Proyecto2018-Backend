@@ -6,9 +6,11 @@
 package com.miudelar.server.ejb;
 
 import com.miudelar.server.logic.entities.Carrera;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -27,6 +29,12 @@ public class CarreraFacade extends AbstractFacade<Carrera> implements CarreraFac
 
     public CarreraFacade() {
         super(Carrera.class);
+    }
+    
+    @Override
+    public List<Carrera> findByNombre(String nombre){
+        Query q = getEntityManager().createNamedQuery(Carrera.FIND_BY_NAME).setParameter("nombre", nombre);
+        return q.getResultList();
     }
     
 }

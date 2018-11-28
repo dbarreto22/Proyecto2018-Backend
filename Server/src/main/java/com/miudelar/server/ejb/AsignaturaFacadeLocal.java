@@ -33,4 +33,6 @@ public interface AsignaturaFacadeLocal {
     
     List<Asignatura> findByCarrera(Long codigo);
     
+    List<Asignatura> findByNombre(String nombre);
+    
 }

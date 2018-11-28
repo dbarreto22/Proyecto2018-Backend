@@ -242,14 +242,18 @@ public class DirectorServiceImpl implements DirectorService {
         if (carreraFacade.find(carrera.getCodigo()) != null){
             return "La carrera con código : " + carrera.getCodigo() + " ya fue ingresada";
         }else{
-        Carrera carreraEntity = new Carrera(carrera.getCodigo(), carrera.getNombre());
-        message = "OK";
-        try {
-            carreraFacade.create(carreraEntity);
-        } catch (Exception ex) {
-            System.out.println("Class:DirectorServiceImpl: " + ex.getMessage());
-            message = ex.getMessage();
-        }
+            if (!carreraFacade.findByNombre(carrera.getNombre()).isEmpty()){
+                message = "Ya existe carrera con nombre: " + carrera.getNombre();
+            }else{
+                Carrera carreraEntity = new Carrera(carrera.getCodigo(), carrera.getNombre());
+                message = "OK";
+                try {
+                    carreraFacade.create(carreraEntity);
+                } catch (Exception ex) {
+                    System.out.println("Class:DirectorServiceImpl: " + ex.getMessage());
+                    message = ex.getMessage();
+                }
+            }
         return message;
         }
     }
@@ -260,14 +264,19 @@ public class DirectorServiceImpl implements DirectorService {
         if (asignaturaFacade.find(asignatura.getCodigo()) != null){
             return "La carrera con código : " + asignatura.getCodigo() + " ya fue ingresada";
         }else{
-        Asignatura asignaturaEntity = new Asignatura(asignatura.getCodigo(), asignatura.getNombre());
-            message = "OK";
-        try {
-            asignaturaFacade.create(asignaturaEntity);
-        } catch (Exception ex) {
-            System.out.println("Class:DirectorServiceImpl: " + ex.getMessage());
-            message = ex.getMessage();
-        }
+            if (!asignaturaFacade.findByNombre(asignatura.getNombre()).isEmpty()){
+                message = "Ya existe asignatura con nombre: " + asignatura.getNombre();
+            }else{
+                Asignatura asignaturaEntity = new Asignatura(asignatura.getCodigo(), asignatura.getNombre());
+                message = "OK";
+                try {
+                    asignaturaFacade.create(asignaturaEntity);
+                } catch (Exception ex) {
+                    System.out.println("Class:DirectorServiceImpl: " + ex.getMessage());
+                    message = ex.getMessage();
+                }
+            }
+        
         return message;
         }
     }

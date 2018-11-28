@@ -37,4 +37,10 @@ public class AsignaturaFacade extends AbstractFacade<Asignatura> implements Asig
         return q.getResultList();
     }
     
+    @Override
+    public List<Asignatura> findByNombre(String nombre){
+        Query q = getEntityManager().createNamedQuery(Asignatura.FIND_BY_NAME).setParameter("nombre", nombre);
+        return q.getResultList();
+    }
+    
 }

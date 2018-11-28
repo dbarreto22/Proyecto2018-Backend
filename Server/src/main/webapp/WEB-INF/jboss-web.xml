@@ -1,0 +1,5 @@
+<jboss-web>
+    <valve>
+            <class-name>org.apache.catalina.valves.RequestDumperValve</class-name>
+    </valve>
+</jboss-web>  

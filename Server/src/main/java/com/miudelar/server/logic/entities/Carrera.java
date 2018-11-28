@@ -27,11 +27,12 @@ import javax.xml.bind.annotation.*;
  */
 //@XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-//@NamedQueries({
+@NamedQueries({
 //    @NamedQuery(name = "Carrera.findAsignaturas", query = "Select e from Carrera e"),
-//    @NamedQuery(name = "Carrera.findAsignaturas", query = "Select c from Carrera c where c.nombre=:nombre")})
+    @NamedQuery(name = Carrera.FIND_BY_NAME, query = "SELECT A FROM Carrera A WHERE lower(A.nombre) = lower(:nombre)")})
 public class Carrera implements Serializable {
 
+    public final static String FIND_BY_NAME = "Carrera.FIND_BY_NAME";
     @Id
     private Long codigo;
 

@@ -186,8 +186,12 @@ public class AdministradorServiceImpl implements AdministradorService {
                     if (rol == null) {
                         message = "El rol no existe";
                     } else {
-                        usuario.addRol(rol);
-                        usuarioFacade.edit(usuario);
+                        if (usuario.getRoles().contains(rol)){
+                            message = "El usuario ya tiene el rol asignado";
+                        }else{
+                            usuario.addRol(rol);
+                            usuarioFacade.edit(usuario);
+                        }
                     }
                 }
                 
