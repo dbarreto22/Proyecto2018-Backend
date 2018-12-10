@@ -233,8 +233,14 @@ public class BedeliaServiceImpl implements BedeliaService {
     @Override
     public List<DtAsignatura_Carrera> getAsignaturaCarreraByCarrera(Long idCarrera) {
         List<DtAsignatura_Carrera> asignaturas = new ArrayList<>();
-        List<Asignatura_Carrera> list = carreraFacade.find(idCarrera).getAsignatura_Carreras();
-        System.out.println("list.size(): " + list.size());
+//        List<Asignatura_Carrera> list = carreraFacade.find(idCarrera).getAsignatura_Carreras();
+//        System.out.println("list.size(): " + list.size());
+//        list.forEach(asignatura -> {
+//            asignaturas.add(new DtAsignatura_Carrera(asignatura.getId(),
+//                    new DtCarrera(asignatura.getCarrera().getCodigo(), asignatura.getCarrera().getNombre()),
+//                    new DtAsignatura(asignatura.getAsignatura().getCodigo(), asignatura.getAsignatura().getNombre())));
+//        });
+        List<Asignatura_Carrera> list = carreraFacade.findAsignaturasCarrera(idCarrera);
         list.forEach(asignatura -> {
             asignaturas.add(new DtAsignatura_Carrera(asignatura.getId(),
                     new DtCarrera(asignatura.getCarrera().getCodigo(), asignatura.getCarrera().getNombre()),

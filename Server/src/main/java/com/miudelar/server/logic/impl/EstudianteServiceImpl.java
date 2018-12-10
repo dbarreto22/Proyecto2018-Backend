@@ -30,9 +30,11 @@ import com.miudelar.server.logic.datatypes.DtAsignatura_Carrera;
 import com.miudelar.server.logic.datatypes.DtCalificaciones;
 import com.miudelar.server.logic.datatypes.DtCarrera;
 import com.miudelar.server.logic.datatypes.DtCurso;
+import com.miudelar.server.logic.datatypes.DtCursoAng;
 import com.miudelar.server.logic.datatypes.DtEstudiante_Curso;
 import com.miudelar.server.logic.datatypes.DtEstudiante_Examen;
 import com.miudelar.server.logic.datatypes.DtExamen;
+import com.miudelar.server.logic.datatypes.DtExamenAng;
 import com.miudelar.server.logic.entities.Asignatura_Carrera;
 import com.miudelar.server.logic.entities.Carrera;
 import com.miudelar.server.logic.entities.Curso;
@@ -203,12 +205,32 @@ public class EstudianteServiceImpl implements EstudianteService {
 
         return cursos;
     }
+    
+    @Override
+    public List<DtCursoAng> getCursoByCedulaAng(String cedula) {
+        List<DtCursoAng> cursos = new ArrayList<>();
+        cursoFacade.getCursosDisponiblesEstudiante(cedula).forEach(curso -> {
+            cursos.add(curso.toDataTypeAng());
+        });
+
+        return cursos;
+    }
 
     @Override
     public List<DtExamen> getExamenByCedula(String cedula) {
         List<DtExamen> examenes = new ArrayList<>();
         examenFacade.getExamenesDisponiblesEstudiante(cedula).forEach(examen -> {
             examenes.add(examen.toDataType());
+        });
+
+        return examenes;
+    }
+    
+    @Override
+    public List<DtExamenAng> getExamenByCedulaAng(String cedula) {
+        List<DtExamenAng> examenes = new ArrayList<>();
+        examenFacade.getExamenesDisponiblesEstudiante(cedula).forEach(examen -> {
+            examenes.add(examen.toDataTypeAng());
         });
 
         return examenes;
@@ -258,6 +280,7 @@ public class EstudianteServiceImpl implements EstudianteService {
 
     @Override
     public DtCalificaciones getCalificacionesSAsig(String cedula) {
+        System.out.println("Calificaciones cedula: " + cedula);
         List<DtEstudiante_Curso> cursos = new ArrayList<>();
         List<DtEstudiante_Examen> examenes = new ArrayList<>();
 

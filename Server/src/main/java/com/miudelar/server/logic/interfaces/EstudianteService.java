@@ -8,7 +8,9 @@ package com.miudelar.server.logic.interfaces;
 import com.miudelar.server.logic.datatypes.DtCalificaciones;
 import com.miudelar.server.logic.datatypes.DtCarrera;
 import com.miudelar.server.logic.datatypes.DtCurso;
+import com.miudelar.server.logic.datatypes.DtCursoAng;
 import com.miudelar.server.logic.datatypes.DtExamen;
+import com.miudelar.server.logic.datatypes.DtExamenAng;
 import com.miudelar.server.logic.entities.Estudiante_Curso;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -52,6 +54,19 @@ public interface EstudianteService {
     @Produces(MediaType.APPLICATION_JSON)
     public List<DtCurso> getCursoByCedula(@PathParam("cedula")
         final String cedula);
+    
+    @GET
+    @Path("cursoAng/{cedula}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<DtCursoAng> getCursoByCedulaAng(@PathParam("cedula")
+        final String cedula);
+    
+    @GET
+    @Path("examenAng/{cedula}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<DtExamenAng> getExamenByCedulaAng(@PathParam("cedula")
+        final String cedula);
+
     
     @GET
     @Path("examen/{cedula}")

@@ -7,6 +7,7 @@ import com.miudelar.server.logic.datatypes.DtAsignatura;
 import com.miudelar.server.logic.datatypes.DtAsignatura_Carrera;
 import com.miudelar.server.logic.datatypes.DtCarrera;
 import com.miudelar.server.logic.datatypes.DtExamen;
+import com.miudelar.server.logic.datatypes.DtExamenAng;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.ArrayList;
@@ -129,6 +130,14 @@ public class Examen implements Serializable {
                 new DtAsignatura(this.asignatura_Carrera.getAsignatura().getCodigo(), this.asignatura_Carrera.getAsignatura().getNombre())
         );
         return new DtExamen(this.id, this.fecha, asignatura_Carrera);
+    }
+    
+    public DtExamenAng toDataTypeAng(){
+        DtAsignatura_Carrera asignatura_Carrera = new DtAsignatura_Carrera(this.asignatura_Carrera.getId(),
+                new DtCarrera(this.asignatura_Carrera.getCarrera().getCodigo(), this.asignatura_Carrera.getCarrera().getNombre()),
+                new DtAsignatura(this.asignatura_Carrera.getAsignatura().getCodigo(), this.asignatura_Carrera.getAsignatura().getNombre())
+        );
+        return new DtExamenAng(this.id, this.fecha, asignatura_Carrera);
     }
 
     @Override

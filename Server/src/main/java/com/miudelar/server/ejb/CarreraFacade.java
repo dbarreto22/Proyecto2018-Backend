@@ -5,6 +5,7 @@
  */
 package com.miudelar.server.ejb;
 
+import com.miudelar.server.logic.entities.Asignatura_Carrera;
 import com.miudelar.server.logic.entities.Carrera;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -34,6 +35,12 @@ public class CarreraFacade extends AbstractFacade<Carrera> implements CarreraFac
     @Override
     public List<Carrera> findByNombre(String nombre){
         Query q = getEntityManager().createNamedQuery(Carrera.FIND_BY_NAME).setParameter("nombre", nombre);
+        return q.getResultList();
+    }
+    
+    @Override
+    public List<Asignatura_Carrera> findAsignaturasCarrera(Long codigo){
+        Query q = getEntityManager().createNamedQuery(Carrera.FIND_ASIGNATURAS_CARRERA).setParameter("codigo", codigo);
         return q.getResultList();
     }
     

@@ -21,6 +21,8 @@ public class DtUsuario implements Serializable {
     private String email;
 
     private String password;
+    
+    private String estado;
 
     private List<DtEstudiante_Examen> examenes;
 

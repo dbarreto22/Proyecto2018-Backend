@@ -115,13 +115,18 @@ public class InitMgr implements InitMgt {
     public static Message armarMsg(Message message, Usuario usuario, String tipo, String asignatura, Long calificacion) {
         System.out.println("armarMsg");
         try {
-            System.out.println("usuario.getEmail(): " + usuario.getEmail());
-            message.setRecipients(Message.RecipientType.TO,
-                    InternetAddress.parse(usuario.getEmail()));
-            message.setSubject("Se ha cargado una calificación");
-            message.setText("Estimado/a " + usuario.getNombre() + ", "
+            if (!usuario.getEmail().isEmpty()){
+                System.out.println("usuario.getEmail(): " + usuario.getEmail());
+                message.setRecipients(Message.RecipientType.TO,
+                        InternetAddress.parse(usuario.getEmail()));
+                message.setSubject("Se ha cargado una calificación");
+                message.setText("Estimado/a " + usuario.getNombre() + ", "
                     + "\n\n Usted ha obtenido un " + calificacion + " en el " + tipo + " de " + asignatura + "."
                     + "\n\n\n\n MiUdelar");
+            }else{
+                System.out.println("EMAIL VACIO");
+            }
+            
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         }
@@ -147,7 +152,7 @@ public class InitMgr implements InitMgt {
                 deviceToken = examen.getUsuario().getDeviceToken();
                 tipo = "examen";
                 message += examen.getCalificacion();
-                message += " en el curso de " + examen.getExamen().getAsignatura_Carrera().getAsignatura().getNombre() + ".";
+                message += " en el examen de " + examen.getExamen().getAsignatura_Carrera().getAsignatura().getNombre() + ".";
             }
         }
 
@@ -159,7 +164,7 @@ public class InitMgr implements InitMgt {
 
             data.addProperty("title", title);
             data.addProperty("body", message);
-            data.addProperty("tipo", "curso");
+            data.addProperty("tipo", tipo);
             json.addProperty("to", deviceToken);
             json.add("data", data);
 
@@ -176,6 +181,7 @@ public class InitMgr implements InitMgt {
                 // Send FCM message content.
                 OutputStream outputStream = conn.getOutputStream();
                 String jsonString = new Gson().toJson(json);
+                System.out.println("jsonString: " + jsonString);
                 byte[] utf8JsonString = jsonString.getBytes("UTF8");
                 outputStream.write(utf8JsonString);
                 System.out.println("utf8JsonString: " + utf8JsonString.toString());
